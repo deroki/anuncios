@@ -127,3 +127,9 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#ATHENTICATION_BACKENDS = ('main.backends.EmailBackend',)
+
+AUTH_USER_MODEL = 'main.User'
+
+LOGIN_URL = "/"

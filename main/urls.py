@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
-    path('', views.index, name='clientes'),
+    path('', views.login_user, name='login'),
+    path('clientes/', views.index, name='clientes'),
     path('formulario_ok/', views.formulario_ok, name='formulario_ok'),
     path('crear_cliente/', views.crear_cliente, name='crear_cliente'),
 
