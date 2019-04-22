@@ -41,6 +41,11 @@ class User(AbstractUser):
     #TODO añadir resto de caracteristicas o crear nuevos users asociados one2one
     objects = UserManager()
     email = models.EmailField(unique=True)
+    username = models.CharField(max_length=150,
+                                unique=False,
+                                null = True,
+                                blank= True,
+                                default=True)
     is_cliente = models.BooleanField(default=False)
     is_montador = models.BooleanField(default=False)
 
@@ -62,14 +67,19 @@ COLOR = (('red', 'red'),
 
 
 class Cliente(models.Model):
-    nombre = models.CharField(max_length=20)
+    usuario = models.OneToOneField(User,
+                                   on_delete=models.CASCADE,
+                                   primary_key=True,
+                                   limit_choices_to={'is_cliente': True},
+                                   related_name='cliente')
     created = models.DateField(auto_now_add=True)
     slug = models.SlugField(max_length=20,
                             unique= True,
                             blank= True)
     admin = models.ForeignKey(User,
                               on_delete=models.CASCADE,
-                              limit_choices_to={'is_staff': True})
+                              limit_choices_to={'is_staff': True},
+                              related_name='admin')
     color = models.CharField(choices=COLOR,
                              max_length=10)
     logo = models.ForeignKey(Logo,
@@ -83,8 +93,18 @@ class Cliente(models.Model):
 
         return newWord[:3]
 
-# TODO : funcion que haga unico el slug del cliente cojo de 2 en 2, poco elegante
+    # TODO : funcion que haga unico el slug del cliente cojo de 2 en 2, poco elegante
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = self.get_every_two()
         return super(Cliente,self).save()
+
+
+class Montador(models.Model):
+    usuario = models.OneToOneField(User,
+                                on_delete=models.CASCADE,
+                                primary_key=True)
+    empresa = models.CharField(max_length=100)
+    dni = models.CharField(max_length=9)
+    ciudad = models.CharField(max_length=50)
+    provincia = models.CharField(max_length=50)

@@ -7,7 +7,7 @@ from django.http import HttpResponse
 # Create your views here.
 from django.template import RequestContext
 
-from main.forms import ClienteForm, ImageForm
+from main.forms import ClienteForm, ImageForm, UserForm
 from main.models import Cliente
 from anuncios2.settings import MEDIA_URL
 
@@ -46,7 +46,7 @@ def crear_cliente(request):
             if form_image.is_valid():
                 form_image.save()
                 exitStatus = "Imagen enviada"
-                render(request, 'main/crearCliente.html', {'form': form,
+                return render(request, 'main/crearCliente.html', {'form': form,
                                                            'form_image': form_image,
                                                            'exitStatus': exitStatus,
                                                            'MEDIA_URL': MEDIA_URL})
@@ -57,7 +57,7 @@ def crear_cliente(request):
             if form.is_valid():
                 form.save()
                 exitStatus = "Cliente guardado"
-                render(request, 'main/crearCliente.html', {'form': form,
+                return render(request, 'main/crearCliente.html', {'form': form,
                                                            'form_image': form_image,
                                                            'exitStatus': exitStatus,
                                                            'MEDIA_URL': MEDIA_URL})
@@ -81,6 +81,26 @@ def usuarios(request):
     users = User.objects.all()
     for user in users:
         if user.is_staff:
+            user.role = 'STAFF'
+        elif user.is_cliente:
+            user.role = 'CLIENTE'
+        elif user.is_montador:
+            user.role = 'MONTADOR'
 
     context = {'users': users}
-    return render(request, 'main/usuarios.html.html', context)
+    return render(request, 'main/usuarios.html', context)
+
+def crear_usuario(request):
+        exitStatus = None
+        if request.POST:
+            form = UserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                exitStatus = "Usuario guardado"
+                return render(request, 'main/crear_usuario.html', {'form': form,
+                                                                   'exitStatus': exitStatus})
+        else:
+            form = UserForm()
+            exitStatus = None
+        return render(request, 'main/crear_usuario.html', {'form': form,
+                                                            'exitStatus': exitStatus})
