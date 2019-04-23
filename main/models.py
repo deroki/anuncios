@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 class UserManager(BaseUserManager):
     """Define a model manager for User model with no username field."""
 
@@ -38,16 +39,20 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     """User model."""
-    #TODO añadir resto de caracteristicas o crear nuevos users asociados one2one
+    # TODO añadir resto de caracteristicas o crear nuevos users asociados one2one
     objects = UserManager()
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=150,
                                 unique=False,
-                                null = True,
-                                blank= True,
-                                default=True)
+                                null=True,
+                                blank=True,
+                                default=None)
     is_cliente = models.BooleanField(default=False)
     is_montador = models.BooleanField(default=False)
+    empresa = models.CharField(max_length=100,
+                               default=None,
+                               null=True,
+                               blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -74,8 +79,8 @@ class Cliente(models.Model):
                                    related_name='cliente')
     created = models.DateField(auto_now_add=True)
     slug = models.SlugField(max_length=20,
-                            unique= True,
-                            blank= True)
+                            unique=True,
+                            blank=True)
     admin = models.ForeignKey(User,
                               on_delete=models.CASCADE,
                               limit_choices_to={'is_staff': True},
@@ -84,7 +89,7 @@ class Cliente(models.Model):
                              max_length=10)
     logo = models.ForeignKey(Logo,
                              on_delete=models.CASCADE,
-                             default= None)
+                             default=None)
 
     def get_every_two(self):
         newWord = ''
@@ -97,14 +102,63 @@ class Cliente(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = self.get_every_two()
-        return super(Cliente,self).save()
+        return super(Cliente, self).save()
 
 
 class Montador(models.Model):
     usuario = models.OneToOneField(User,
-                                on_delete=models.CASCADE,
-                                primary_key=True)
-    empresa = models.CharField(max_length=100)
+                                   on_delete=models.CASCADE,
+                                   primary_key=True,
+                                   limit_choices_to={'is_montador': True})
     dni = models.CharField(max_length=9)
     ciudad = models.CharField(max_length=50)
     provincia = models.CharField(max_length=50)
+
+
+class Pdv(models.Model):
+    slug = models.SlugField(max_length=10)
+    cadena = models.CharField(max_length=50)
+    direccion = models.TextField(max_length=300)
+    cp = models.IntegerField(max_length=5)
+    ciudad = models.CharField(max_length=50)
+    provincia = models.CharField(max_length=50)
+    prioridad = models.IntegerField(max_length=2)
+    activo = models.BooleanField(default=False)
+
+class TipoPdi(models.Model):
+    nombre = models.CharField(max_length=50)
+
+
+class MaterialPdi(models.Model):
+    nombre = models.CharField(max_length=50)
+
+
+class CreatividadPdi(models.Model):
+    nombre = models.CharField(max_length=50)
+
+
+class Pdi(models.Model):
+    pdv = models.ForeignKey(Pdv,
+                            on_delete=models.CASCADE,
+                            )
+    nombre = models.CharField(max_length=50)
+    material = models.ForeignKey(MaterialPdi,
+                                 on_delete=models.CASCADE)
+    tipo = models.ForeignKey(TipoPdi,
+                             on_delete=models.CASCADE)
+    creatividad = models.ForeignKey(CreatividadPdi,
+                                    on_delete=models.CASCADE)
+    anchoTotal = models.IntegerField(max_length=4)
+    anchoVista = models.IntegerField(max_length=4)
+    altoTotal = models.IntegerField(max_length=4)
+    altoVista = models.IntegerField(max_length=4)
+    estado = models.BooleanField()
+    composicion = models.BooleanField()
+    instaladores = models.IntegerField(max_length=3)
+
+
+class Campana(models.Model):
+    cliente = models.ForeignKey(Cliente,
+                                on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=50)
+    material = models.ForeignKey(MaterialPdi)

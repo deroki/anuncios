@@ -18,9 +18,17 @@ class ImageForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
     class Meta:
         model = models.User
-        fields = ('first_name', 'last_name', 'email', 'is_staff', 'is_cliente', 'is_montador')
+        fields = ('first_name', 'last_name', 'email', 'empresa', 'password', 'is_staff', 'is_cliente', 'is_montador')
         labels = {'first_name': 'Nombre',
                   'last_name': 'Apellidos',
-                  'is_staff' : 'Administrador',
+                  'is_staff': 'Administrador',
                   'is_cliente': 'Cliente',
-                  'is_montador': 'Montador'}
+                  'is_montador': 'Montador',
+                  'empresa': 'Empresa'}
+
+
+# TODO quitar el campo usuario y hacer que user el usuario que hemos metido en el form despues del save de este
+class MontadorForm(forms.ModelForm):
+    class Meta:
+        model = models.Montador
+        fields = '__all__'

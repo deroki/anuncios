@@ -21,6 +21,12 @@
                 <form method="POST" novalidate>
                     {% csrf_token %}
                     {{ form|crispy}}
+                    <div id="div_montador" style="display: none;">
+                        {{ form_montador|crispy }}
+                    </div>
+                    <div id="div_cliente" style="display: none;">
+                        {{ form_cliente|crispy }}
+                    </div>
                     <button type='submit' class='btn btn-success'> Crear </button>
                 </form>
             </div>
@@ -40,11 +46,11 @@
                 console.log('changeado');
                 if (this.checked) {
                     $('#div_id_is_cliente').hide();
-                    $('#id_is_cliente').prop('checked', false)
+                    $('#id_is_cliente').prop('checked', false);
                     $('#div_id_is_montador').hide();
                     $('#id_is_montador').prop('checked', false)
                 } else {
-                    $('#div_id_is_cliente').show()
+                    $('#div_id_is_cliente').show();
                     $('#div_id_is_montador').show()
 
                 }
@@ -56,12 +62,14 @@
                 console.log('changeado');
                 if (this.checked) {
                     $('#div_id_is_staff').hide();
-                    $('#id_is_staff').prop('checked', false)
+                    $('#id_is_staff').prop('checked', false);
                     $('#div_id_is_montador').hide();
-                    $('#id_is_montador').prop('checked', false)
+                    $('#id_is_montador').prop('checked', false);
+                    $('#div_cliente').show();
                 } else {
-                    $('#div_id_is_staff').show()
-                    $('#div_id_is_montador').show()
+                    $('#div_id_is_staff').show();
+                    $('#div_id_is_montador').show();
+                    $('#div_cliente').hide();
 
                 }
 
@@ -71,12 +79,15 @@
                 console.log('changeado');
                 if (this.checked) {
                     $('#div_id_is_cliente').hide();
-                    $('#id_is_cliente').prop('checked', false)
+                    $('#id_is_cliente').prop('checked', false);
                     $('#div_id_is_staff').hide();
-                    $('#id_is_staff').prop('checked', false)
+                    $('#id_is_staff').prop('checked', false);
+                    $('#div_montador').show()
+
                 } else {
-                    $('#div_id_is_cliente').show()
-                    $('#div_id_is_staff').show()
+                    $('#div_id_is_cliente').show();
+                    $('#div_id_is_staff').show();
+                    $('#div_montador').hide();
 
                 }
 

@@ -7,7 +7,7 @@ from django.http import HttpResponse
 # Create your views here.
 from django.template import RequestContext
 
-from main.forms import ClienteForm, ImageForm, UserForm
+from main.forms import ClienteForm, ImageForm, UserForm, MontadorForm
 from main.models import Cliente
 from anuncios2.settings import MEDIA_URL
 
@@ -93,7 +93,9 @@ def usuarios(request):
 def crear_usuario(request):
         exitStatus = None
         if request.POST:
+            # TODO procesar los forms dependiendo del iscliente, isstaff....
             form = UserForm(request.POST)
+
             if form.is_valid():
                 form.save()
                 exitStatus = "Usuario guardado"
@@ -101,6 +103,10 @@ def crear_usuario(request):
                                                                    'exitStatus': exitStatus})
         else:
             form = UserForm()
+            form_montador = MontadorForm()
+            form_cliente = ClienteForm()
             exitStatus = None
         return render(request, 'main/crear_usuario.html', {'form': form,
+                                                           'form_montador': form_montador,
+                                                           'form_cliente': form_cliente,
                                                             'exitStatus': exitStatus})
