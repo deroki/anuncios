@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 
 class UserManager(BaseUserManager):
@@ -91,9 +92,12 @@ class Cliente(models.Model):
                              on_delete=models.CASCADE,
                              default=None)
 
+    def __str__(self):
+        return self.usuario.empresa
+
     def get_every_two(self):
         newWord = ''
-        for char in self.nombre[::2]:
+        for char in self.usuario.empresa[::2]:
             newWord += char
 
         return newWord[:3]
@@ -114,27 +118,44 @@ class Montador(models.Model):
     ciudad = models.CharField(max_length=50)
     provincia = models.CharField(max_length=50)
 
+    def __str__(self):
+        return f'{self.usuario.empresa}-{self.usuario.first_name}'
+
 
 class Pdv(models.Model):
     slug = models.SlugField(max_length=10)
     cadena = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=50)
     direccion = models.TextField(max_length=300)
-    cp = models.IntegerField(max_length=5)
+    cp = models.IntegerField()
     ciudad = models.CharField(max_length=50)
     provincia = models.CharField(max_length=50)
-    prioridad = models.IntegerField(max_length=2)
+    prioridad = models.IntegerField()
     activo = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.slug
+
 
 class TipoPdi(models.Model):
     nombre = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.nombre
 
-class MaterialPdi(models.Model):
+
+class Material(models.Model):
     nombre = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.nombre
 
-class CreatividadPdi(models.Model):
+
+class Creatividad(models.Model):
     nombre = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.nombre
 
 
 class Pdi(models.Model):
@@ -142,23 +163,62 @@ class Pdi(models.Model):
                             on_delete=models.CASCADE,
                             )
     nombre = models.CharField(max_length=50)
-    material = models.ForeignKey(MaterialPdi,
-                                 on_delete=models.CASCADE)
     tipo = models.ForeignKey(TipoPdi,
                              on_delete=models.CASCADE)
-    creatividad = models.ForeignKey(CreatividadPdi,
-                                    on_delete=models.CASCADE)
-    anchoTotal = models.IntegerField(max_length=4)
-    anchoVista = models.IntegerField(max_length=4)
-    altoTotal = models.IntegerField(max_length=4)
-    altoVista = models.IntegerField(max_length=4)
-    estado = models.BooleanField()
+    anchoTotal = models.IntegerField()
+    anchoVista = models.IntegerField()
+    altoTotal = models.IntegerField()
+    altoVista = models.IntegerField()
+    activo = models.BooleanField()
     composicion = models.BooleanField()
-    instaladores = models.IntegerField(max_length=3)
+    instaladores = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.pdv}-{self.nombre}"
 
 
 class Campana(models.Model):
     cliente = models.ForeignKey(Cliente,
                                 on_delete=models.CASCADE)
     nombre = models.CharField(max_length=50)
-    material = models.ForeignKey(MaterialPdi)
+    material = models.ForeignKey(Material,
+                                 on_delete=models.CASCADE)
+    creatividad = models.ForeignKey(Creatividad,
+                                    on_delete=models.CASCADE)
+    comentarios = models.TextField(max_length=500)
+    activo = models.BooleanField()
+    fecha_creaccion = models.DateField(auto_now_add=True)
+    fecha_cambio = models.DateField(auto_now=True)
+    fecha_finalizado = models.DateField(null=True,
+                                        blank=True)
+
+    def __str__(self):
+        return f'{self.cliente}-{self.nombre}'
+
+
+IDIOMAS = (('esp', 'Español'),
+           ('cat', 'Catalán'),
+           ('gal', 'Gallego'),
+           ('eu', 'Euskera'),
+           ('eng', 'Inglés'),)
+
+def pdi_image_path(instance, filename):
+    return f'images/{instance.campana.nombre}/{instance.pdv.slug}/{instance.pdi.nombre}/{filename}'
+
+
+class Campana_pdV_pdI(models.Model):
+    campana = models.ForeignKey(Campana, on_delete=models.CASCADE)
+    pdv = models.ForeignKey(Pdv, on_delete=models.CASCADE)
+    pdi = models.ForeignKey(Pdi, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=pdi_image_path)
+    idioma = models.CharField(choices=IDIOMAS, max_length=10)
+    montador = models.ForeignKey(Montador,on_delete=models.CASCADE)
+    fecha_creaccion = models.DateField(auto_now_add=True)
+    fecha_cambio = models.DateField(auto_now=True)
+
+
+
+
+
+
+

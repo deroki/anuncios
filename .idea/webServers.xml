@@ -2,8 +2,8 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="5c6093d4-78a3-4eb9-b466-0e753f5a9f16" name="googlecloud" url="http://35.204.244.138">
-        <fileTransfer host="35.204.244.138" port="22" privateKey="$USER_HOME$/.ssh/id_rsa" rootFolder="/home/bitnami/apps/django/django_projects/" accessType="SFTP" keyPair="true">
+      <webServer id="5c6093d4-78a3-4eb9-b466-0e753f5a9f16" name="googlecloud" url="http://35.246.144.44/">
+        <fileTransfer host="35.246.144.44" port="22" privateKey="$USER_HOME$/.ssh/googlekey" rootFolder="/home/Linux" accessType="SFTP" keyPair="true">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>

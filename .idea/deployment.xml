@@ -5,7 +5,7 @@
       <paths name="googlecloud">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/bitnami/apps/django/django_projects/Project" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home/Project" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

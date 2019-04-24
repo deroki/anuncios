@@ -9,6 +9,7 @@ from django.template import RequestContext
 
 from main.forms import ClienteForm, ImageForm, UserForm, MontadorForm
 from main.models import Cliente
+from main.models import *
 from anuncios2.settings import MEDIA_URL
 
 def login_user(request):
@@ -110,3 +111,7 @@ def crear_usuario(request):
                                                            'form_montador': form_montador,
                                                            'form_cliente': form_cliente,
                                                             'exitStatus': exitStatus})
+
+def campana_pdvs(request):
+    campanaPdvs = Campana_pdV_pdI.objects.all()
+    return render(request, 'main/campana_pdvs.html', {'campanaPdvs': campanaPdvs})
