@@ -177,15 +177,18 @@ class Pdi(models.Model):
         return f"{self.pdv}-{self.nombre}"
 
 
+campana_estados =(('ok', 'ok'),
+                  ('pendiente', 'pendiente'),
+                  ('incidencia', 'incidencia'))
+
 class Campana(models.Model):
     cliente = models.ForeignKey(Cliente,
                                 on_delete=models.CASCADE)
     nombre = models.CharField(max_length=50)
-    material = models.ForeignKey(Material,
-                                 on_delete=models.CASCADE)
-    creatividad = models.ForeignKey(Creatividad,
-                                    on_delete=models.CASCADE)
+    # TODO: creatividad depende del pdi, y los materiales tb
     comentarios = models.TextField(max_length=500)
+    estado = models.CharField(choices=campana_estados,
+                              max_length=15)
     activo = models.BooleanField()
     fecha_creaccion = models.DateField(auto_now_add=True)
     fecha_cambio = models.DateField(auto_now=True)
@@ -210,11 +213,15 @@ class Campana_pdV_pdI(models.Model):
     campana = models.ForeignKey(Campana, on_delete=models.CASCADE)
     pdv = models.ForeignKey(Pdv, on_delete=models.CASCADE)
     pdi = models.ForeignKey(Pdi, on_delete=models.CASCADE)
+    material = models.ForeignKey(Material,on_delete=models.CASCADE)
+    creatividad = models.ForeignKey(Creatividad,on_delete=models.CASCADE)
     image = models.ImageField(upload_to=pdi_image_path)
     idioma = models.CharField(choices=IDIOMAS, max_length=10)
     montador = models.ForeignKey(Montador,on_delete=models.CASCADE)
     fecha_creaccion = models.DateField(auto_now_add=True)
     fecha_cambio = models.DateField(auto_now=True)
+    # TODO: boton para desplegar todas las datatables extendibles
+    # TODO : poner el color del cliente look n feel
 
 
 

@@ -26,7 +26,7 @@ def login_user(request):
                 if user.is_staff:
                     return HttpResponseRedirect('clientes')
                 elif user.is_cliente:
-                    return HttpResponseRedirect()
+                    return HttpResponseRedirect('campanas_del_cliente')
                 elif user.is_montador:
                     return HttpResponseRedirect()
 
@@ -94,14 +94,30 @@ def usuarios(request):
 def crear_usuario(request):
         exitStatus = None
         if request.POST:
-            # TODO procesar los forms dependiendo del iscliente, isstaff....
+            # TODO: si el form no es valido meterlo en exitstatus
             form = UserForm(request.POST)
-
+            form_cliente = ClienteForm(request.POST)
+            form_montador = MontadorForm(request.POST)
             if form.is_valid():
                 form.save()
                 exitStatus = "Usuario guardado"
+                user = User.objects.get(email=request.POST.get('email'))
+                if request.POST.get('is_cliente'):
+                    if form_cliente.is_valid():
+                        preform = form_cliente.save(commit=False)
+                        preform.usuario = user
+                        preform.save()
+                        exitStatus = "Usuario cliente guardado"
+                elif request.POST.get('is_montador'):
+                    if form_montador.is_valid():
+                        preform = form_montador.save(commit=False)
+                        preform.usuario = user
+                        preform.save()
+                        exitStatus = "Usuario montador guardado"
                 return render(request, 'main/crear_usuario.html', {'form': form,
-                                                                   'exitStatus': exitStatus})
+                                                           'form_montador': form_montador,
+                                                           'form_cliente': form_cliente,
+                                                            'exitStatus': exitStatus})
         else:
             form = UserForm()
             form_montador = MontadorForm()
@@ -112,6 +128,20 @@ def crear_usuario(request):
                                                            'form_cliente': form_cliente,
                                                             'exitStatus': exitStatus})
 
+
 def campana_pdvs(request):
     campanaPdvs = Campana_pdV_pdI.objects.all()
     return render(request, 'main/campana_pdvs.html', {'campanaPdvs': campanaPdvs})
+
+
+def pdis_por_pdv(request):
+    if request.POST:
+        pdvSlug = request.POST['pdvSlug']
+        pdis = Pdi.objects.filter(pdv=pdvSlug)
+
+
+def campanas_del_cliente(request):
+    user = request.user
+    campanas = Campana.objects.filter(user=user)
+    return render(request, 'main/campanas_del_cliente.html', {'campanas': campanas})
+
