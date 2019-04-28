@@ -1,3 +1,5 @@
+from pipes import stepkinds
+
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, render_to_response
@@ -7,7 +9,7 @@ from django.http import HttpResponse
 # Create your views here.
 from django.template import RequestContext
 
-from main.forms import ClienteForm, ImageForm, UserForm, MontadorForm
+from main.forms import ClienteForm, ImageForm, UserForm, MontadorForm, CampanaForm
 from main.models import Cliente
 from main.models import *
 from anuncios2.settings import MEDIA_URL
@@ -93,7 +95,7 @@ def usuarios(request):
 
 def crear_usuario(request):
         exitStatus = None
-        if request.POST:
+        if request.method == 'POST':
             # TODO: si el form no es valido meterlo en exitstatus
             form = UserForm(request.POST)
             form_cliente = ClienteForm(request.POST)
@@ -130,8 +132,7 @@ def crear_usuario(request):
 
 
 def campana_pdvs(request):
-    campanaPdvs = Campana_pdV_pdI.objects.all()
-    return render(request, 'main/campana_pdvs.html', {'campanaPdvs': campanaPdvs})
+    pass
 
 
 def pdis_por_pdv(request):
@@ -142,6 +143,44 @@ def pdis_por_pdv(request):
 
 def campanas_del_cliente(request):
     user = request.user
-    campanas = Campana.objects.filter(user=user)
-    return render(request, 'main/campanas_del_cliente.html', {'campanas': campanas})
+    cliente = Cliente.objects.get(usuario=user)
+    campanas = Campana.objects.filter(cliente=cliente)
+    return render(request, 'main/cliente/campanas_del_cliente.html', {'campanas': campanas})
+
+
+def crear_campana(request):
+    if request.method == 'POST':
+        form_campana = CampanaForm(request.POST)
+        form_campanaPdVPdI = CampanaPdvPdiForm(request.POST)
+        if form_campana.is_valid():
+            form_campana.save()
+            if form_campanaPdVPdI.is_valid():
+                form_campanaPdVPdI.save()
+    else:
+        form_campana = CampanaForm()
+        form_campanaPdVPdI = CampanaPdvPdiForm()
+
+    return render(request, 'main/crear_campana.html', {'form_campana': form_campana,
+                                                       'form_campanaPdVPdI': form_campanaPdVPdI})
+
+
+def elegir_pdvs(request,campana_pk):
+    user = request.user
+    selected_campana = Campana.objects.get(pk = campana_pk)
+    cliente = Cliente.objects.get(usuario = user)
+    pdvs = Pdv.objects.filter(cliente=cliente)
+
+    for pdv in pdvs:
+        campanas_del_pdv = pdv.campana_pdv_set
+        try:
+            campana = campanas_del_pdv.get(campana=selected_campana)
+            pdv.estado = campana.estado
+            print(f'{pdv.nombre}   {pdv.estado}')
+        except:
+            pass
+
+
+
+    return render(request,'main/cliente/pdvs_cliente.html', {'pdvs':pdvs})
+
 

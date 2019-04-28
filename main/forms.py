@@ -52,3 +52,11 @@ class MontadorForm(forms.ModelForm):
     class Meta:
         model = models.Montador
         fields = '__all__'
+
+
+class CampanaForm(forms.ModelForm):
+    class Meta:
+        model = models.Campana
+        fields = "__all__"
+
+

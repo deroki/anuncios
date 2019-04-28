@@ -4,7 +4,9 @@
 <html class="no-js" lang="en">
 
 <head>
-{% include 'static_templates/css.html' %}
+    {% include 'static_templates/css.html' %}
+    {% block css %}
+    {% endblock %}
 </head>
 
 <body>
@@ -29,31 +31,19 @@
             <div class="main-menu">
                 <div class="menu-inner">
                     <nav>
+                        {% if user.is_staff %}
                         <ul class="metismenu" id="menu">
-
-
                             <li><a href={% url 'clientes' %}><i class="ti-heart"></i><span>Clientes</span></a></li>
                             <li><a href="{% url 'usuarios' %}"><i class="ti-face-smile"></i><span>Usuarios</span></a></li>
                             <li><a href="{% url 'campana_pdvs' %}"><i class="ti-dashboard"></i><span>Puntos de Venta</span></a></li>
                             <li><a href="#"><i class="ti-brush"></i><span>Montador</span></a></li>
-                            <li>
-                                <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-align-left"></i>
-                                    <span>Multi
-                                        level menu</span></a>
-                                <ul class="collapse">
-                                    <li><a href="#">Item level (1)</a></li>
-                                    <li><a href="#">Item level (1)</a></li>
-                                    <li><a href="#" aria-expanded="true">Item level (1)</a>
-                                        <ul class="collapse">
-                                            <li><a href="#">Item level (2)</a></li>
-                                            <li><a href="#">Item level (2)</a></li>
-                                            <li><a href="#">Item level (2)</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Item level (1)</a></li>
-                                </ul>
-                            </li>
                         </ul>
+                        {% endif %}
+                        {% if user.is_cliente %}
+                        <ul class="metismenu" id="menu">
+                            <li><a href={% url 'campanas_del_cliente' %}><i class="ti-heart"></i><span>Campañas</span></a></li>
+                        </ul>
+                        {% endif %}
                     </nav>
                 </div>
             </div>

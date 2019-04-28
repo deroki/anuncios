@@ -123,6 +123,8 @@ class Montador(models.Model):
 
 
 class Pdv(models.Model):
+    cliente = models.ManyToManyField('Cliente')
+    campanas = models.ManyToManyField('Campana', through='Campana_Pdv')
     slug = models.SlugField(max_length=10)
     cadena = models.CharField(max_length=50)
     nombre = models.CharField(max_length=50)
@@ -144,24 +146,8 @@ class TipoPdi(models.Model):
         return self.nombre
 
 
-class Material(models.Model):
-    nombre = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.nombre
-
-
-class Creatividad(models.Model):
-    nombre = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.nombre
-
-
 class Pdi(models.Model):
-    pdv = models.ForeignKey(Pdv,
-                            on_delete=models.CASCADE,
-                            )
+    pdv = models.ForeignKey(Pdv, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=50)
     tipo = models.ForeignKey(TipoPdi,
                              on_delete=models.CASCADE)
@@ -177,17 +163,18 @@ class Pdi(models.Model):
         return f"{self.pdv}-{self.nombre}"
 
 
-campana_estados =(('ok', 'ok'),
-                  ('pendiente', 'pendiente'),
-                  ('incidencia', 'incidencia'))
+pdv_estados =(('ok', 'ok'),
+              ('pendiente', 'pendiente'),
+              ('incidencia', 'incidencia'))
+
 
 class Campana(models.Model):
     cliente = models.ForeignKey(Cliente,
                                 on_delete=models.CASCADE)
+    pdvs = models.ManyToManyField('Pdv', through='Campana_Pdv')
     nombre = models.CharField(max_length=50)
-    # TODO: creatividad depende del pdi, y los materiales tb
     comentarios = models.TextField(max_length=500)
-    estado = models.CharField(choices=campana_estados,
+    estado = models.CharField(choices=pdv_estados,
                               max_length=15)
     activo = models.BooleanField()
     fecha_creaccion = models.DateField(auto_now_add=True)
@@ -206,23 +193,46 @@ IDIOMAS = (('esp', 'Español'),
            ('eng', 'Inglés'),)
 
 def pdi_image_path(instance, filename):
-    return f'images/{instance.campana.nombre}/{instance.pdv.slug}/{instance.pdi.nombre}/{filename}'
+    return f'images/{instance.Campana_Pdv.campana.nombre}/{instance.Campana_Pdv.pdv.slug}/{instance.pdi.nombre}/{filename}'
 
-
-class Campana_pdV_pdI(models.Model):
-    campana = models.ForeignKey(Campana, on_delete=models.CASCADE)
+class Campana_Pdv(models.Model):
+    campana = models.ForeignKey(Campana,on_delete=models.CASCADE)
     pdv = models.ForeignKey(Pdv, on_delete=models.CASCADE)
+    estado = models.BooleanField()
+
+    def __str__(self):
+        return f'{self.campana.nombre}//{self.pdv.nombre}'
+
+
+class Material(models.Model):
+    nombre = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.nombre
+
+
+class Creatividad(models.Model):
+    nombre = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.nombre
+
+
+class CampanapdV_pdI(models.Model):
+    Campana_Pdv = models.ForeignKey(Campana_Pdv, on_delete=models.CASCADE)
     pdi = models.ForeignKey(Pdi, on_delete=models.CASCADE)
     material = models.ForeignKey(Material,on_delete=models.CASCADE)
     creatividad = models.ForeignKey(Creatividad,on_delete=models.CASCADE)
     image = models.ImageField(upload_to=pdi_image_path)
     idioma = models.CharField(choices=IDIOMAS, max_length=10)
     montador = models.ForeignKey(Montador,on_delete=models.CASCADE)
-    fecha_creaccion = models.DateField(auto_now_add=True)
+    fecha_creacion = models.DateField(auto_now_add=True)
     fecha_cambio = models.DateField(auto_now=True)
     # TODO: boton para desplegar todas las datatables extendibles
     # TODO : poner el color del cliente look n feel
 
+    def __str__(self):
+        return f'{self.Campana_Pdv.campana}//{self.Campana_Pdv.pdv}//{self.pdi}'
 
 
 
