@@ -186,4 +186,8 @@ def pdis_json(request):
     pdv_pk = request.GET.get('pdv_pk', None)
     pdv = Pdv.objects.get(pk=pdv_pk)
     pdis = list(pdv.pdi_set.all().values())
-    return JsonResponse({'data': pdis})
+    creatividades = list(Creatividad.objects.all().values())
+    materiales = list(Material.objects.all().values())
+    return JsonResponse({'data': pdis,
+                         'creatividades': creatividades,
+                         'materiales' : materiales})
