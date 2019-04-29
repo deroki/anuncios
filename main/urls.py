@@ -28,7 +28,8 @@ urlpatterns = [
     path('campana_pdvs', views.campana_pdvs, name = 'campana_pdvs'),
     path('campanas_del_cliente/', views.campanas_del_cliente, name='campanas_del_cliente'),
     path('crear_campana', views.crear_campana, name='crear_campana'),
-    path('elegir_pdvs/<int:campana_pk>/', views.elegir_pdvs, name ='elegir_pdvs')
+    path('elegir_pdvs/<int:campana_pk>/', views.elegir_pdvs, name ='elegir_pdvs'),
+    path('pdis_json/', views.pdis_json, name = 'pdis_json')
 
 
 
