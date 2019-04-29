@@ -1,7 +1,7 @@
 from pipes import stepkinds
 
 from django.contrib.auth import login, authenticate, logout, get_user_model
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, render_to_response
 from django.core import serializers
 from django.http import HttpResponse
@@ -179,8 +179,11 @@ def elegir_pdvs(request,campana_pk):
         except:
             pass
 
-
-
     return render(request,'main/cliente/pdvs_cliente.html', {'pdvs':pdvs})
 
 
+def pdis_json(request):
+    pdv_pk = request.GET.get('pdv_pk', None)
+    pdv = Pdv.objects.get(pk=pdv_pk)
+    pdis = list(pdv.pdi_set.all().values())
+    return JsonResponse({'data': pdis})
