@@ -2,9 +2,26 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block logo %}
+
+                        {% if MEDIA_URL %}
+                            <img src={{ MEDIA_URL }}/{{ logo_path }}>
+                        {% else %}
+                            <a href="#"><h1> PEPEAPP </h1></a>
+                        {% endif %}
+{% endblock %}
+
 {% block content %}
-    <h1>Usuarios</h1>
     <br><br>
+    <div class="col-12">
+        <div class="card mt-auto">
+            <div class="card-body">
+                <div class="row">
+                    <h1>Crear campaña</h1>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {% if exitStatus %}
     <div class="alert alert-success" role="alert">

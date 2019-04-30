@@ -177,7 +177,7 @@ class Campana(models.Model):
     estado = models.CharField(choices=pdv_estados,
                               max_length=15)
     activo = models.BooleanField()
-    fecha_creaccion = models.DateField(auto_now_add=True)
+    fecha_creacion = models.DateField(auto_now_add=True)
     fecha_cambio = models.DateField(auto_now=True)
     fecha_finalizado = models.DateField(null=True,
                                         blank=True)
@@ -199,6 +199,7 @@ class Campana_Pdv(models.Model):
     campana = models.ForeignKey(Campana,on_delete=models.CASCADE)
     pdv = models.ForeignKey(Pdv, on_delete=models.CASCADE)
     estado = models.BooleanField()
+    idioma = models.CharField(choices=IDIOMAS, max_length=10)
 
     def __str__(self):
         return f'{self.campana.nombre}//{self.pdv.nombre}'
@@ -224,7 +225,6 @@ class CampanapdV_pdI(models.Model):
     material = models.ForeignKey(Material,on_delete=models.CASCADE)
     creatividad = models.ForeignKey(Creatividad,on_delete=models.CASCADE)
     image = models.ImageField(upload_to=pdi_image_path)
-    idioma = models.CharField(choices=IDIOMAS, max_length=10)
     montador = models.ForeignKey(Montador,on_delete=models.CASCADE)
     fecha_creacion = models.DateField(auto_now_add=True)
     fecha_cambio = models.DateField(auto_now=True)

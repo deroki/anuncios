@@ -1,6 +1,7 @@
 from django import forms
 
 from main import models
+from main.models import Cliente
 
 
 class ClienteForm(forms.ModelForm):
@@ -55,6 +56,11 @@ class MontadorForm(forms.ModelForm):
 
 
 class CampanaForm(forms.ModelForm):
+    pdvs = forms.CharField(required=False, widget=forms.HiddenInput())
+    fecha_finalizado = forms.DateField(required=False, widget=forms.HiddenInput())
+    cliente = forms.ModelChoiceField(queryset=Cliente.objects.all(),
+                                     required=False,
+                                     widget=forms.HiddenInput())
     class Meta:
         model = models.Campana
         fields = "__all__"

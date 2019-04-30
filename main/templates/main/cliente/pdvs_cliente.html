@@ -1,6 +1,14 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
+{% block logo %}
+
+                        {% if MEDIA_URL %}
+                            <img src={{ MEDIA_URL }}/{{ logo_path }}>
+                        {% else %}
+                            <a href="#"><h1> PEPEAPP </h1></a>
+                        {% endif %}
+{% endblock %}
 
 {% block css%}<style>
     td.add_button{
@@ -23,16 +31,26 @@
 
 
 {% block content %}
-    <h1>Mis Campañas</h1>
+    <br><br>
+    <div class="col-12">
+        <div class="card mt-auto">
+            <div class="card-body">
+                <div class="row">
+                    <h1>{{ selected_campana.nombre }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <br><br>
     <!-- botones -->
     <div class="col-12">
         <div class="card mt-auto">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-3">
-                        <a href={% url 'crear_campana' %} class="btn btn-dark text-white">Nueva Campaña</a>
-                    </div>
+{#                    <div class="col-3">#}
+{#                        <a href={% url 'crear_campana' %} class="btn btn-dark text-white">Nueva Campaña</a>#}
+{#                    </div>#}
 
 
                 </div>
@@ -53,6 +71,7 @@
                                 <th class="text-center">Pdv</th>
                                 <th class="text-center">Nombre</th>
                                 <th class="text-center">Cadena</th>
+                                <th class="text-center">Idioma</th>
                                 <th class="text-center">Ciudad</th>
                                 <th class="text-center">Provincia</th>
                                 <th class="text-center">Estado</th>
@@ -69,6 +88,7 @@
                                     <td>{{ pdv.slug }}</td>
                                     <td>{{ pdv.nombre }}</td>
                                     <td>{{ pdv.cadena }}</td>
+                                    <td>{{ pdv.idioma }}</td>
                                     <td>{{ pdv.ciudad }}</td>
                                     <td>{{ pdv.provincia }}</td>
 
@@ -150,7 +170,7 @@
 
             function createtable(json, materiales, creatividades){
                 console.log(json[0].nombre)
-                let tabla = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+                let tabla = '<table class="extended">';
                 tabla += `<thead>
                             <tr>
                                 <th class="text-center">Nombre</th>

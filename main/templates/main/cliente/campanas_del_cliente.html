@@ -1,14 +1,14 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
-{#{% block logo %}#}
-{##}
-{#                        {% if user.is_cliente %}#}
-{#                            <img src={{ MEDIA_URL }}/{{ logo }}>#}
-{#                        {% else %}#}
-{#                            <a href="#"><h1> PEPEAPP </h1></a>#}
-{#                        {% endif %}#}
-{#{% endblock %}#}
+{% block logo %}
+
+                        {% if MEDIA_URL %}
+                            <img src={{ MEDIA_URL }}/{{ logo_path }}>
+                        {% else %}
+                            <a href="#"><h1> PEPEAPP </h1></a>
+                        {% endif %}
+{% endblock %}
 
 
 {% block css%}
@@ -45,7 +45,16 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Mis Campañas</h1>
+        <br><br>
+    <div class="col-12">
+        <div class="card mt-auto">
+            <div class="card-body">
+                <div class="row">
+                    <h1>Mis campañas</h1>
+                </div>
+            </div>
+        </div>
+    </div>
     <br><br>
     <!-- botones -->
     <div class="col-12">
@@ -55,10 +64,10 @@
                     <div class="col-3">
                         <a href={% url 'crear_campana' %} class="btn btn-dark text-white">Nueva Campaña</a>
                     </div>
-                    <div class="col-3">
-                        <a href="#" class="btn btn-dark text-white">Añadir Cliente</a>
-                    </div>
-                    <
+{#                    <div class="col-3">#}
+{#                        <a href="#" class="btn btn-dark text-white">Añadir Cliente</a>#}
+{#                    </div>#}
+
                 </div>
             </div>
         </div>
@@ -74,6 +83,7 @@
                             <tr>
 
                                 <th class="text-center">Nombre</th>
+                                <th class="text-center">Fecha creación</th>
                                 <th class="text-center">Finalizada</th>
                                 <th class="text-center">Estado</th>
                                 <th class="text-center">Activo</th>
@@ -85,7 +95,14 @@
                                 <tr>
 
                                     <td><a href="{% url 'elegir_pdvs' campana.pk %}">{{ campana.nombre }}</a></td>
-                                    <td>{{ campana.fecha_finalizado }}</td>
+                                    <td>{{ campana.fecha_creacion }}</td>
+                                    <td>
+                                        {% if campana.fecha_finalizado == None %}
+                                        ---
+                                        {% else %}
+                                        {{ campana.fecha_finalizado }}
+                                        {% endif %}
+                                    </td>
                                     <td>{{ campana.estado }}</td>
                                     <td>{{ campana.activo }}</td>
 

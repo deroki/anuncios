@@ -144,30 +144,42 @@ def pdis_por_pdv(request):
 def campanas_del_cliente(request):
     user = request.user
     cliente = Cliente.objects.get(usuario=user)
+    logo_path = cliente.logo.image.name
     campanas = Campana.objects.filter(cliente=cliente)
-    return render(request, 'main/cliente/campanas_del_cliente.html', {'campanas': campanas})
+    return render(request, 'main/cliente/campanas_del_cliente.html', {'campanas': campanas,
+                                                                      'MEDIA_URL' : MEDIA_URL,
+                                                                      'logo_path' : logo_path
+                                                                      })
 
 
 def crear_campana(request):
+    user = request.user
+    cliente = Cliente.objects.get(usuario=user)
+    logo_path = cliente.logo.image.name
     if request.method == 'POST':
+        user = request.user
+        cliente = Cliente.objects.get(usuario=user)
         form_campana = CampanaForm(request.POST)
-        form_campanaPdVPdI = CampanaPdvPdiForm(request.POST)
         if form_campana.is_valid():
-            form_campana.save()
-            if form_campanaPdVPdI.is_valid():
-                form_campanaPdVPdI.save()
+            preform = form_campana.save(commit=False)
+            preform.cliente = cliente
+            preform.save()
+            return HttpResponseRedirect('campanas_del_cliente')
     else:
         form_campana = CampanaForm()
-        form_campanaPdVPdI = CampanaPdvPdiForm()
 
-    return render(request, 'main/crear_campana.html', {'form_campana': form_campana,
-                                                       'form_campanaPdVPdI': form_campanaPdVPdI})
+    return render(request, 'main/cliente/crear_campana.html', {'form_campana': form_campana,
+                                                               'MEDIA_URL': MEDIA_URL,
+                                                               'logo_path': logo_path
+                                                               })
 
 
 def elegir_pdvs(request,campana_pk):
     user = request.user
     selected_campana = Campana.objects.get(pk = campana_pk)
     cliente = Cliente.objects.get(usuario = user)
+    logo_path = cliente.logo.image.name
+
     pdvs = Pdv.objects.filter(cliente=cliente)
 
     for pdv in pdvs:
@@ -175,11 +187,16 @@ def elegir_pdvs(request,campana_pk):
         try:
             campana = campanas_del_pdv.get(campana=selected_campana)
             pdv.estado = campana.estado
+            pdv.idioma = campana.idioma
             print(f'{pdv.nombre}   {pdv.estado}')
         except:
+            print('no existe la camapaña')
             pass
 
-    return render(request,'main/cliente/pdvs_cliente.html', {'pdvs':pdvs})
+    return render(request,'main/cliente/pdvs_cliente.html', {'pdvs': pdvs,
+                                                             'selected_campana': selected_campana,
+                                                             'MEDIA_URL' : MEDIA_URL,
+                                                              'logo_path' : logo_path})
 
 
 def pdis_json(request):
