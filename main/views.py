@@ -186,13 +186,12 @@ def elegir_pdvs(request,campana_pk):
     for pdv in pdvs:
         campanas_del_pdv = pdv.campana_pdv_set
         try:
-            campana = campanas_del_pdv.get(campana=selected_campana)
-            pdv.estado = campana.estado
-            pdv.idioma = campana.idioma
+            campana_pdv = campanas_del_pdv.get(campana=selected_campana)
+            pdv.estado = campana_pdv.estado
+            pdv.idioma = campana_pdv.idioma
+            pdv.checked = True
             print(f'{pdv.nombre}   {pdv.estado}')
         except:
-            pdv.estado = None
-            pdv.idioma = "---"
             pass
 
     return render(request,'main/cliente/pdvs_cliente.html', {'pdvs': pdvs,
@@ -273,7 +272,7 @@ def guardar_config_campana(request):
             #TODO idioma español por defecto cambiar al elegido en request
             campana_Pdv, created = Campana_Pdv.objects.get_or_create(campana=campana,
                                                             pdv=pdv,
-                                                            idioma='esp',
+                                                            idioma=params[f'pdv_{pdv.id}_idioma'],
                                                             estado='pendiente')
             campanaPdv_Pdi = CampanapdV_pdI.objects.get_or_create(Campana_Pdv = campana_Pdv,
                                                                   pdi = pdi,

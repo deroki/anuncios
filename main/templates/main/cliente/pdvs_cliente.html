@@ -89,21 +89,24 @@
                                     <td>{{ pdv.slug }}</td>
                                     <td>{{ pdv.nombre }}</td>
                                     <td>{{ pdv.cadena }}</td>
-                                    <td>{{ pdv.idioma }}</td>
+                                    <td>
+                                        <select {%  if pdv.idioma%} style="background-color:#FFFFF0;" {% endif %} name="pdv_{{pdv.pk }}_idioma">
+                                            <option {%  if pdv.idioma == 'esp' %} selected {% endif %} value="esp">Español</option>
+                                            <option {%  if pdv.idioma == 'cat' %} selected {% endif %} value="cat">Catalán</option>
+                                            <option {%  if pdv.idioma == 'gal' %} selected {% endif %} value="gal">Gallego</option>
+                                            <option {%  if pdv.idioma == 'eus' %} selected {% endif %} value="eus">Euskera</option>
+                                            <option {%  if pdv.idioma == 'eng' %} selected {% endif %} value="eng">Inglés</option>
+                                        </select>
+                                    </td>
                                     <td>{{ pdv.ciudad }}</td>
                                     <td>{{ pdv.provincia }}</td>
 
-                                    <td>
-                                    {% if pdv.estado == True %}
-                                        ok
-                                    {% elif pdv.estado == None %}
-                                        Incidencia
-                                    {% else %}
-                                        Incidencia
-                                    {% endif %}
+                                    <td>{{ pdv.estado }}
                                     </td>
 
-                                    <td> <input class="main_pdv_{{ pdv.pk }}" onclick="togglePdv(this)" type="checkbox" name="pdv_{{ pdv.pk }}" value="True"></td>
+                                    <td> <input {% if pdv.checked %} checked {% endif %}
+                                            class="main_pdv_{{ pdv.pk }}" onclick="togglePdv(this)" type="checkbox"
+                                            name="pdv_{{ pdv.pk }}" value="True"></td>
 
 
                                 </tr>
@@ -244,8 +247,12 @@
                         }
                     tabla+= '</select>';
                     tabla+= '</td>';
+                    var checked = null
                     //check
-                    tabla+= `<td> <input class="pdv_${pdv_pk}" onclick="togglePdi(this)"type="checkbox" name="pdi_${json[rrow]['id']}" value="${json.checked}"></td>`
+                    if (json[rrow].checked){
+                        checked = 'checked'
+                    }
+                    tabla+= `<td> <input ${checked} class="pdv_${pdv_pk}" onclick="togglePdi(this)"type="checkbox" name="pdi_${json[rrow]['id']}" value="${json.checked}"></td>`
 
 
 
