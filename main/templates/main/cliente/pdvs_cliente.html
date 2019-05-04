@@ -195,42 +195,30 @@
                 tabla += '<tbody>';
                 for (var rrow in json){
                     tabla+= '<tr>';
-                    //TODO: aqui podemos quitar el loop siguiente
-                    for (var key in json[rrow]){
-                        if (key === 'id' || key === 'pdv_id')
-                        {
-
-                        }
-                        else if(key === 'creatividad' || key === 'material'){
-                            tabla += '<td class="text-center">' + json[rrow][key];
-                            console.log(json[rrow][key]);
-                            tabla += `<select name="pdi_${json[rrow]['id']}_${key}">`;
-                            for (var index in materiales) {
-                                let id = materiales[index]['id'];
-                                let nombre = materiales[index]['nombre'];
-                                tabla += `<option value="${id}">${nombre}</option>`;
-                            }
-                            tabla += '</select>';
-                            tabla += '</td>';
-                        }
-                        else {
-                            tabla += '<td class="text-center">' + json[rrow][key] + '</td>';
-                        }
-                    }
-                // crear materiales y creatividades
-                    tabla += '<td>';
-                    tabla += `<select name="pdi_${json[rrow]['id']}Materiales">`;
-
-                    for (var index in materiales){
+                    tabla += '<td class="text-center">' + json[rrow].nombre + '</td>';
+                    tabla += '<td class="text-center">' + json[rrow].tipo + '</td>';
+                    tabla += '<td class="text-center">' + json[rrow].altoTotal + '</td>';
+                    tabla += '<td class="text-center">' + json[rrow].altoVista+ '</td>';
+                    tabla += '<td class="text-center">' + json[rrow].anchoTotal + '</td>';
+                    tabla += '<td class="text-center">' + json[rrow].anchoVista+ '</td>';
+                    tabla += '<td class="text-center">' + json[rrow].composicion + '</td>';
+                    tabla += '<td class="text-center">' + json[rrow].activo + '</td>';
+                    tabla += '<td class="text-center">' + json[rrow].instaladores + '</td>';
+                    //material actual
+                    tabla += '<td class="text-center">' + json[rrow].material ;
+                    //material a elegir
+                    tabla += `<select name="pdi_${json[rrow]['id']}_material">`;
+                    for (var index in materiales) {
                         let id = materiales[index]['id'];
                         let nombre = materiales[index]['nombre'];
                         tabla += `<option value="${id}">${nombre}</option>`;
-                        }
-
+                    }
                     tabla += '</select>';
                     tabla += '</td>';
-                    tabla+= '<td>';
-                    tabla+= `<select name="pdi_${json[rrow]['id']}Creatividades">`;
+                    //creatividad inicial
+                    tabla += '<td class="text-center">' + json[rrow].creatividad ;
+                    //creatividad a elegir
+                    tabla+= `<select name="pdi_${json[rrow]['id']}_creatividad">`;
 
                     for (var index in creatividades){
                         let id = creatividades[index]['id'];
@@ -239,7 +227,12 @@
                         }
                     tabla+= '</select>';
                     tabla+= '</td>';
-                    tabla+= `<td> <input class="pdv_${pdv_pk}" onclick="togglePdi(this)"type="checkbox" name="pdi_${json[rrow]['id']}" value="True"></td>`
+                    //check
+                    tabla+= `<td> <input class="pdv_${pdv_pk}" onclick="togglePdi(this)"type="checkbox" name="pdi_${json[rrow]['id']}" value="${json.checked}"></td>`
+
+
+
+
                     }
                 tabla+= '</tr>';
                 tabla += '</body>';

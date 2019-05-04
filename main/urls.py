@@ -29,7 +29,8 @@ urlpatterns = [
     path('campanas_del_cliente/', views.campanas_del_cliente, name='campanas_del_cliente'),
     path('crear_campana', views.crear_campana, name='crear_campana'),
     path('elegir_pdvs/<int:campana_pk>/', views.elegir_pdvs, name ='elegir_pdvs'),
-    path('pdis_json/', views.pdis_json, name = 'pdis_json')
+    path('pdis_json/', views.pdis_json, name = 'pdis_json'),
+    path('guardar_config_campana/', views.guardar_config_campana, name='guardar_config_campana')
 
 
 

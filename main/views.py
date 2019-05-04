@@ -1,3 +1,4 @@
+import re
 from pipes import stepkinds
 
 from django.contrib.auth import login, authenticate, logout, get_user_model
@@ -190,7 +191,8 @@ def elegir_pdvs(request,campana_pk):
             pdv.idioma = campana.idioma
             print(f'{pdv.nombre}   {pdv.estado}')
         except:
-            print('no existe la camapaña')
+            pdv.estado = None
+            pdv.idioma = "---"
             pass
 
     return render(request,'main/cliente/pdvs_cliente.html', {'pdvs': pdvs,
@@ -200,11 +202,56 @@ def elegir_pdvs(request,campana_pk):
 
 
 def pdis_json(request):
+    str = request.META['HTTP_REFERER']
+    CampanaNum = re.findall(r'/\d+/', str)[0][1:-1]
+    campana = Campana.objects.filter(pk = CampanaNum).get()
     pdv_pk = request.GET.get('pdv_pk', None)
     pdv = Pdv.objects.get(pk=pdv_pk)
-    pdis = list(pdv.pdi_set.all().values())
+    pdis = pdv.pdi_set.all()
     creatividades = list(Creatividad.objects.all().values())
     materiales = list(Material.objects.all().values())
+    try:
+        campana_pdv = pdv.campana_pdv_set.filter(campana = CampanaNum).get()
+        print(campana_pdv)
+        pdis_ = pdis.values()
+        for pdi, pdi_ in zip(pdis,pdis_):
+                try:
+                    campanapdv_pdi = pdi.campanapdv_pdi_set.all()
+                    campanapdv_pdi = pdi.campanapdv_pdi_set.filter(Campana_Pdv = campana_pdv).get()
+                    pdi_['creatividad'] = campanapdv_pdi.creatividad.nombre
+                    pdi_['material'] = campanapdv_pdi.material.nombre
+                    pdi_['checked'] = True
+
+                except Exception as Err:
+                    print(Err)
+                    pdi_['creatividad'] = ""
+                    pdi_['material'] = ""
+                    pdi_['checked'] = False
+
+        pdis_ = list(pdis_)
+        return JsonResponse({'data': pdis_,
+                             'creatividades': creatividades,
+                             'materiales': materiales,
+                             'pdv_pk': pdv_pk})
+
+
+    except Exception as Err:
+        print(Err)
+        pdis = pdis.values()
+        for pdi in pdis:
+            pdi['creatividad'] = ""
+            pdi['material'] = ""
+
+    pdis = list(pdis)
     return JsonResponse({'data': pdis,
                          'creatividades': creatividades,
-                         'materiales' : materiales})
+                         'materiales' : materiales,
+                         'pdv_pk': pdv_pk})
+
+
+def guardar_config_campana(request):
+    request = request
+    str = request.META['HTTP_REFERER']
+    CampanaNum = re.findall(r'/\d+/', str)[0][1:-1]
+
+    return redirect('campanas_del_cliente')
