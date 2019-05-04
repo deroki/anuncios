@@ -198,7 +198,8 @@ def pdi_image_path(instance, filename):
 class Campana_Pdv(models.Model):
     campana = models.ForeignKey(Campana,on_delete=models.CASCADE)
     pdv = models.ForeignKey(Pdv, on_delete=models.CASCADE)
-    estado = models.BooleanField()
+    estado = models.CharField(choices=pdv_estados,
+                              max_length=15)
     idioma = models.CharField(choices=IDIOMAS, max_length=10)
 
     def __str__(self):
@@ -224,8 +225,13 @@ class CampanapdV_pdI(models.Model):
     pdi = models.ForeignKey(Pdi, on_delete=models.CASCADE)
     material = models.ForeignKey(Material,on_delete=models.CASCADE)
     creatividad = models.ForeignKey(Creatividad,on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=pdi_image_path)
-    montador = models.ForeignKey(Montador,on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=pdi_image_path,
+                              null=True,
+                              blank=True)
+    montador = models.ForeignKey(Montador,on_delete=models.CASCADE,
+                                 null=True,
+                                 blank=True
+                                 )
     fecha_creacion = models.DateField(auto_now_add=True)
     fecha_cambio = models.DateField(auto_now=True)
     # TODO: boton para desplegar todas las datatables extendibles

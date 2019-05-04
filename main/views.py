@@ -218,14 +218,15 @@ def pdis_json(request):
                 try:
                     campanapdv_pdi = pdi.campanapdv_pdi_set.all()
                     campanapdv_pdi = pdi.campanapdv_pdi_set.filter(Campana_Pdv = campana_pdv).get()
-                    pdi_['creatividad'] = campanapdv_pdi.creatividad.nombre
-                    pdi_['material'] = campanapdv_pdi.material.nombre
+                    pdi_['creatividad'] = campanapdv_pdi.creatividad.id
+                    pdi_['material'] = campanapdv_pdi.material.id
                     pdi_['checked'] = True
+                    pdi_['tipo'] = pdi.tipo.nombre
 
                 except Exception as Err:
                     print(Err)
-                    pdi_['creatividad'] = ""
-                    pdi_['material'] = ""
+                    # pdi_['creatividad'] = ""
+                    # pdi_['material'] = ""
                     pdi_['checked'] = False
 
         pdis_ = list(pdis_)
@@ -237,13 +238,15 @@ def pdis_json(request):
 
     except Exception as Err:
         print(Err)
-        pdis = pdis.values()
-        for pdi in pdis:
-            pdi['creatividad'] = ""
-            pdi['material'] = ""
+        pdis_ = pdis.values()
+        for pdi, pdi_ in zip(pdis, pdis_):
+            pdi_['creatividad'] = ""
+            pdi_['material'] = ""
+            pdi_['checked'] = True
+            pdi_['tipo'] = pdi.tipo.nombre
 
-    pdis = list(pdis)
-    return JsonResponse({'data': pdis,
+    pdis_ = list(pdis_)
+    return JsonResponse({'data': pdis_,
                          'creatividades': creatividades,
                          'materiales' : materiales,
                          'pdv_pk': pdv_pk})
@@ -253,5 +256,33 @@ def guardar_config_campana(request):
     request = request
     str = request.META['HTTP_REFERER']
     CampanaNum = re.findall(r'/\d+/', str)[0][1:-1]
+    campana = Campana.objects.get(pk=CampanaNum)
+    # borrar all
+    campanaPdv = Campana_Pdv.objects.filter(campana=campana).delete()
+    params = request.POST
+
+    for key in params.keys():
+        z = re.match(r'^pdi_\d+$', key)
+        if z:
+            material = key + '_material'
+            creatividad = key + '_creatividad'
+            print(z.group())
+            pdi_pk = key[4:]
+            pdi = Pdi.objects.get(pk = pdi_pk)
+            pdv = pdi.pdv
+            #TODO idioma español por defecto cambiar al elegido en request
+            campana_Pdv, created = Campana_Pdv.objects.get_or_create(campana=campana,
+                                                            pdv=pdv,
+                                                            idioma='esp',
+                                                            estado='pendiente')
+            campanaPdv_Pdi = CampanapdV_pdI.objects.get_or_create(Campana_Pdv = campana_Pdv,
+                                                                  pdi = pdi,
+                                                                  material_id= params[material],
+                                                                  creatividad_id= params[creatividad])
+
+
+
+
+
 
     return redirect('campanas_del_cliente')

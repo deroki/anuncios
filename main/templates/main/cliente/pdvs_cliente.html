@@ -157,7 +157,7 @@
 
             function format(d) {
                 // `d` is the original data object for the row
-                return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                return '<table class="table table-striped table-bordered dataTable no-footer" style="width:100%" role="grid" aria-describedby="tabla_info">' +
                     '<tr>' +
                     '<td>Nombre</td>' +
                     '<td>' + d.name + '</td>' +
@@ -174,7 +174,7 @@
             }
 
             function createtable(json, materiales, creatividades, pdv_pk){
-                let tabla = '<table class="extended">';
+                let tabla = '<table class="extended table table-striped table-bordered dataTable no-footer" style="width:100%" role="grid" aria-describedby="tabla_info">';
                 tabla += `<thead>
                             <tr>
                                 <th class="text-center">Nombre</th>
@@ -204,26 +204,43 @@
                     tabla += '<td class="text-center">' + json[rrow].composicion + '</td>';
                     tabla += '<td class="text-center">' + json[rrow].activo + '</td>';
                     tabla += '<td class="text-center">' + json[rrow].instaladores + '</td>';
-                    //material actual
-                    tabla += '<td class="text-center">' + json[rrow].material ;
-                    //material a elegir
-                    tabla += `<select name="pdi_${json[rrow]['id']}_material">`;
-                    for (var index in materiales) {
+                    //material
+                    tabla += '<td class="text-center">' ;
+                    if (json[rrow].material){
+                        tabla+= `<select style="background-color:#FFFFF0;" name="pdi_${json[rrow]['id']}_material">`;
+                    }else{
+                        tabla+= `<select name="pdi_${json[rrow]['id']}_material">`;
+                    }
+
+
+                    for (var index in materiales){
                         let id = materiales[index]['id'];
                         let nombre = materiales[index]['nombre'];
+                        if (json[rrow].material === id){
+                            tabla += `<option selected value="${id}">${nombre}</option>`;
+                        }else{
                         tabla += `<option value="${id}">${nombre}</option>`;
+                        }
+                        }
+                    tabla+= '</select>';
+                    tabla+= '</td>';
+                    //creatividad
+                    tabla += '<td class="text-center">' ;
+                    if (json[rrow].creatividad){
+                        tabla+= `<select style="background-color:#FFFFF0;" name="pdi_${json[rrow]['id']}_creatividad">`;
+                    }else{
+                        tabla+= `<select name="pdi_${json[rrow]['id']}_creatividad">`;
                     }
-                    tabla += '</select>';
-                    tabla += '</td>';
-                    //creatividad inicial
-                    tabla += '<td class="text-center">' + json[rrow].creatividad ;
-                    //creatividad a elegir
-                    tabla+= `<select name="pdi_${json[rrow]['id']}_creatividad">`;
+
 
                     for (var index in creatividades){
                         let id = creatividades[index]['id'];
                         let nombre = creatividades[index]['nombre'];
+                        if (json[rrow].creatividad === id){
+                            tabla += `<option selected value="${id}">${nombre}</option>`;
+                        }else{
                         tabla += `<option value="${id}">${nombre}</option>`;
+                        }
                         }
                     tabla+= '</select>';
                     tabla+= '</td>';
