@@ -1,14 +1,6 @@
-{% extends 'main/base.html' %}
+{% extends 'main/cliente/base.html' %}
 {% load static %}
 
-{% block logo %}
-
-                        {% if MEDIA_URL %}
-                            <img src={{ MEDIA_URL }}/{{ logo_path }}>
-                        {% else %}
-                            <a href="#"><h1> PEPEAPP </h1></a>
-                        {% endif %}
-{% endblock %}
 
 
 {% block css%}
@@ -44,17 +36,13 @@
 </style>
 {% endblock %}
 
+{% block titulo %}
+    <h1>Campañas</h1>
+{%  endblock %}
+
 {% block content %}
         <br><br>
-    <div class="col-12">
-        <div class="card mt-auto">
-            <div class="card-body">
-                <div class="row">
-                    <h1>Mis campañas</h1>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <br><br>
     <!-- botones -->
     <div class="col-12">
@@ -94,7 +82,7 @@
                             {% for campana in campanas%}
                                 <tr>
 
-                                    <td><a href="{% url 'elegir_pdvs' campana.pk %}">{{ campana.nombre }}</a></td>
+                                    <td><a class="noblue" href="{% url 'elegir_pdvs' campana.pk %}">{{ campana.nombre }}</a></td>
                                     <td>{{ campana.fecha_creacion }}</td>
                                     <td>
                                         {% if campana.fecha_finalizado == None %}

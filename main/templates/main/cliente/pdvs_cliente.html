@@ -1,14 +1,7 @@
-{% extends 'main/base.html' %}
+{% extends 'main/cliente/base.html' %}
 {% load static %}
 
-{% block logo %}
 
-                        {% if MEDIA_URL %}
-                            <img src={{ MEDIA_URL }}/{{ logo_path }}>
-                        {% else %}
-                            <a href="#"><h1> PEPEAPP </h1></a>
-                        {% endif %}
-{% endblock %}
 
 {% block css%}<style>
     td.add_button{
@@ -17,30 +10,20 @@
         background-repeat: no-repeat;
         background-size: 20px 20px;
     }
+    img.thumbnail{
+    width:100%;
+    max-width:50px;
+}
 </style>
 {% endblock %}
 
-{#{% block logo %}#}
-{##}
-{#                        {% if user.is_cliente %}#}
-{#                            <img src={{ MEDIA_URL }}/{{ logo }}>#}
-{#                        {% else %}#}
-{#                            <a href="#"><h1> PEPEAPP </h1></a>#}
-{#                        {% endif %}#}
-{#{% endblock %}#}
+{% block titulo %}
+    <h1>{{ selected_campana.nombre }}</h1>
+{%  endblock %}
+
 
 
 {% block content %}
-    <br><br>
-    <div class="col-12">
-        <div class="card mt-auto">
-            <div class="card-body">
-                <div class="row">
-                    <h1>{{ selected_campana.nombre }}</h1>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <br><br>
     <!-- botones -->
@@ -117,14 +100,34 @@
                     </div>
                 </div>
 
-                <div class="col-3">
-                    <a href="#" class="btn btn-dark text-white" onclick="document.getElementById('theform').submit();">
-                        Guardar PDIs
-                    </a>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-12">
+        <div class="card mt-auto">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-2">
+                        <a href="#" class="btn btn-dark text-white"
+                           onclick="document.getElementById('theform').submit();">
+                            Guardar PDIs
+                        </a>
+                    </div>
+
+                    <div class="col-2">
+                        <a href={% url 'campanas_del_cliente' %} class="btn btn-dark text-white">
+                        Volver
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div id="mymodal"></div>
 {% endblock%}
 
 {% block javascript %}
@@ -176,7 +179,7 @@
                     '</table>';
             }
 
-            function createtable(json, materiales, creatividades, pdv_pk){
+            function createtable(json, materiales, creatividades, pdv_pk, MEDIA_URL){
                 let tabla = '<table class="extended table table-striped table-bordered dataTable no-footer" style="width:100%" role="grid" aria-describedby="tabla_info">';
                 tabla += `<thead>
                             <tr>
@@ -191,6 +194,7 @@
                                 <th class="text-center">Instaladores</th>
                                 <th class="text-center">Material</th>
                                 <th class="text-center">Creatividad</th>
+                                <th class="text-center">Image</th>
                                 <th class="text-center"></th>
 
                             </tr>
@@ -252,6 +256,12 @@
                     if (json[rrow].checked){
                         checked = 'checked'
                     }
+                    image_path = json[rrow].image
+                    if (image_path){
+                        tabla += `<td class="text-center"> <img src="${MEDIA_URL}${image_path}" class="thumbnail" onclick="showImageModal(this)"> </td>`;
+                    }else{
+                        tabla += `<td class="text-center"> <img src="${MEDIA_URL}images/error.png" class="thumbnail"> </td>`;
+                    }
                     tabla+= `<td> <input ${checked} class="pdv_${pdv_pk}" onclick="togglePdi(this)"type="checkbox" name="pdi_${json[rrow]['id']}" value="${json.checked}"></td>`
 
 
@@ -286,7 +296,7 @@
                     'data' : {'pdv_pk': pdi_pk },
                     'dataType': 'json',
                     'success': function(json){
-                        tabla = createtable(json.data,json.materiales,json.creatividades, json.pdv_pk);
+                        tabla = createtable(json.data,json.materiales,json.creatividades, json.pdv_pk, json.MEDIA_URL);
                         row.child(tabla).show();
                         tr.addClass('shown')
                     }
@@ -318,5 +328,29 @@
                     pdvCheckbox.checked = source.checked;
                 }
             }
+
+        function showImageModal(source){
+            var modal = `<div class="modal fade show" id="exampleModalCenter" style="display: block; padding-right: 15px;">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+
+                                                <button onclick="closeModal()" type="button" class="close" data-dismiss="modal"><span>×</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <img class = "mx-auto d-block" src="${source.src}">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>`;
+            var mydiv = document.getElementById('mymodal');
+            mydiv.innerHTML += modal;
+        }
+
+        function closeModal(){
+            var mydiv = document.getElementById('mymodal');
+            mydiv.innerHTML = ""
+        }
     </script>
 {% endblock %}

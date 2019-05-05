@@ -131,15 +131,7 @@ def crear_usuario(request):
                                                            'form_cliente': form_cliente,
                                                             'exitStatus': exitStatus})
 
-
-def campana_pdvs(request):
-    pass
-
-
-def pdis_por_pdv(request):
-    if request.POST:
-        pdvSlug = request.POST['pdvSlug']
-        pdis = Pdi.objects.filter(pdv=pdvSlug)
+# Vistar de Cliente
 
 
 def campanas_del_cliente(request):
@@ -149,7 +141,8 @@ def campanas_del_cliente(request):
     campanas = Campana.objects.filter(cliente=cliente)
     return render(request, 'main/cliente/campanas_del_cliente.html', {'campanas': campanas,
                                                                       'MEDIA_URL' : MEDIA_URL,
-                                                                      'logo_path' : logo_path
+                                                                      'logo_path' : logo_path,
+                                                                      'cliente': cliente
                                                                       })
 
 
@@ -171,7 +164,7 @@ def crear_campana(request):
 
     return render(request, 'main/cliente/crear_campana.html', {'form_campana': form_campana,
                                                                'MEDIA_URL': MEDIA_URL,
-                                                               'logo_path': logo_path
+                                                               'logo_path': logo_path,
                                                                })
 
 
@@ -197,7 +190,8 @@ def elegir_pdvs(request,campana_pk):
     return render(request,'main/cliente/pdvs_cliente.html', {'pdvs': pdvs,
                                                              'selected_campana': selected_campana,
                                                              'MEDIA_URL' : MEDIA_URL,
-                                                              'logo_path' : logo_path})
+                                                              'logo_path' : logo_path,
+                                                             'cliente': cliente})
 
 
 def pdis_json(request):
@@ -221,6 +215,7 @@ def pdis_json(request):
                     pdi_['material'] = campanapdv_pdi.material.id
                     pdi_['checked'] = True
                     pdi_['tipo'] = pdi.tipo.nombre
+                    pdi_['image'] = campanapdv_pdi.image.name
 
                 except Exception as Err:
                     print(Err)
@@ -232,7 +227,8 @@ def pdis_json(request):
         return JsonResponse({'data': pdis_,
                              'creatividades': creatividades,
                              'materiales': materiales,
-                             'pdv_pk': pdv_pk})
+                             'pdv_pk': pdv_pk,
+                             'MEDIA_URL' : MEDIA_URL})
 
 
     except Exception as Err:
@@ -278,10 +274,4 @@ def guardar_config_campana(request):
                                                                   pdi = pdi,
                                                                   material_id= params[material],
                                                                   creatividad_id= params[creatividad])
-
-
-
-
-
-
     return redirect('campanas_del_cliente')
