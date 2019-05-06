@@ -59,7 +59,13 @@
                                 <th class="text-center">Ciudad</th>
                                 <th class="text-center">Provincia</th>
                                 <th class="text-center">Estado</th>
-                                <th class="text-center"></th>
+                                <th class="text-center">
+                                    <div style="vertical-align: center; text-align:center;">
+                                        <img src="{% static 'images/all.png' %}"  height="20" width="20" onclick="extend()">
+                                        <img src="{% static 'images/checkbox.png' %}" style="padding-left: 5px" height="20" width="20" onclick="checkAll()">
+                                    </div>
+
+                                </th>
 
 
                             </tr>
@@ -110,10 +116,10 @@
         <div class="card mt-auto">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-2">
+                    <div class="col-1">
                         <a href="#" class="btn btn-dark text-white"
                            onclick="document.getElementById('theform').submit();">
-                            Guardar PDIs
+                            Guardar
                         </a>
                     </div>
 
@@ -260,7 +266,7 @@
                     if (image_path){
                         tabla += `<td class="text-center"> <img src="${MEDIA_URL}${image_path}" class="thumbnail" onclick="showImageModal(this)"> </td>`;
                     }else{
-                        tabla += `<td class="text-center"> <img src="${MEDIA_URL}images/error.png" class="thumbnail"> </td>`;
+                        tabla += `<td class="text-center"> <img src="/static/images/error.png" class="thumbnail"> </td>`;
                     }
                     tabla+= `<td> <input ${checked} class="pdv_${pdv_pk}" onclick="togglePdi(this)"type="checkbox" name="pdi_${json[rrow]['id']}" value="${json.checked}"></td>`
 
@@ -351,6 +357,22 @@
         function closeModal(){
             var mydiv = document.getElementById('mymodal');
             mydiv.innerHTML = ""
+        }
+
+        function checkAll(){
+            extend()
+            var inputs = document.getElementsByTagName("input");
+            for (var i=0;i<inputs.length;i++){
+                if(inputs[i].type == "checkbox"){
+                    inputs[i].checked = true;
+                }
+            }
+        }
+        function extend(){
+            var buttons = document.getElementsByClassName('add_button')
+            for(var i=0;i<buttons.length;i++){
+                buttons[i].click()
+            }
         }
     </script>
 {% endblock %}
