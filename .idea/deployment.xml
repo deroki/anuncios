@@ -2,6 +2,13 @@
 <project version="4">
   <component name="PublishConfigData" serverName="googlecloud">
     <serverData>
+      <paths name="bitnami">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/django_projects/Project" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="googlecloud">
         <serverdata>
           <mappings>

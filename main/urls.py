@@ -25,6 +25,15 @@ urlpatterns = [
     path('clientes/', views.index, name='clientes'),
     path('formulario_ok/', views.formulario_ok, name='formulario_ok'),
     path('crear_cliente/', views.crear_cliente, name='crear_cliente'),
+    path('campana_pdvs', views.campana_pdvs, name = 'campana_pdvs'),
+    # admin pdvs
+    path('pdvs/', views.pdvs, name="pdvs"),
+    path('all_pdis_json/', views.all_pdis_json, name='all_pdis_json'),
+    path('crear_pdv', views.crear_pdv, name='crear_pdv'),
+    path('crear_pdi', views.crear_pdi, name='crear_pdi'),
+    path('crear_material', views.crear_material, name='crear_material'),
+    path('crear_creatividad', views.crear_creatividad, name='crear_creatividad'),
+    # cliente
     path('campanas_del_cliente/', views.campanas_del_cliente, name='campanas_del_cliente'),
     path('crear_campana', views.crear_campana, name='crear_campana'),
     path('elegir_pdvs/<int:campana_pk>/', views.elegir_pdvs, name ='elegir_pdvs'),

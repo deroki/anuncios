@@ -7,6 +7,15 @@
     {% include 'static_templates/css.html' %}
     {% block css %}
     {% endblock %}
+
+    <style>
+        .page-item.active .page-link{
+        z-index: 1;
+        color: white;
+        background-color: dimgray;
+        border-color: black;
+    }
+    </style>
 </head>
 
 <body>
@@ -38,7 +47,7 @@
                         <ul class="metismenu" id="menu">
                             <li><a href={% url 'clientes' %}><i class="ti-heart"></i><span>Clientes</span></a></li>
                             <li><a href="{% url 'usuarios' %}"><i class="ti-face-smile"></i><span>Usuarios</span></a></li>
-                            <li><a href="{% url 'campana_pdvs' %}"><i class="ti-dashboard"></i><span>Puntos de Venta</span></a></li>
+                            <li><a href="{% url 'pdvs' %}"><i class="ti-dashboard"></i><span>Puntos de Venta</span></a></li>
                             <li><a href="#"><i class="ti-brush"></i><span>Montador</span></a></li>
                         </ul>
                         {% endif %}
@@ -137,6 +146,21 @@
             <!-- page title area end -->
             <div class="main-content-inner">
                 <!-- MAIN CONTENT GOES HERE -->
+                <br><br>
+                <div class="col-12">
+                    <div class="card mt-auto">
+                        <div class="card-body">
+                            <div class="row">
+                                    <div class="mx-auto">
+                                    <h1>{% block titulo %}{% endblock %}</h1>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <br><br>
 
                 {% block content %}
                 {% endblock %}

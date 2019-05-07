@@ -1,9 +1,10 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
+
+{% block titulo %}Usuarios{% endblock %}
 {% block content %}
-    <h1>Clientes</h1>
-    <br><br>
+
     <!-- botones -->
     <div class="col-12">
         <div class="card mt-auto">
@@ -12,10 +13,6 @@
                     <div class="col-3">
                         <a href={% url 'crear_usuario' %} class="btn btn-dark text-white">Añadir Usuario</a>
                     </div>
-                    <div class="col-3">
-                        <a href="#" class="btn btn-dark text-white">Añadir Cliente</a>
-                    </div>
-                    <
                 </div>
             </div>
         </div>

@@ -65,4 +65,23 @@ class CampanaForm(forms.ModelForm):
         model = models.Campana
         fields = "__all__"
 
+class PdvForm(forms.ModelForm):
+    class Meta:
+        model = models.Pdv
+        fields = '__all__'
 
+
+class PdiForm(forms.ModelForm):
+    class Meta:
+        model = models.Pdi
+        fields = '__all__'
+
+class CreatividadForm(forms.ModelForm):
+    class Meta:
+        model = models.Creatividad
+        fields = '__all__'
+
+class MaterialForm(forms.ModelForm):
+    class Meta:
+        model = models.Material
+        fields = '__all__'

@@ -2,6 +2,7 @@ import re
 from pipes import stepkinds
 
 from django.contrib.auth import login, authenticate, logout, get_user_model
+from django.db.models import Q
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, render_to_response
 from django.core import serializers
@@ -10,7 +11,8 @@ from django.http import HttpResponse
 # Create your views here.
 from django.template import RequestContext
 
-from main.forms import ClienteForm, ImageForm, UserForm, MontadorForm, CampanaForm
+from main.forms import ClienteForm, ImageForm, UserForm, MontadorForm, CampanaForm, PdvForm, PdiForm, CreatividadForm, \
+    MaterialForm
 from main.models import Cliente
 from main.models import *
 from anuncios2.settings import MEDIA_URL
@@ -131,7 +133,80 @@ def crear_usuario(request):
                                                            'form_cliente': form_cliente,
                                                             'exitStatus': exitStatus})
 
-# Vistar de Cliente
+
+def pdvs(request):
+    user = request.user
+    if user.is_superuser:
+        pdvs = Pdv.objects.filter(cliente__admin= user)
+        print(pdvs)
+    return render(request, 'main/pdvs.html', {'pdvs': pdvs})
+
+
+def all_pdis_json(request):
+    pdv_pk = request.GET.get('pdv_pk', None)
+    pdis = Pdi.objects.filter(pdv=pdv_pk)
+    pdis_ = list(pdis.values())
+
+    for pdi, pdi_ in zip(pdis, pdis_):
+        try:
+            image = CampanapdV_pdI.objects.filter(pdi=pdi).latest('fecha_cambio').image.name
+            pdi_['image'] = image
+        except:
+            pass
+
+
+
+    return JsonResponse({'data': pdis_,
+                         'pdv_pk': pdv_pk,
+                         'MEDIA_URL': MEDIA_URL})
+
+
+def crear_pdv(request):
+    if request.method == 'POST':
+        pdv_form = PdvForm(request.POST)
+        if pdv_form.is_valid():
+            pdv_form.save()
+    else:
+        pdv_form = PdvForm()
+    return render(request, 'main/crear_pdv.html',{'form': pdv_form})
+
+def crear_pdi(request):
+    if request.method == 'POST':
+        pdi_form = PdvForm(request.POST)
+        if pdi_form.is_valid():
+            pdi_form.save()
+    else:
+        pdi_form = PdvForm()
+    return render(request, 'main/crear_pdi.html',{'form': pdi_form})
+
+def crear_creatividad(request):
+    if request.method == 'POST':
+        creatividad_form = CreatividadForm(request.POST)
+        if creatividad_form.is_valid():
+            creatividad_form.save()
+    else:
+        creatividad_form = CreatividadForm()
+    return render(request, 'main/crear_creatividad.html',{'form': creatividad_form})
+
+def crear_material(request):
+    if request.method == 'POST':
+        material_form = MaterialForm(request.POST)
+        if material_form.is_valid():
+            material_form.save()
+    else:
+        material_form = MaterialForm()
+    return render(request, 'main/crear_material.html',{'form': material_form})
+
+
+
+def campana_pdvs(request):
+    pass
+
+
+def pdis_por_pdv(request):
+    if request.POST:
+        pdvSlug = request.POST['pdvSlug']
+        pdis = Pdi.objects.filter(pdv=pdvSlug)
 
 
 def campanas_del_cliente(request):

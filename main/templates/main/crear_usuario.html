@@ -2,9 +2,12 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+
+
+{% block titulo %}Crear Usuario{% endblock %}
+
 {% block content %}
-    <h1>Usuarios</h1>
-    <br><br>
+
 
     {% if exitStatus %}
     <div class="alert alert-success" role="alert">

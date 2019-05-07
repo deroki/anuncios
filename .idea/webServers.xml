@@ -10,6 +10,14 @@
           <option name="port" value="22" />
         </fileTransfer>
       </webServer>
+      <webServer id="63f18695-f134-4ea9-b5cd-93b1d164a3d3" name="bitnami" url="http://34.90.19.188">
+        <fileTransfer host="34.90.19.188" port="22" privateKey="$USER_HOME$/.ssh/googlekey" rootFolder="/opt/bitnami/apps/django" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>
