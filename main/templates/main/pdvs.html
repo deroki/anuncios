@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block titulo %}
-    <h1>Puntos de venta</h1>
+    <h1>PUNTOS DE VENTA</h1>
 {%  endblock %}
 
 
@@ -31,27 +31,27 @@
         <div class="card mt-auto">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-2">
+                    <div class="col-2 text-center">
                         <a href="{% url 'crear_pdv' %}" class="btn btn-dark text-white">
-                            Crear PdV
+                            CREAR PDV
                         </a>
                     </div>
 
-                    <div class="col-2">
+                    <div class="col-2 text-center">
                         <a href="{% url 'crear_pdi' %}" class="btn btn-dark text-white">
-                            Crear PdI
+                            CREAR PDI
                         </a>
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-2 text-center">
                         <a href="{% url 'crear_creatividad' %}" class="btn btn-dark text-white">
-                            Añadir Creatividad
+                            AÑADIR CREATIVIDAD
                         </a>
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-2 text-center">
                         <a href="{% url 'crear_material' %}" class="btn btn-dark text-white">
-                            Añadir Material
+                            AÑADIR MATERIAL
                         </a>
                     </div>
 
@@ -72,13 +72,13 @@
                             <thead>
                             <tr>
                                 <th class="text-center"></th>
-                                <th class="text-center">Id</th>
-                                <th class="text-center">Nombre</th>
-                                <th class="text-center">Cadena</th>
-                                <th class="text-center">Ciudad</th>
-                                <th class="text-center">Provincia</th>
-                                <th class="text-center">Edicion</th>
-                                <th class="text-center">Activo</th>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">NOMBRE</th>
+                                <th class="text-center">CADENA</th>
+                                <th class="text-center">CIUDAD</th>
+                                <th class="text-center">PROVINCIA</th>
+                                <th class="text-center">EDICION</th>
+                                <th class="text-center">ACTIVO</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -116,14 +116,14 @@
                     <div class="col-2">
                         <a href="#" class="btn btn-dark text-white"
                            onclick="document.getElementById('theform').submit();">
-                            Guardar
+                            GUARDAR
                         </a>
                     </div>
 
 
                     <div class="col-3">
                         <a href={% url 'campanas_del_cliente' %} class="btn btn-dark text-white">
-                        Volver
+                        VOLVER
                         </a>
                     </div>
                 </div>

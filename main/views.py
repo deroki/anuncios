@@ -39,8 +39,8 @@ def login_user(request):
 
 def index(request):
     clientes = Cliente.objects.all()
-    context = {'clientes' : clientes}
-    return render(request, 'main/clientes.html', context)
+    return render(request, 'main/clientes.html', {'clientes' : clientes,
+                                                  'MEDIA_URL' : MEDIA_URL})
 
 
 def crear_cliente(request):
@@ -166,6 +166,7 @@ def crear_pdv(request):
         pdv_form = PdvForm(request.POST)
         if pdv_form.is_valid():
             pdv_form.save()
+            return redirect('pdvs')
     else:
         pdv_form = PdvForm()
     return render(request, 'main/crear_pdv.html',{'form': pdv_form})
@@ -175,24 +176,38 @@ def crear_pdi(request):
         pdi_form = PdvForm(request.POST)
         if pdi_form.is_valid():
             pdi_form.save()
+            return redirect('pdvs')
     else:
         pdi_form = PdvForm()
     return render(request, 'main/crear_pdi.html',{'form': pdi_form})
+
+
+def creatividades(request):
+    creatividades = Creatividad.objects.all()
+    pass
 
 def crear_creatividad(request):
     if request.method == 'POST':
         creatividad_form = CreatividadForm(request.POST)
         if creatividad_form.is_valid():
             creatividad_form.save()
+            return redirect('pdvs')
     else:
         creatividad_form = CreatividadForm()
     return render(request, 'main/crear_creatividad.html',{'form': creatividad_form})
+
+
+def materiales(request):
+    materialiales = Material.objects.all()
+    pass
+
 
 def crear_material(request):
     if request.method == 'POST':
         material_form = MaterialForm(request.POST)
         if material_form.is_valid():
             material_form.save()
+            return redirect('pdvs')
     else:
         material_form = MaterialForm()
     return render(request, 'main/crear_material.html',{'form': material_form})
