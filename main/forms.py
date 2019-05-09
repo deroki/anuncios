@@ -66,9 +66,10 @@ class CampanaForm(forms.ModelForm):
         fields = "__all__"
 
 class PdvForm(forms.ModelForm):
+
     class Meta:
         model = models.Pdv
-        fields = '__all__'
+        fields = ['cliente', 'cadena', 'nombre', 'direccion', 'cp', 'ciudad', 'provincia', 'prioridad', 'activo']
 
 
 class PdiForm(forms.ModelForm):

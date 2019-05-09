@@ -1,6 +1,29 @@
 {% extends 'main/base.html' %}
 {% load static %}
-
+{%  block css %}
+<style>
+    table{
+        border-collapse: collapse;
+    }
+    #tabla tr {
+        background-color: #eee;
+        border-top: 1px solid #fff;
+    }
+    #tabla tr:hover {
+        background-color: #ccc;
+    }
+    #tabla th {
+        background-color: #fff;
+    }
+    #tabla th,
+    #tabla td {
+        padding: 3px 5px;
+    }
+    #tabla td:hover {
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
 
 {% block titulo %}<strong>CLIENTES</strong>{% endblock %}
 
@@ -34,7 +57,7 @@
                           </thead>
                           <tbody>
                           {% for cliente in clientes %}
-                              <tr>
+                              <tr class="clickable" data-href={% url 'campanas_del_cliente' cliente.pk %}>
                                   <td>{{ cliente.usuario }}</td>
                                   <td>{{ cliente.slug }}</td>
                                   <td><img class="mx-auto d-block" src={{ MEDIA_URL }}{{ cliente.logo }}></td>
@@ -85,7 +108,9 @@
                     $(this).addClass('selected');
                 }
             });
-
+            $(".clickable").click(function() {
+        window.location = $(this).data("href");
+    });
         });
     </script>
 {% endblock %}

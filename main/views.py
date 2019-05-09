@@ -173,12 +173,12 @@ def crear_pdv(request):
 
 def crear_pdi(request):
     if request.method == 'POST':
-        pdi_form = PdvForm(request.POST)
+        pdi_form = PdiForm(request.POST)
         if pdi_form.is_valid():
             pdi_form.save()
             return redirect('pdvs')
     else:
-        pdi_form = PdvForm()
+        pdi_form = PdiForm()
     return render(request, 'main/crear_pdi.html',{'form': pdi_form})
 
 
@@ -224,21 +224,36 @@ def pdis_por_pdv(request):
         pdis = Pdi.objects.filter(pdv=pdvSlug)
 
 
-def campanas_del_cliente(request):
+def get_cliente_pk(request):
+    return pk
+
+
+def campanas_del_cliente(request, cliente_id = None):
     user = request.user
-    cliente = Cliente.objects.get(usuario=user)
+    if user.is_staff and cliente_id is not None:
+        cliente = Cliente.objects.get(pk = cliente_id)
+
+    else:
+        cliente = Cliente.objects.get(usuario=user)
     logo_path = cliente.logo.image.name
     campanas = Campana.objects.filter(cliente=cliente)
-    return render(request, 'main/cliente/campanas_del_cliente.html', {'campanas': campanas,
+    response = render(request, 'main/cliente/campanas_del_cliente.html', {'campanas': campanas,
                                                                       'MEDIA_URL' : MEDIA_URL,
                                                                       'logo_path' : logo_path,
                                                                       'cliente': cliente
                                                                       })
 
+    response.set_cookie('cliente_id', cliente_id)
+    return response
+
 
 def crear_campana(request):
     user = request.user
-    cliente = Cliente.objects.get(usuario=user)
+    if user.is_staff:
+        cliente_id = request.COOKIES.get('cliente_id')
+        cliente = Cliente.objects.get(pk=cliente_id)
+    else:
+        cliente = Cliente.objects.get(usuario=user)
     logo_path = cliente.logo.image.name
     if request.method == 'POST':
         user = request.user
@@ -260,8 +275,12 @@ def crear_campana(request):
 
 def elegir_pdvs(request,campana_pk):
     user = request.user
+    if user.is_staff:
+        cliente_id = request.COOKIES.get('cliente_id')
+        cliente = Cliente.objects.get(pk=cliente_id)
+    else:
+        cliente = Cliente.objects.get(usuario=user)
     selected_campana = Campana.objects.get(pk = campana_pk)
-    cliente = Cliente.objects.get(usuario = user)
     logo_path = cliente.logo.image.name
 
     pdvs = Pdv.objects.filter(cliente=cliente)

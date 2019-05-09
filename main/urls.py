@@ -29,12 +29,13 @@ urlpatterns = [
     # admin pdvs
     path('pdvs/', views.pdvs, name="pdvs"),
     path('all_pdis_json/', views.all_pdis_json, name='all_pdis_json'),
-    path('crear_pdv', views.crear_pdv, name='crear_pdv'),
-    path('crear_pdi', views.crear_pdi, name='crear_pdi'),
+    path('crear_pdv/', views.crear_pdv, name='crear_pdv'),
+    path('crear_pdi/', views.crear_pdi, name='crear_pdi'),
     path('crear_material', views.crear_material, name='crear_material'),
     path('crear_creatividad', views.crear_creatividad, name='crear_creatividad'),
     # cliente
     path('campanas_del_cliente/', views.campanas_del_cliente, name='campanas_del_cliente'),
+    path('campanas_del_cliente/<int:cliente_id>/', views.campanas_del_cliente, name='campanas_del_cliente'),
     path('crear_campana', views.crear_campana, name='crear_campana'),
     path('elegir_pdvs/<int:campana_pk>/', views.elegir_pdvs, name ='elegir_pdvs'),
     path('pdis_json/', views.pdis_json, name = 'pdis_json'),
