@@ -16,7 +16,26 @@
     {% endif %}
 
 
+    <div class="col-12">
+        <div class="card mt-auto">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <h3> Nuevo Logo </h3>
+                        <form method="POST" novalidate enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form_image|crispy }}
+                            <button type='submit' class='btn btn-success'> Enviar Logo</button>
+                        </form>
+                    </div>
 
+                    <div class="col-3">
+                        <img id="logo_img" src="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="col-12">
         <div class="card mt-5">
             <div class = "card-body">
@@ -44,6 +63,13 @@
 
 {%  block javascript %}
     <script>
+
+        $("#id_logo").change(function () {
+            $("#logo_img").attr('src', '{{ MEDIA_URL }}' + $("#id_logo option:selected").text());
+        });
+
+
+
         $(document).ready(function () {
             $('#id_is_staff').change(function () {
                 console.log('changeado');

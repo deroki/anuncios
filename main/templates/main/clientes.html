@@ -60,7 +60,7 @@
                               <tr class="clickable" data-href={% url 'campanas_del_cliente' cliente.pk %}>
                                   <td>{{ cliente.usuario }}</td>
                                   <td>{{ cliente.slug }}</td>
-                                  <td><img class="mx-auto d-block" src={{ MEDIA_URL }}{{ cliente.logo }}></td>
+                                  <td><img width="100" height="100" class="mx-auto d-block" src={{ MEDIA_URL }}{{ cliente.logo }}></td>
                               </tr>
                           {% endfor %}
                           </tbody>

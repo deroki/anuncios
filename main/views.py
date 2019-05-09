@@ -52,7 +52,7 @@ def crear_cliente(request):
             if form_image.is_valid():
                 form_image.save()
                 exitStatus = "Imagen enviada"
-                return render(request, 'main/crearCliente.html', {'form': form,
+                return render(request, 'main/crear_usuario.html', {'form': form,
                                                            'form_image': form_image,
                                                            'exitStatus': exitStatus,
                                                            'MEDIA_URL': MEDIA_URL})
@@ -63,7 +63,7 @@ def crear_cliente(request):
             if form.is_valid():
                 form.save()
                 exitStatus = "Cliente guardado"
-                return render(request, 'main/crearCliente.html', {'form': form,
+                return render(request, 'main/crear_usuario.html', {'form': form,
                                                            'form_image': form_image,
                                                            'exitStatus': exitStatus,
                                                            'MEDIA_URL': MEDIA_URL})
@@ -72,7 +72,7 @@ def crear_cliente(request):
         form = ClienteForm()
         form_image = ImageForm()
         exitStatus = None
-    return render(request, 'main/crearCliente.html', {'form': form,
+    return render(request, 'main/crear_usuario.html', {'form': form,
                                                       'form_image': form_image,
                                                       'exitStatus': exitStatus,
                                                       'MEDIA_URL': MEDIA_URL})
@@ -96,10 +96,33 @@ def usuarios(request):
     context = {'users': users}
     return render(request, 'main/usuarios.html', context)
 
+
 def crear_usuario(request):
-        exitStatus = None
-        if request.method == 'POST':
-            # TODO: si el form no es valido meterlo en exitstatus
+    exitStatus = None
+    form_image = ImageForm()
+    form = UserForm()
+    form_cliente = ClienteForm()
+    form_montador = MontadorForm()
+
+    if request.method == 'POST':
+        if 'image' in request.FILES:
+            form = UserForm()
+            form_cliente = ClienteForm()
+            form_montador = MontadorForm()
+            print(request.FILES)
+            form_image = ImageForm(request.POST, request.FILES)
+            if form_image.is_valid():
+                form_image.save()
+                exitStatus = "Imagen enviada"
+                return render(request, 'main/crear_usuario.html', {'form': form,
+                                                                  'form_montador': form_montador,
+                                                                  'form_image': form_image,
+                                                                  'form_cliente': form_cliente,
+                                                                  'exitStatus': exitStatus,
+                                                                  'MEDIA_URL': MEDIA_URL})
+
+        if 'color' in request.POST:
+            form_image = ImageForm()
             form = UserForm(request.POST)
             form_cliente = ClienteForm(request.POST)
             form_montador = MontadorForm(request.POST)
@@ -120,18 +143,25 @@ def crear_usuario(request):
                         preform.save()
                         exitStatus = "Usuario montador guardado"
                 return render(request, 'main/crear_usuario.html', {'form': form,
-                                                           'form_montador': form_montador,
-                                                           'form_cliente': form_cliente,
-                                                            'exitStatus': exitStatus})
-        else:
-            form = UserForm()
-            form_montador = MontadorForm()
-            form_cliente = ClienteForm()
-            exitStatus = None
-        return render(request, 'main/crear_usuario.html', {'form': form,
-                                                           'form_montador': form_montador,
-                                                           'form_cliente': form_cliente,
-                                                            'exitStatus': exitStatus})
+                                                                   'form_montador': form_montador,
+                                                                   'form_image': form_image,
+                                                                   'form_cliente': form_cliente,
+                                                                   'exitStatus': exitStatus,
+                                                                   'MEDIA_URL': MEDIA_URL})
+
+    else:
+        form_image = ImageForm()
+        form = UserForm()
+        form_cliente = ClienteForm()
+        form_montador = MontadorForm()
+        exitStatus = None
+    return render(request, 'main/crear_usuario.html', {'form': form,
+                                                      'form_montador': form_montador,
+                                                      'form_image': form_image,
+                                                      'form_cliente': form_cliente,
+                                                      'exitStatus': exitStatus,
+                                                      'MEDIA_URL': MEDIA_URL})
+
 
 
 def pdvs(request):
@@ -230,9 +260,9 @@ def get_cliente_pk(request):
 
 def campanas_del_cliente(request, cliente_id = None):
     user = request.user
-    if user.is_staff and cliente_id is not None:
-        cliente = Cliente.objects.get(pk = cliente_id)
-
+    if user.is_staff:
+        cliente_id = request.COOKIES.get('cliente_id')
+        cliente = Cliente.objects.get(pk=cliente_id)
     else:
         cliente = Cliente.objects.get(usuario=user)
     logo_path = cliente.logo.image.name
@@ -257,7 +287,6 @@ def crear_campana(request):
     logo_path = cliente.logo.image.name
     if request.method == 'POST':
         user = request.user
-        cliente = Cliente.objects.get(usuario=user)
         form_campana = CampanaForm(request.POST)
         if form_campana.is_valid():
             preform = form_campana.save(commit=False)
