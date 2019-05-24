@@ -261,7 +261,6 @@ def get_cliente_pk(request):
 def campanas_del_cliente(request, cliente_id = None):
     user = request.user
     if user.is_staff:
-        cliente_id = request.COOKIES.get('cliente_id')
         cliente = Cliente.objects.get(pk=cliente_id)
     else:
         cliente = Cliente.objects.get(usuario=user)

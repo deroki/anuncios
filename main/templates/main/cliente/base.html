@@ -4,10 +4,12 @@
 <html class="no-js" lang="en">
 
 <head>
+    <title> Pagina del cliente</title>
     {% include 'static_templates/css.html' %}
     {% block css %}
     {% endblock %}
 <style>
+
     .btn-secondary{
         color: white;
         background-color: {{ cliente.color }};
@@ -144,7 +146,8 @@
                             <div class="row">
                                 <div class ="col-12">
                                     {% if MEDIA_URL %}
-                                    <img class="mx-auto d-block" src={{ MEDIA_URL }}/{{ logo_path }}>
+                                    <img class="mx-auto d-block" src={{ MEDIA_URL }}/{{ logo_path }} height="150" width="150">
+                                    <br>
                                     {% else %}
                                         <a href="#"><h1> PEPEAPP </h1></a>
                                     {% endif %}
