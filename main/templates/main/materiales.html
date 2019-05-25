@@ -63,7 +63,17 @@
                             {% for material in materiales%}
                                 <tr id = {{ material.pk }}>
                                     <td>{{ material.nombre }}</td>
-                                    <td>    </td>
+                                    <td>
+                                        <div style="vertical-align: center; text-align:center;">
+                                            <a href="{% url 'edit_material' material.pk %}">
+                                            <img title="Editar" src="{% static 'images/edit.png' %}"
+                                                  height="20" width="20">
+                                            </a>
+                                            <img onclick="showImageModal({{ material.pk }})"  title="Borrar" src="{% static 'images/delete.png' %}"
+                                                   height="20" width="20" >
+                                        </div>
+                                        </div>
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -267,8 +277,24 @@
                                                 <button onclick="closeModal()" type="button" class="close" data-dismiss="modal"><span>×</span></button>
                                             </div>
                                             <div class="modal-body">
-                                                <img class = "mx-auto d-block" src="${source.src}">
+                                            <div class="row justify-content-md-center">
+                                                <h1>estas seguro???</h1>
                                             </div>
+                                               <br><br>
+                                            <div class="row justify-content-md-center">
+                                               <div class="col-3">
+                                                    <a href="{% url 'delete_material' %}${source}" class="btn btn-dark text-white">
+                                                       SI
+                                                    </a>
+                                               </div>
+
+                                               <div class="col-3">
+                                                    <a onclick="closeModal()" href="#" class="btn btn-dark text-white">
+                                                        NO
+                                                    </a>
+                                               </div>
+                                            </div>
+
 
                                         </div>
                                     </div>

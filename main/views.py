@@ -213,43 +213,6 @@ def crear_pdi(request):
     return render(request, 'main/crear_pdi.html',{'form': pdi_form})
 
 
-def creatividades(request):
-    creatividades = Creatividad.objects.all()
-    pass
-
-def crear_creatividad(request, pk):
-    if pk:
-        instance = Creatividad.objects.get(pk=pk)
-    else:
-        instance = None
-
-    if request.method == 'POST':
-        creatividad_form = CreatividadForm(request.POST, request.FILES, instance=instance)
-        if creatividad_form.is_valid():
-            creatividad_form.save()
-            return redirect('creatividades')
-    else:
-        creatividad_form = CreatividadForm()
-    return render(request, 'main/crear_creatividad.html',{'form': creatividad_form})
-
-
-def materiales(request):
-    materialiales = Material.objects.all()
-    pass
-
-
-def crear_material(request):
-    if request.method == 'POST':
-        material_form = MaterialForm(request.POST)
-        if material_form.is_valid():
-            material_form.save()
-            return redirect('pdvs')
-    else:
-        material_form = MaterialForm()
-    return render(request, 'main/crear_material.html',{'form': material_form})
-
-
-
 def campana_pdvs(request):
     pass
 
@@ -420,10 +383,28 @@ def guardar_config_campana(request):
     return redirect('campanas_del_cliente')
 
 
+
 def creatividades(request):
     creatividades = Creatividad.objects.all()
 
     return render(request,'main/creatividades.html', context={'creatividades': creatividades})
+
+
+def crear_creatividad(request, pk=None):
+    if pk:
+        instance = Creatividad.objects.get(pk=pk)
+    else:
+        instance = None
+
+    if request.method == 'POST':
+        creatividad_form = CreatividadForm(request.POST, request.FILES, instance=instance)
+        if creatividad_form.is_valid():
+            creatividad_form.save()
+            return redirect('creatividades')
+    else:
+        creatividad_form = CreatividadForm()
+    return render(request, 'main/crear_creatividad.html',{'form': creatividad_form})
+
 
 def delete_creatividad(request, creatividad_pk = None):
     creatividad = Creatividad.objects.filter(pk=creatividad_pk)
@@ -444,3 +425,25 @@ class CampanasAutocomplete(autocomplete.Select2QuerySetView):
 def materiales(request):
     materiales = Material.objects.all()
     return render(request,'main/materiales.html', context={'materiales' : materiales})
+
+
+def crear_material(request, pk=None):
+    if pk:
+        instance = Material.objects.get(pk=pk)
+    else:
+        instance = None
+
+    if request.method == 'POST':
+        material_form = MaterialForm(request.POST, instance=instance)
+        if material_form.is_valid():
+            material_form.save()
+            return redirect('materiales')
+    else:
+        material_form = MaterialForm()
+    return render(request, 'main/crear_material.html',{'form': material_form})
+
+
+def delete_material(request,pk):
+    material = Material.objects.get(pk=pk)
+    material.delete()
+    return redirect('materiales')
