@@ -2,6 +2,7 @@ from django import forms
 
 from main import models
 from main.models import Cliente
+from dal import autocomplete
 
 
 class ClienteForm(forms.ModelForm):
@@ -81,6 +82,7 @@ class CreatividadForm(forms.ModelForm):
     class Meta:
         model = models.Creatividad
         fields = '__all__'
+        widgets = { 'campana' : autocomplete.ModelSelect2(url='CampanasAutocomplete') }
 
 class MaterialForm(forms.ModelForm):
     class Meta:

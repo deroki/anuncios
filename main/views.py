@@ -1,6 +1,7 @@
 import re
 from pipes import stepkinds
 
+from dal import autocomplete
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.db.models import Q
 from django.http import HttpResponseRedirect, JsonResponse
@@ -216,12 +217,17 @@ def creatividades(request):
     creatividades = Creatividad.objects.all()
     pass
 
-def crear_creatividad(request):
+def crear_creatividad(request, pk):
+    if pk:
+        instance = Creatividad.objects.get(pk=pk)
+    else:
+        instance = None
+
     if request.method == 'POST':
-        creatividad_form = CreatividadForm(request.POST)
+        creatividad_form = CreatividadForm(request.POST, request.FILES, instance=instance)
         if creatividad_form.is_valid():
             creatividad_form.save()
-            return redirect('pdvs')
+            return redirect('creatividades')
     else:
         creatividad_form = CreatividadForm()
     return render(request, 'main/crear_creatividad.html',{'form': creatividad_form})
@@ -338,7 +344,7 @@ def pdis_json(request):
     pdv_pk = request.GET.get('pdv_pk', None)
     pdv = Pdv.objects.get(pk=pdv_pk)
     pdis = pdv.pdi_set.all()
-    creatividades = list(Creatividad.objects.all().values())
+    creatividades = list(Creatividad.objects.filter(campana=campana).values())
     materiales = list(Material.objects.all().values())
     try:
         campana_pdv = pdv.campana_pdv_set.filter(campana = CampanaNum).get()
@@ -412,3 +418,29 @@ def guardar_config_campana(request):
                                                                   material_id= params[material],
                                                                   creatividad_id= params[creatividad])
     return redirect('campanas_del_cliente')
+
+
+def creatividades(request):
+    creatividades = Creatividad.objects.all()
+
+    return render(request,'main/creatividades.html', context={'creatividades': creatividades})
+
+def delete_creatividad(request, creatividad_pk = None):
+    creatividad = Creatividad.objects.filter(pk=creatividad_pk)
+    creatividad.delete()
+    return redirect('creatividades')
+
+
+class CampanasAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Campana.objects.none()
+
+        campanas = Campana.objects.all()
+
+        return campanas
+
+
+def materiales(request):
+    materiales = Material.objects.all()
+    return render(request,'main/materiales.html', context={'materiales' : materiales})

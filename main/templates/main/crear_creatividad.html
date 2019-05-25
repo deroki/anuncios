@@ -21,7 +21,7 @@
         <div class="card mt-5">
             <div class = "card-body">
 
-                <form method="POST" novalidate>
+                <form enctype="multipart/form-data" method="POST" novalidate>
                     {% csrf_token %}
                     {{ form|crispy}}
                     <button type='submit' class='btn btn-success'> Crear </button>
@@ -44,4 +44,6 @@
             $("#logo_img").attr('src', '{{ MEDIA_URL }}' + $("#id_logo option:selected").text());
         });
     </script>
+
+    {{ form.media }}
 {% endblock %}

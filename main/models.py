@@ -168,6 +168,15 @@ pdv_estados =(('ok', 'ok'),
               ('incidencia', 'incidencia'))
 
 
+class Creatividad(models.Model):
+    campana = models.ForeignKey("Campana", on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=50)
+    imagen = models.ImageField(upload_to='images/creatividades')
+
+    def __str__(self):
+        return self.nombre
+
+
 class Campana(models.Model):
     cliente = models.ForeignKey(Cliente,
                                 on_delete=models.CASCADE)
@@ -213,18 +222,14 @@ class Material(models.Model):
         return self.nombre
 
 
-class Creatividad(models.Model):
-    nombre = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.nombre
-
-
 class CampanapdV_pdI(models.Model):
     Campana_Pdv = models.ForeignKey(Campana_Pdv, on_delete=models.CASCADE)
     pdi = models.ForeignKey(Pdi, on_delete=models.CASCADE)
+    creatividad = models.ForeignKey(Creatividad,
+                                    on_delete=models.CASCADE,
+                                    null=True,
+                                    blank=True)
     material = models.ForeignKey(Material,on_delete=models.CASCADE)
-    creatividad = models.ForeignKey(Creatividad,on_delete=models.CASCADE)
     image = models.ImageField(upload_to=pdi_image_path,
                               null=True,
                               blank=True)

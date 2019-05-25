@@ -32,15 +32,21 @@ urlpatterns = [
     path('crear_pdv/', views.crear_pdv, name='crear_pdv'),
     path('crear_pdi/', views.crear_pdi, name='crear_pdi'),
     path('crear_material', views.crear_material, name='crear_material'),
-    path('crear_creatividad', views.crear_creatividad, name='crear_creatividad'),
+    path('creatividades', views.creatividades, name='creatividades'),
+    path('delete_creatividad/<int:creatividad_pk>/', views.delete_creatividad, name='delete_creatividad'),
+    path('delete_creatividad/', views.delete_creatividad, name='delete_creatividad'),
+    path('edit_creatividad/<int:pk>/', views.crear_creatividad, name="edit_creatividad"),
+    path('crear_creatividad/', views.crear_creatividad, name='crear_creatividad'),
+    path('materiales/', views.materiales, name="materiales"),
     # cliente
     path('campanas_del_cliente/', views.campanas_del_cliente, name='campanas_del_cliente'),
     path('campanas_del_cliente/<int:cliente_id>/', views.campanas_del_cliente, name='campanas_del_cliente'),
     path('crear_campana', views.crear_campana, name='crear_campana'),
     path('elegir_pdvs/<int:campana_pk>/', views.elegir_pdvs, name ='elegir_pdvs'),
     path('pdis_json/', views.pdis_json, name = 'pdis_json'),
-    path('guardar_config_campana/', views.guardar_config_campana, name='guardar_config_campana')
-
+    path('guardar_config_campana/', views.guardar_config_campana, name='guardar_config_campana'),
+    #autocomplete
+    path('campanasAutocomplete/', views.CampanasAutocomplete.as_view(), name="CampanasAutocomplete")
 
 
 ]
