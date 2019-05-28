@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block titulo %}
-    <h1><strong>{{ selected_campana.nombre|upper }}</strong></h1>
+    <h1 id="campana_name"><strong>{{ selected_campana.nombre|upper }}</strong></h1>
 {%  endblock %}
 
 
@@ -202,7 +202,7 @@
                                 <th class="text-center">Instaladores</th>
                                 <th class="text-center">Material</th>
                                 <th class="text-center">Creatividad</th>
-                                <th class="text-center">Image</th>
+                                <th class="text-center">Imagen Actual</th>
                                 <th class="text-center"></th>
 
                             </tr>
@@ -258,6 +258,7 @@
                         }
                         }
                     tabla+= '</select>';
+                    tabla+= '<p style="cursor:pointer;"onclick="verImagen(this);"> ver imagen </p>';
                     tabla+= '</td>';
                     var checked = null
                     //check
@@ -356,6 +357,27 @@
             mydiv.innerHTML += modal;
         }
 
+                function showCreativityImageModal(imagepath){
+            var modal = `<div class="modal fade show" id="exampleModalCenter" style="display: block; padding-right: 15px;">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+
+                                                <button onclick="closeModal()" type="button" class="close" data-dismiss="modal"><span>×</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <img class = "mx-auto d-block" src="${imagepath}">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>`;
+            var mydiv = document.getElementById('mymodal');
+            mydiv.innerHTML += modal;
+        }
+
+
+
         function closeModal(){
             var mydiv = document.getElementById('mymodal');
             mydiv.innerHTML = ""
@@ -375,6 +397,30 @@
             for(var i=0;i<buttons.length;i++){
                 buttons[i].click()
             }
+        }
+
+        function verImagen(source){
+            var select = source.previousSibling;
+            var creatividadName = select.options[select.selectedIndex].text;
+            var row = select.parentElement.parentElement;
+            var pdi = row.childNodes[0].innerHTML;
+            var pdvRow = row.parentElement.parentElement.parentElement.parentElement.previousElementSibling;
+            var pdv = pdvRow.childNodes[3].innerText;
+            var campana_name = document.getElementById('campana_name').innerText;
+            console.log(creatividadName)
+
+            $.ajax({
+            'url': {% url 'get_creatividad_imagen' %},
+            'data' : {'creatividad': creatividadName,
+                        'campana_name': campana_name},
+            'dataType': 'json',
+            'success': function(json){
+                var imagen = json.imagen;
+                console.log(imagen);
+                showCreativityImageModal(imagen)
+
+            }
+            });
         }
     </script>
 {% endblock %}

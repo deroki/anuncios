@@ -25,7 +25,7 @@ SECRET_KEY = 'u*w_tz0m31jrim%+k9rt0yh*o+32$8%0h@$y54%h+@l+soi&#^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['just-skyline-242012.appspot.com', '127.0.0.1']
 
 
 # Application definition
@@ -126,6 +126,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "allstaticfiles")
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

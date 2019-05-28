@@ -98,7 +98,12 @@ def usuarios(request):
     return render(request, 'main/usuarios.html', context)
 
 
-def crear_usuario(request):
+def crear_usuario(request,pk=None):
+    if pk:
+        instance = User.objects.get(pk=pk)
+    else:
+        instance = None
+
     exitStatus = None
     form_image = ImageForm()
     form = UserForm()
@@ -110,7 +115,6 @@ def crear_usuario(request):
             form = UserForm()
             form_cliente = ClienteForm()
             form_montador = MontadorForm()
-            print(request.FILES)
             form_image = ImageForm(request.POST, request.FILES)
             if form_image.is_valid():
                 form_image.save()
@@ -164,6 +168,11 @@ def crear_usuario(request):
                                                       'MEDIA_URL': MEDIA_URL})
 
 
+def delete_usuario(request,pk):
+    usuario = User.objects.get(pk=pk)
+    usuario.delete()
+    return redirect('usuarios')
+
 
 def pdvs(request):
     user = request.user
@@ -171,6 +180,18 @@ def pdvs(request):
         pdvs = Pdv.objects.filter(cliente__admin= user)
         print(pdvs)
     return render(request, 'main/pdvs.html', {'pdvs': pdvs})
+
+
+class ClientesAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Cliente.objects.none()
+
+        clientes = Cliente.objects.all()
+
+        return clientes
+
+
 
 
 def all_pdis_json(request):
@@ -190,6 +211,21 @@ def all_pdis_json(request):
     return JsonResponse({'data': pdis_,
                          'pdv_pk': pdv_pk,
                          'MEDIA_URL': MEDIA_URL})
+
+def get_creatividad_image(request):
+    pdv_name = request.GET.get('pdv', None)
+    pdi_name = request.GET.get('pdi', None)
+    creatividad_name = request.GET.get('creatividad', None)
+    campana_name = request.GET.get('campana_name', None)
+    campana = campana_name.lower()
+
+    campana = Campana.objects.get(nombre=campana)
+    creatividad = Creatividad.objects.get(campana = campana, nombre = creatividad_name)
+    imagepath = MEDIA_URL + creatividad.imagen.name
+
+    return JsonResponse({'imagen': imagepath})
+
+
 
 
 def crear_pdv(request):
@@ -246,6 +282,7 @@ def campanas_del_cliente(request, cliente_id = None):
 
 
 def crear_campana(request):
+    cliente_id = ""
     user = request.user
     if user.is_staff:
         cliente_id = request.COOKIES.get('cliente_id')
@@ -260,7 +297,7 @@ def crear_campana(request):
             preform = form_campana.save(commit=False)
             preform.cliente = cliente
             preform.save()
-            return HttpResponseRedirect('campanas_del_cliente')
+            return redirect('campanas_del_cliente', cliente_id =cliente_id)
     else:
         form_campana = CampanaForm()
 

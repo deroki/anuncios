@@ -22,6 +22,7 @@ urlpatterns = [
     path('', views.login_user, name='login'),
     path('usuarios/', views.usuarios, name='usuarios'),
     path('crear_usuario', views.crear_usuario, name='crear_usuario'),
+    path('delete_usuario', views.delete_usuario, name = "delete_usuario"),
     path('clientes/', views.index, name='clientes'),
     path('formulario_ok/', views.formulario_ok, name='formulario_ok'),
     path('crear_cliente/', views.crear_cliente, name='crear_cliente'),
@@ -29,6 +30,7 @@ urlpatterns = [
     # admin pdvs
     path('pdvs/', views.pdvs, name="pdvs"),
     path('all_pdis_json/', views.all_pdis_json, name='all_pdis_json'),
+    path('get_creatividad_imagen/', views.get_creatividad_image, name = 'get_creatividad_imagen'),
     path('crear_pdv/', views.crear_pdv, name='crear_pdv'),
     path('crear_pdi/', views.crear_pdi, name='crear_pdi'),
     path('crear_material', views.crear_material, name='crear_material'),
@@ -50,7 +52,8 @@ urlpatterns = [
     path('pdis_json/', views.pdis_json, name = 'pdis_json'),
     path('guardar_config_campana/', views.guardar_config_campana, name='guardar_config_campana'),
     #autocomplete
-    path('campanasAutocomplete/', views.CampanasAutocomplete.as_view(), name="CampanasAutocomplete")
+    path('campanasAutocomplete/', views.CampanasAutocomplete.as_view(), name="CampanasAutocomplete"),
+    path('clientesAutocomplete/', views.ClientesAutocomplete.as_view(), name="ClientesAutocomplete")
 
 
 ]
