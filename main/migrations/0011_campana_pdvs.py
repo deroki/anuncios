@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='campana',
             name='pdvs',
-            field=models.ManyToManyField(through='application.Campana_pdV_pdI', to='application.Pdv'),
+            field=models.ManyToManyField(through='main.Campana_pdV_pdI', to='main.Pdv'),
         ),
     ]

@@ -18,12 +18,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='campanapdv_pdi',
             name='creatividad',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='application.Creatividad'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='main.Creatividad'),
         ),
         migrations.AddField(
             model_name='creatividad',
             name='Campana',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='application.Campana'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='main.Campana'),
             preserve_default=False,
         ),
     ]

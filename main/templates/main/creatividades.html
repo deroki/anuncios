@@ -56,7 +56,7 @@
                             <thead>
                             <tr>
                                 <th class="text-center">Campaña</th>
-                                <th class="text-center">Nombre</th>
+                                <th  align="center" class="text-center">Nombre</th>
                                 <th class="text-center">Imagen</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
@@ -64,13 +64,13 @@
                             <tbody>
                             {% for creatividad in creatividades%}
                                 <tr id = {{ creatividad.pk }}>
-                                    <td>{{ creatividad.campana }}</td>
-                                    <td>{{ creatividad.nombre }}</td>
+                                    <td align="center">{{ creatividad.campana }}</td>
+                                    <td align="center">{{ creatividad.nombre }}</td>
                                     <td align="center">
 
                                         <img src="{{ creatividad.imagen.url }}" height="50" width="50">
                                     </td>
-                                    <td>
+                                    <td align="center">
                                         <div style="vertical-align: center; text-align:center;">
                                             <a href="{% url 'edit_creatividad' creatividad.pk %}">
                                             <img title="Editar" src="{% static 'images/edit.png' %}"

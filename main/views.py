@@ -177,7 +177,7 @@ def delete_usuario(request,pk):
 def pdvs(request):
     user = request.user
     if user.is_superuser:
-        pdvs = Pdv.objects.filter(cliente__admin= user)
+        pdvs = Pdv.objects.all()
         print(pdvs)
     return render(request, 'main/pdvs.html', {'pdvs': pdvs})
 
@@ -317,7 +317,7 @@ def elegir_pdvs(request,campana_pk):
     selected_campana = Campana.objects.get(pk = campana_pk)
     logo_path = cliente.logo.image.name
 
-    pdvs = Pdv.objects.filter(cliente=cliente)
+    pdvs = Pdv.objects.all()
 
     for pdv in pdvs:
         campanas_del_pdv = pdv.campana_pdv_set

@@ -22,13 +22,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='campana_pdv_pdi',
             name='creatividad',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='application.Creatividad'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='main.Creatividad'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='campana_pdv_pdi',
             name='material',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='application.Material'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='main.Material'),
             preserve_default=False,
         ),
     ]

@@ -62,8 +62,8 @@
                             <tbody>
                             {% for material in materiales%}
                                 <tr id = {{ material.pk }}>
-                                    <td>{{ material.nombre }}</td>
-                                    <td>
+                                    <td align="center">{{ material.nombre }}</td>
+                                    <td align="center">
                                         <div style="vertical-align: center; text-align:center;">
                                             <a href="{% url 'edit_material' material.pk %}">
                                             <img title="Editar" src="{% static 'images/edit.png' %}"

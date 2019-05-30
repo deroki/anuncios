@@ -27,11 +27,11 @@ class Migration(migrations.Migration):
                 ('idioma', models.CharField(choices=[('esp', 'Español'), ('cat', 'Catalán'), ('gal', 'Gallego'), ('eu', 'Euskera'), ('eng', 'Inglés')], max_length=10)),
                 ('fecha_creacion', models.DateField(auto_now_add=True)),
                 ('fecha_cambio', models.DateField(auto_now=True)),
-                ('Campana_Pdv', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='application.Campana_Pdv')),
-                ('creatividad', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='application.Creatividad')),
-                ('material', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='application.Material')),
-                ('montador', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='application.Montador')),
-                ('pdi', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='application.Pdi')),
+                ('Campana_Pdv', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.Campana_Pdv')),
+                ('creatividad', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.Creatividad')),
+                ('material', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.Material')),
+                ('montador', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.Montador')),
+                ('pdi', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.Pdi')),
             ],
         ),
         migrations.RemoveField(
@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='campana',
             name='pdvs',
-            field=models.ManyToManyField(through='application.Campana_Pdv', to='application.Pdv'),
+            field=models.ManyToManyField(through='main.Campana_Pdv', to='main.Pdv'),
         ),
         migrations.DeleteModel(
             name='Campana_pdV_pdI',
@@ -49,16 +49,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='campana_pdv',
             name='campana',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='application.Campana'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.Campana'),
         ),
         migrations.AddField(
             model_name='campana_pdv',
             name='pdv',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='application.Pdv'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.Pdv'),
         ),
         migrations.AddField(
             model_name='pdv',
             name='campanas',
-            field=models.ManyToManyField(through='application.Campana_Pdv', to='application.Campana'),
+            field=models.ManyToManyField(through='main.Campana_Pdv', to='main.Campana'),
         ),
     ]

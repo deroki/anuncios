@@ -82,17 +82,17 @@
                             {% for campana in campanas%}
                                 <tr>
 
-                                    <td><a class="noblue" href="{% url 'elegir_pdvs' campana.pk %}">{{ campana.nombre }}</a></td>
-                                    <td>{{ campana.fecha_creacion }}</td>
-                                    <td>
+                                    <td align="center"><a class="noblue" href="{% url 'elegir_pdvs' campana.pk %}">{{ campana.nombre }}</a></td>
+                                    <td align="center">{{ campana.fecha_creacion }}</td>
+                                    <td align="center">
                                         {% if campana.fecha_finalizado == None %}
                                         ---
                                         {% else %}
                                         {{ campana.fecha_finalizado }}
                                         {% endif %}
-                                    </td>
-                                    <td>{{ campana.estado }}</td>
-                                    <td>{{ campana.activo }}</td>
+                                    </td align="center">
+                                    <td align="center">{{ campana.estado }}</td>
+                                    <td align="center">{{ campana.activo }}</td>
 
                                 </tr>
                             {% endfor %}

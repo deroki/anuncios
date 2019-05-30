@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='pdv',
             name='cliente',
-            field=models.ManyToManyField(to='application.Cliente'),
+            field=models.ManyToManyField(to='main.Cliente'),
         ),
     ]

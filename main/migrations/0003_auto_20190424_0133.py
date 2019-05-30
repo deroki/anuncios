@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='campana_pdv_pdi',
             name='montador',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='application.Montador'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='main.Montador'),
             preserve_default=False,
         ),
         migrations.AlterField(
