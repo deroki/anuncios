@@ -395,6 +395,7 @@ def guardar_config_campana(request):
     str = request.META['HTTP_REFERER']
     CampanaNum = re.findall(r'/\d+/', str)[0][1:-1]
     campana = Campana.objects.get(pk=CampanaNum)
+    cliente_id = campana.cliente.pk
     # borrar all
     campanaPdv = Campana_Pdv.objects.filter(campana=campana).delete()
     params = request.POST
@@ -417,8 +418,7 @@ def guardar_config_campana(request):
                                                                   pdi = pdi,
                                                                   material_id= params[material],
                                                                   creatividad_id= params[creatividad])
-    return redirect('campanas_del_cliente')
-
+    return redirect('campanas_del_cliente', cliente_id=cliente_id)
 
 
 def creatividades(request):
