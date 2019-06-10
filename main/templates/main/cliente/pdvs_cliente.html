@@ -3,7 +3,12 @@
 
 
 
-{% block css%}<style>
+{% block css%}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+
+
     td.add_button{
         background: url("{% static 'images/icon/add.png' %}") center;
         cursor: pointer;
@@ -24,6 +29,7 @@
 
 
 {% block content %}
+    <select class="js-example-basic-multiple" name="states[]" multiple="multiple">    </select>
 
     <br><br>
     <!-- botones -->
@@ -146,13 +152,15 @@
 {#    <script src="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"></script>#}
     <link rel="stylesheet" type="text/css"
           href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-html5-1.5.6/r-2.2.2/datatables.min.css"/>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript"
             src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-html5-1.5.6/r-2.2.2/datatables.min.js"></script>
     <script>
         $(document).ready(function () {
+
+
             var table = $('#tabla').DataTable(
                 {
                     dom: 'Bfrtip',
@@ -167,6 +175,8 @@
                     {#    {data: "Estado"},#}
                     {#    {data: "Activo"}]#}
                 }
+
+
             )
 
             function format(d) {
@@ -185,7 +195,18 @@
                     '<td>And any further details here (images etc)...</td>' +
                     '</tr>' +
                     '</table>';
-            }
+            };
+
+            function select2(){
+                $('.js-example-basic-multiple').select2({
+                ajax:{
+                    url: '{% url 'montadores_json' %}',
+                    dataType: 'json',
+
+                }
+            });
+            };
+
 
             function createtable(json, materiales, creatividades, pdv_pk, MEDIA_URL){
                 let tabla = '<table class="extended table table-striped table-bordered dataTable no-footer" style="width:100%" role="grid" aria-describedby="tabla_info">';
@@ -273,10 +294,10 @@
                     }
                     tabla+= `<td> <input ${checked} class="pdv_${pdv_pk}" onclick="togglePdi(this)"type="checkbox" name="pdi_${json[rrow]['id']}" value="${json.checked}"></td>`
 
-
-
-
                     }
+                tabla+= '</tr>';
+                tabla+= '<tr >';
+                tabla+= `<td colspan="13">   <span style="margin: 30px;"> Montadores </span> <select id="montadores_${pdv_pk}" class="js-example-basic-multiple" name="montadores_${pdv_pk}" multiple="multiple" style="width: 75%">    </select>  </td>`;
                 tabla+= '</tr>';
                 tabla += '</body>';
                 tabla += '</table>';
@@ -308,6 +329,8 @@
                         tabla = createtable(json.data,json.materiales,json.creatividades, json.pdv_pk, json.MEDIA_URL);
                         row.child(tabla).show();
                         tr.addClass('shown')
+                        select2()
+
                     }
                     });
                     }
@@ -422,5 +445,20 @@
             }
             });
         }
+
+
+
+        $( function() {
+		function split( val ) {
+			return val.split( /,\s*/ );
+		}
+		function extractLast( term ) {
+			return split( term ).pop();
+		}
+
+
+	} );
+
     </script>
 {% endblock %}
+

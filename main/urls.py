@@ -53,7 +53,9 @@ urlpatterns = [
     path('guardar_config_campana/', views.guardar_config_campana, name='guardar_config_campana'),
     #autocomplete
     path('campanasAutocomplete/', views.CampanasAutocomplete.as_view(), name="CampanasAutocomplete"),
-    path('clientesAutocomplete/', views.ClientesAutocomplete.as_view(), name="ClientesAutocomplete")
+    path('clientesAutocomplete/', views.ClientesAutocomplete.as_view(), name="ClientesAutocomplete"),
+    #montador
+    path('montadores_json/', views.montadores_json, name="montadores_json")
 
 
 ]

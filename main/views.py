@@ -390,6 +390,20 @@ def pdis_json(request):
                          'pdv_pk': pdv_pk})
 
 
+
+
+def montadores_json(request):
+    montadores = Montador.objects.all()
+    jsonList = []
+    for montador in montadores:
+        montadorDict = {'id' : montador.usuario.pk,
+                        'text': montador.usuario.email}
+        jsonList.append(montadorDict)
+
+
+    return JsonResponse({'results' : jsonList })
+
+
 def guardar_config_campana(request):
     request = request
     str = request.META['HTTP_REFERER']
@@ -414,10 +428,28 @@ def guardar_config_campana(request):
                                                             pdv=pdv,
                                                             idioma=params[f'pdv_{pdv.id}_idioma'],
                                                             estado='pendiente')
-            campanaPdv_Pdi = CampanapdV_pdI.objects.get_or_create(Campana_Pdv = campana_Pdv,
+
+            #si no hay creatividad que seleccionar
+            try:
+                creatividad_id = params[creatividad]
+            except:
+                creatividad_id = None
+
+
+            campanaPdv_Pdi, created = CampanapdV_pdI.objects.get_or_create(Campana_Pdv = campana_Pdv,
                                                                   pdi = pdi,
                                                                   material_id= params[material],
-                                                                  creatividad_id= params[creatividad])
+                                                                  creatividad_id= creatividad_id)
+            montadores_list = request.POST.getlist(f'montadores_{pdv.pk}')
+            if montadores_list:
+                for user_pk in montadores_list:
+                    campanaPdv_Pdi.user_montador.add(User.objects.get(pk=user_pk))
+                    campanaPdv_Pdi.save()
+
+
+
+
+
     return redirect('campanas_del_cliente', cliente_id=cliente_id)
 
 

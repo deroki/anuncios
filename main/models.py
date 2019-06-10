@@ -232,7 +232,7 @@ class CampanapdV_pdI(models.Model):
     image = models.ImageField(upload_to=pdi_image_path,
                               null=True,
                               blank=True)
-    montador = models.ForeignKey(Montador,on_delete=models.CASCADE,
+    user_montador = models.ManyToManyField(User,
                                  null=True,
                                  blank=True
                                  )
