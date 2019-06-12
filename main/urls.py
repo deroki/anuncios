@@ -44,6 +44,8 @@ urlpatterns = [
     path('delete_material/', views.delete_material, name='delete_material'),
     path('edit_material/<int:pk>/', views.crear_material, name="edit_material"),
     path('crear_material/', views.crear_material, name='crear_material'),
+    path('instalaciones', views.instalaciones, name='instalaciones'),
+    path('incidencias/<int:pk>/', views.incidencias, name="incidencias"),
     # cliente
     path('campanas_del_cliente/', views.campanas_del_cliente, name='campanas_del_cliente'),
     path('campanas_del_cliente/<int:cliente_id>/', views.campanas_del_cliente, name='campanas_del_cliente'),
@@ -55,7 +57,10 @@ urlpatterns = [
     path('campanasAutocomplete/', views.CampanasAutocomplete.as_view(), name="CampanasAutocomplete"),
     path('clientesAutocomplete/', views.ClientesAutocomplete.as_view(), name="ClientesAutocomplete"),
     #montador
-    path('montadores_json/', views.montadores_json, name="montadores_json")
+    path('montadores_json/', views.montadores_json, name="montadores_json"),
+    path('dashboard/', views.dashboard, name="dashboard"),
+    path('pdis_instalacion_json/', views.pdis_instalacion_json, name="pdis_instalacion_json"),
+    path('instalacion_config/', views.instalacion_config, name= "instalacion_config")
 
 
 ]

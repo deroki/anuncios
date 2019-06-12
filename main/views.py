@@ -34,7 +34,7 @@ def login_user(request):
                 elif user.is_cliente:
                     return HttpResponseRedirect('campanas_del_cliente')
                 elif user.is_montador:
-                    return HttpResponseRedirect()
+                    return HttpResponseRedirect('dashboard')
 
     return render(request, 'registration/login.html')
 
@@ -516,3 +516,88 @@ def delete_material(request,pk):
     material = Material.objects.get(pk=pk)
     material.delete()
     return redirect('materiales')
+
+
+def instalaciones(request):
+    instalaciones = Campana_Pdv.objects.all().order_by('-fecha_cambio')
+    return render(request,'main/instalaciones.html', context={'instalaciones': instalaciones})
+
+
+
+def incidencias(request,pk):
+    instalacion = Campana_Pdv.objects.get(pk=pk)
+    incidencias = Comments.objects.filter(Campana_Pdv = instalacion)
+    return render(request,'main/incidencias.html', context={'incidencias' : incidencias,
+                                                            'instalacion_pk' : instalacion.pk})
+
+
+
+
+# Montador
+
+def dashboard(request):
+    user = request.user
+    instalaciones_pdi = CampanapdV_pdI.objects.filter(user_montador= user)
+    instalaciones_pdv = []
+
+    for instalacion_pdi in instalaciones_pdi:
+        if instalacion_pdi.Campana_Pdv not in instalaciones_pdv:
+            instalaciones_pdv.append(instalacion_pdi.Campana_Pdv)
+
+    return render(request, 'main/montador/dasboard.html', context= {'instalaciones_pdv': instalaciones_pdv})
+
+
+def pdis_instalacion_json(request):
+    instalacionPdv_pk = request.GET.get('instalacionPdv_pk', None)
+    instalacionPdv = Campana_Pdv.objects.get(pk = instalacionPdv_pk)
+    instalacionesPdi = CampanapdV_pdI.objects.filter(Campana_Pdv = instalacionPdv)
+    jsonDict = {'data': [] }
+
+    for instalacionPdi in instalacionesPdi:
+        lastImage = CampanapdV_pdI.objects.filter(pdi=instalacionPdi.pdi).order_by('-fecha_cambio').first()
+        jsonDict['data'].append({'nombre' : instalacionPdi.pdi.nombre,
+                                 'tipo' : instalacionPdi.pdi.tipo.nombre,
+                                 'anchoTotal' : instalacionPdi.pdi.anchoTotal,
+                                 'anchoVista': instalacionPdi.pdi.anchoVista,
+                                 'altoVista' : instalacionPdi.pdi.altoVista,
+                                 'altoTotal' : instalacionPdi.pdi.altoTotal,
+                                 'composicion': instalacionPdi.pdi.composicion,
+                                 'pdi_pk' : instalacionPdi.pk, # se trata del pk de la instalacion no del pdi
+                                 'imagenNow' : lastImage.image.name,
+                                 "MEDIA_URL": MEDIA_URL,
+                                 'campanaPdv_pk' : instalacionPdi.Campana_Pdv.pk
+                                })
+
+    return JsonResponse(jsonDict)
+
+
+def instalacion_config(request):
+    params = request.POST
+    user = request.user
+
+    for key in params.keys():
+        word = re.match(r'^comment_\d+$', key)
+        if word:
+            pk = key[8:]
+            instalacion = Campana_Pdv.objects.get(pk=pk)
+            comentario = params[f'comment_{pk}']
+
+            if user.is_staff:
+                tipo = "admin"
+            else:
+                tipo = params['options']
+
+            Comment = Comments(Campana_Pdv=instalacion,
+                               User= user,
+                               Comments = comentario,
+                               tipo= tipo,
+                               visible= False)
+            Comment.save()
+
+            instalacion.estado = tipo
+            instalacion.save()
+            if user.is_staff:
+                return redirect('instalaciones')
+
+    return redirect('dashboard')
+

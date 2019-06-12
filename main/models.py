@@ -163,7 +163,7 @@ class Pdi(models.Model):
 
 
 pdv_estados =(('ok', 'ok'),
-              ('pendiente', 'pendiente'),
+              ('ko', 'ko'),
               ('incidencia', 'incidencia'))
 
 
@@ -209,6 +209,8 @@ class Campana_Pdv(models.Model):
     estado = models.CharField(choices=pdv_estados,
                               max_length=15)
     idioma = models.CharField(choices=IDIOMAS, max_length=10)
+    fecha_creacion = models.DateField(auto_now_add=True)
+    fecha_cambio = models.DateField(auto_now=True)
 
     def __str__(self):
         return f'{self.campana.nombre}//{self.pdv.nombre}'
@@ -220,6 +222,8 @@ class Material(models.Model):
     def __str__(self):
         return self.nombre
 
+def instalacionPdi_imagen(instance, filename):
+    return f'images/{instance.pdi.nombre}/{instance.fecha_camio}/{filename}'
 
 class CampanapdV_pdI(models.Model):
     Campana_Pdv = models.ForeignKey(Campana_Pdv, on_delete=models.CASCADE)
@@ -229,7 +233,7 @@ class CampanapdV_pdI(models.Model):
                                     null=True,
                                     blank=True)
     material = models.ForeignKey(Material,on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=pdi_image_path,
+    image = models.ImageField(upload_to=instalacionPdi_imagen,
                               null=True,
                               blank=True)
     user_montador = models.ManyToManyField(User,
@@ -244,8 +248,19 @@ class CampanapdV_pdI(models.Model):
     def __str__(self):
         return f'{self.Campana_Pdv.campana}//{self.Campana_Pdv.pdv}//{self.pdi}'
 
-
-
+comentarioTipo = (('ok', 'ok'),
+                  ('ko', 'ko'),
+                  ('incidencia', 'incidencia'),
+                  ('admin', 'admin')
+                  )
+class Comments(models.Model):
+    Campana_Pdv = models.ForeignKey(Campana_Pdv, on_delete=models.CASCADE)
+    User = models.ForeignKey(User, on_delete=models.CASCADE)
+    Comments = models.CharField(max_length=500)
+    tipo = models.CharField(choices=comentarioTipo,
+                            max_length=10)
+    visible = models.BooleanField(default=False)
+    fecha_creacion = models.DateField(auto_now_add=True)
 
 
 

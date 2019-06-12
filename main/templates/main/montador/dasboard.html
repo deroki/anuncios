@@ -1,0 +1,405 @@
+{% extends 'main/montador/base.html' %}
+{% load static %}
+
+
+
+{% block css%}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+
+
+    td.add_button{
+        background: url("{% static 'images/icon/add.png' %}") center;
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-size: 20px 20px;
+    }
+    img.thumbnail{
+    width:100%;
+    max-width:50px;
+}
+</style>
+{% endblock %}
+
+{% block titulo %}
+    <h1>Instalaciones</h1>
+{%  endblock %}
+
+
+
+{% block content %}
+
+    <!-- botones -->
+
+    </div>
+    <!-- tabla -->
+    <div class="col-12">
+        <div class="card mt-auto">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+
+                        <table id="tabla" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                            <tr>
+                                <th class="text-center"></th>
+                                <th class="text-center">PDV</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for instalacion_pdv in instalaciones_pdv%}
+                                <tr id = {{ instalacion_pdv.pk }}>
+                                    <td class="add_button" align="center"></td>
+
+
+
+                                    <td align="center" style="vertical-align: middle;">
+                                        <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#pdvmodall">
+                                          {{ instalacion_pdv.pdv.slug }}
+                                        </button>
+                                        <div class="modal fade" id="pdvmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">{{ instalacion_pdv.pdv.slug }}</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                </button>
+                                              </div>
+                                              <div class="modal-body">
+                                                <p> direccion: {{ instalacion_pdv.pdv.direccion }}</p>
+                                                <p> CP: {{ instalacion_pdv.pdv.cp }}</p>
+                                                <p> Ciudad: {{ instalacion_pdv.pdv.ciudad }}</p>
+                                                <p> Provincia: {{ instalacion_pdv.pdv.provincia }}</p>
+
+
+                                              </div>
+                                              <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </td>
+
+
+
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-12">
+        <div class="card mt-auto">
+            <div class="card-body">
+                <div class="row">
+
+
+                    <div class="col-sm-1">
+                        <a href={% url 'campanas_del_cliente' %} class="btn btn-dark text-white">
+                        VOLVER
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mymodal"></div>
+{% endblock%}
+
+{% block javascript %}
+
+{#    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>#}
+{#    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>#}
+{#    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>#}
+{#    <script src="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"></script>#}
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-html5-1.5.6/r-2.2.2/datatables.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-html5-1.5.6/r-2.2.2/datatables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+
+            var table = $('#tabla').DataTable(
+                { "bLengthChange": false
+
+                }
+
+
+            );
+
+
+
+
+
+
+            function createtable(data){
+                let tabla = `<form action="{% url 'instalacion_config' %}" method="post" enctype="multipart/form-data" id="instalacionform">
+                                {% csrf_token %}
+                                <table class="extended table table-striped table-bordered dataTable no-footer" style="width:100%" role="grid" aria-describedby="tabla_info">`;
+                tabla += `<thead>
+                            <tr>
+                                <th class="text-center">PDI</th>
+
+
+                            </tr>
+                            </thead>`;
+                tabla += '<tbody>';
+                for (var rrow in data){
+                    tabla+= '<tr>';
+                    var modal = `<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">${data[rrow].nombre}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                        <p> tipo: ${data[rrow].tipo}</p>
+                                        <p> Ancho total ${data[rrow].anchoTotal}</p>
+                                        <p> Ancho vista ${data[rrow].anchoVista}</p>
+                                        <p> Alto total ${data[rrow].altoTotal}</p>
+                                        <p> Alto vista ${data[rrow].altoVista}</pp>
+                                        <p> composicion ${data[rrow].composicion}</p>
+
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>`;
+                    var button =`<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModal">
+                                  ${data[rrow].nombre}
+                                </button>`;
+                    var fileinput= `<div class="custom-file">
+                            <input name="image_${data[rrow].pdi_pk}" type="file" class="custom-file-input" id="image_${data[rrow].pdi_pk}">
+                            <label class="custom-file-label" for="inputGroupFile04">Elige imagen</label>
+                            </div>`;
+                    tabla += `<td class="text-center">${modal}${button}<br><br>${fileinput}</td>`;
+                    tabla+= '</tr>';
+
+                    }
+
+                var formbutton = `<button type="button" class="btn btn-dark" data-toggle="modal" data-target="#reportmodal">
+                                  Finalizar Instalación
+                                </button>`;
+                tabla += `<tr class="text-center"><td>${formbutton}</td></tr>`;
+                tabla += '</body>';
+                tabla += '</table>';
+                var reportModal = `<div class="modal fade" id="reportmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Resumen</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+
+                                              <textarea form="instalacionform" name="comment_${data[rrow].campanaPdv_pk}" class="form-control" aria-label="With textarea"></textarea>
+                                                <br><br>
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                  <label class="btn btn-success active">
+                                                    <input type="radio" name="options" value="ok" autocomplete="off" checked> OK
+                                                  </label>
+                                                  <label class="btn btn-warning">
+                                                    <input type="radio" name="options" value="incidencia" autocomplete="off"> Incidencia
+                                                  </label>
+                                                  <label class="btn btn btn-danger">
+                                                    <input type="radio" name="options" value="ko" autocomplete="off"> KO
+                                                  </label>
+                                                </div>
+
+
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="submit" value="submit" class="btn btn btn-primary" >Enviar</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>`;
+                tabla += reportModal;
+                tabla += '</form>';
+                return tabla
+                }
+
+
+
+            $('#tabla tbody').on('click', 'td.add_button', function () {
+                console.log("buton pulsadoo");
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+                var instalacionPdv_pk = tr.attr('id');
+
+                if (row.child.isShown()) {
+                    row.child.hide();
+                    tr.removeClass('shown');
+                } else {
+
+                    if(row.child() && row.child().length){
+                        row.child.show();
+                    }
+                    else{
+                    $.ajax({
+                    'url': {% url 'pdis_instalacion_json' %},
+                    'data' : {'instalacionPdv_pk': instalacionPdv_pk },
+                    'dataType': 'json',
+                    'success': function(json){
+                        tabla = createtable(json.data);
+                        row.child(tabla).show();
+                        tr.addClass('shown')
+
+                    }
+                    });
+                    }
+
+                }
+            });
+
+
+
+        });
+
+        function togglePdv(source){
+                var pdvClass = source.className;
+                var pdvNum = pdvClass.slice(9);
+                console.log(pdvNum);
+                var checkboxes = document.getElementsByClassName(`pdv_${pdvNum}`);
+                for (var index in checkboxes){
+                    checkboxes[index].checked = source.checked
+                }
+            }
+        function togglePdi(source){
+                if (source.checked === true) {
+                    var pdvClass = source.className;
+                    var pdvNum = pdvClass.slice(4);
+                    console.log(pdvNum);
+                    var pdvCheckbox = document.getElementsByClassName(`main_pdv_${pdvNum}`)[0];
+                    pdvCheckbox.checked = source.checked;
+                }
+            }
+
+        function showImageModal(source){
+            var modal = `<div class="modal fade show" id="exampleModalCenter" style="display: block; padding-right: 15px;">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+
+                                                <button onclick="closeModal()" type="button" class="close" data-dismiss="modal"><span>×</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <img class = "mx-auto d-block" src="${source.src}">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>`;
+            var mydiv = document.getElementById('mymodal');
+            mydiv.innerHTML += modal;
+        }
+
+                function showCreativityImageModal(imagepath){
+            var modal = `<div class="modal fade show" id="exampleModalCenter" style="display: block; padding-right: 15px;">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+
+                                                <button onclick="closeModal()" type="button" class="close" data-dismiss="modal"><span>×</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <img class = "mx-auto d-block" src="${imagepath}">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>`;
+            var mydiv = document.getElementById('mymodal');
+            mydiv.innerHTML += modal;
+        }
+
+
+
+        function closeModal(){
+            var mydiv = document.getElementById('mymodal');
+            mydiv.innerHTML = ""
+        }
+
+        function checkAll(){
+            extend()
+            var inputs = document.getElementsByTagName("input");
+            for (var i=0;i<inputs.length;i++){
+                if(inputs[i].type == "checkbox"){
+                    inputs[i].checked = true;
+                }
+            }
+        }
+        function extend(){
+            var buttons = document.getElementsByClassName('add_button')
+            for(var i=0;i<buttons.length;i++){
+                buttons[i].click()
+            }
+        }
+
+        function verImagen(source){
+            var select = source.previousSibling;
+            var creatividadName = select.options[select.selectedIndex].text;
+            var row = select.parentElement.parentElement;
+            var pdi = row.childNodes[0].innerHTML;
+            var pdvRow = row.parentElement.parentElement.parentElement.parentElement.previousElementSibling;
+            var pdv = pdvRow.childNodes[3].innerText;
+            var campana_name = document.getElementById('campana_name').innerText;
+            console.log(creatividadName)
+
+            $.ajax({
+            'url': {% url 'pdis_instalacion_json' %},
+            'data' : {'instalacionPdv_pk': creatividadName,
+                        'campana_name': campana_name},
+            'dataType': 'json',
+            'success': function(json){
+                var imagen = json.imagen;
+                console.log(imagen);
+                showCreativityImageModal(imagen)
+
+            }
+            });
+        }
+
+
+
+        $( function() {
+		function split( val ) {
+			return val.split( /,\s*/ );
+		}
+		function extractLast( term ) {
+			return split( term ).pop();
+		}
+
+
+	} );
+
+    </script>
+{% endblock %}
+
