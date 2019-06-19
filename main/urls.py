@@ -46,6 +46,8 @@ urlpatterns = [
     path('crear_material/', views.crear_material, name='crear_material'),
     path('instalaciones', views.instalaciones, name='instalaciones'),
     path('incidencias/<int:pk>/', views.incidencias, name="incidencias"),
+    path('zonas/', views.zonas, name="zonas"),
+    path('add_zonas/', views.add_zonas, name='add_zonas'),
     # cliente
     path('campanas_del_cliente/', views.campanas_del_cliente, name='campanas_del_cliente'),
     path('campanas_del_cliente/<int:cliente_id>/', views.campanas_del_cliente, name='campanas_del_cliente'),

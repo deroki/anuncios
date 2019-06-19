@@ -3,7 +3,7 @@ from pipes import stepkinds
 
 from dal import autocomplete
 from django.contrib.auth import login, authenticate, logout, get_user_model
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, render_to_response
 from django.core import serializers
@@ -531,7 +531,38 @@ def incidencias(request,pk):
                                                             'instalacion_pk' : instalacion.pk})
 
 
+def zonas(request):
+    clientes = Cliente.objects.all()
+    clientes_dict = {}
+    for cliente in clientes:
+        zonas = Zona.objects.filter(cliente=cliente)
+        for zona in zonas:
+            try:
+                clientes_dict[cliente.usuario.empresa] = clientes_dict[cliente.usuario.empresa] + " - " + zona.nombre
+            except:
+                clientes_dict[cliente.usuario.empresa] = ""
 
+    return render(request, 'main/zonas.html', context={'clientes_dict' : clientes_dict})
+
+
+def add_zonas(request):
+    clientes = Cliente.objects.all()
+    if request.method =='POST':
+        post = request.POST
+        cliente_pk = post['cliente']
+        cliente = Cliente.objects.get(pk=cliente_pk)
+        # borrar todas las zonas del cliente
+        Zona.objects.filter(cliente=cliente).delete()
+        #crearlas
+        zonas = post['zonas']
+        zonas_list= zonas.replace(' ','').split(",")
+        for zona in zonas_list:
+            newZona = Zona.objects.get_or_create(cliente=cliente, nombre=zona)
+
+        return render(request, 'main/zonas_form.html', context={'clientes': clientes })
+    else:
+
+        return render(request, 'main/zonas_form.html', context={'clientes': clientes })
 
 # Montador
 

@@ -70,7 +70,7 @@ class PdvForm(forms.ModelForm):
 
     class Meta:
         model = models.Pdv
-        fields = ['cadena', 'nombre', 'direccion', 'cp', 'ciudad', 'provincia', 'prioridad', 'activo']
+        fields = ['cadena', 'nombre', 'direccion', 'cp', 'ciudad', 'provincia', 'prioridad', 'activo', 'zona']
 
 
 
