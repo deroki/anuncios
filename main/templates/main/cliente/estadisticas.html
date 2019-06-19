@@ -1,0 +1,146 @@
+{% extends 'main/cliente/base.html' %}
+{% load static %}
+
+
+
+{% block css%}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+
+
+    td.add_button{
+        background: url("{% static 'images/icon/add.png' %}") center;
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-size: 20px 20px;
+    }
+    img.thumbnail{
+    width:100%;
+    max-width:50px;
+}
+</style>
+{% endblock %}
+
+{% block titulo %}
+    <h1 id="campana_name"><strong>{{ selected_campana.nombre|upper }}</strong></h1>
+{%  endblock %}
+
+
+
+{% block content %}
+
+    <br><br>
+    <!-- botones -->
+
+    <!-- tabla -->
+    <div class="col-12">
+        <div class="card mt-auto">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+
+                        <div id="chart"></div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-12">
+        <div class="card mt-auto">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-2">
+                        <a href={% url 'campanas_del_cliente' %} class="btn btn-dark text-white">
+                        VOLVER
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mymodal"></div>
+{% endblock%}
+
+{% block javascript %}
+
+{#    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>#}
+{#    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>#}
+{#    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>#}
+{#    <script src="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"></script>#}
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-html5-1.5.6/r-2.2.2/datatables.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-html5-1.5.6/r-2.2.2/datatables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
+
+    <script>
+          var options = {
+            chart: {
+                height: 350,
+                type: 'bar',
+                stacked: true,
+                toolbar: {
+                    show: true
+                },
+                zoom: {
+                    enabled: true
+                }
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    legend: {
+                        position: 'bottom',
+                        offsetX: -10,
+                        offsetY: 0
+                    }
+                }
+            }],
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                },
+            },
+            series: [{
+                name: 'Finalizada',
+                data: [44, 55, 41, 67, 22, 43]
+            },{
+                name: 'Incidencia',
+                data: [13, 23, 20, 8, 13, 27]
+            },{
+                name: 'Cerrada',
+                data: [11, 17, 15, 15, 21, 14]
+            }],
+            xaxis: {
+                type: 'datetime',
+                categories: ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT', '01/05/2011 GMT', '01/06/2011 GMT'],
+            },
+            legend: {
+                position: 'right',
+                offsetY: 40
+            },
+            fill: {
+                opacity: 1
+            },
+        }
+
+       var chart = new ApexCharts(
+            document.querySelector("#chart"),
+            options
+        );
+
+        chart.render();
+
+    </script>
+{% endblock %}
+

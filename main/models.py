@@ -134,6 +134,7 @@ class Montador(models.Model):
 
 
 class Pdv(models.Model):
+    cliente = models.ManyToManyField(Cliente)
     campanas = models.ManyToManyField('Campana', through='Campana_Pdv')
     slug = models.SlugField(max_length=10)
     cadena = models.CharField(max_length=50)

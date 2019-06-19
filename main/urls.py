@@ -55,6 +55,7 @@ urlpatterns = [
     path('elegir_pdvs/<int:campana_pk>/', views.elegir_pdvs, name ='elegir_pdvs'),
     path('pdis_json/', views.pdis_json, name = 'pdis_json'),
     path('guardar_config_campana/', views.guardar_config_campana, name='guardar_config_campana'),
+    path('estadisticas/', views.estadisticas, name='estadisticas'),
     #autocomplete
     path('campanasAutocomplete/', views.CampanasAutocomplete.as_view(), name="CampanasAutocomplete"),
     path('clientesAutocomplete/', views.ClientesAutocomplete.as_view(), name="ClientesAutocomplete"),

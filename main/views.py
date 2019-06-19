@@ -265,7 +265,10 @@ def get_cliente_pk(request):
 
 def campanas_del_cliente(request, cliente_id = None):
     user = request.user
-    if user.is_staff:
+    if cliente_id == None:
+        cliente_id = request.COOKIES.get('cliente_id')
+        cliente = Cliente.objects.get(pk=cliente_id)
+    elif user.is_staff:
         cliente = Cliente.objects.get(pk=cliente_id)
     else:
         cliente = Cliente.objects.get(usuario=user)
@@ -336,6 +339,19 @@ def elegir_pdvs(request,campana_pk):
                                                               'logo_path' : logo_path,
                                                              'cliente': cliente})
 
+
+def estadisticas(request):
+    user = request.user
+    if user.is_staff:
+        cliente_id = request.COOKIES.get('cliente_id')
+        cliente = Cliente.objects.get(pk=cliente_id)
+    else:
+        cliente = Cliente.objects.get(usuario=user)
+
+    logo_path = cliente.logo.image.name
+    return render(request, 'main/cliente/estadisticas.html', {'cliente': cliente,
+                                                              'logo_path': logo_path,
+                                                              'MEDIA_URL' : MEDIA_URL,})
 
 def pdis_json(request):
     str = request.META['HTTP_REFERER']
@@ -563,6 +579,9 @@ def add_zonas(request):
     else:
 
         return render(request, 'main/zonas_form.html', context={'clientes': clientes })
+
+
+
 
 # Montador
 
