@@ -237,7 +237,7 @@ class Material(models.Model):
         return self.nombre
 
 def instalacionPdi_imagen(instance, filename):
-    return f'images/{instance.pdi.nombre}/{instance.fecha_camio}/{filename}'
+    return f'images/{instance.pdi.nombre}/{instance.fecha_cambio}/{filename}'
 
 class CampanapdV_pdI(models.Model):
     Campana_Pdv = models.ForeignKey(Campana_Pdv, on_delete=models.CASCADE)
