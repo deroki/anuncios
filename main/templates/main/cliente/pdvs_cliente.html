@@ -207,7 +207,7 @@
             };
 
 
-            function createtable(json, materiales, creatividades, pdv_pk, MEDIA_URL){
+            function createtable(json, materiales, creatividades, pdv_pk, MEDIA_URL, montadores){
                 let tabla = '<table class="extended table table-striped table-bordered dataTable no-footer" style="width:100%" role="grid" aria-describedby="tabla_info">';
                 tabla += `<thead>
                             <tr>
@@ -296,7 +296,13 @@
                     }
                 tabla+= '</tr>';
                 tabla+= '<tr >';
-                tabla+= `<td colspan="13">   <span style="margin: 30px;"> Montadores </span> <select id="montadores_${pdv_pk}" class="js-example-basic-multiple" name="montadores_${pdv_pk}" multiple="multiple" style="width: 75%">    </select>  </td>`;
+                tabla+= `<td colspan="13">   <span style="margin: 30px;"> Montadores </span> <select id="montadores_${pdv_pk}" class="js-example-basic-multiple" name="montadores_${pdv_pk}" multiple="multiple" style="width: 75%">    </select>  `;
+                tabla+= `<br><br> <div><span> Montadores Actuales </span> `;
+                for (var index in montadores){
+                    tabla+= `<span class="badge badge-secondary" style="magin:40px;"> ${montadores[index]} </span>`
+                }
+                tabla+= `</div>`;
+                tabla+= `</td>`;
                 tabla+= '</tr>';
                 tabla += '</body>';
                 tabla += '</table>';
@@ -325,7 +331,7 @@
                     'data' : {'pdv_pk': pdi_pk },
                     'dataType': 'json',
                     'success': function(json){
-                        tabla = createtable(json.data,json.materiales,json.creatividades, json.pdv_pk, json.MEDIA_URL);
+                        tabla = createtable(json.data,json.materiales,json.creatividades, json.pdv_pk, json.MEDIA_URL, json.montadores);
                         row.child(tabla).show();
                         tr.addClass('shown')
                         select2()

@@ -367,6 +367,9 @@ def pdis_json(request):
     pdv_pk = request.GET.get('pdv_pk', None)
     pdv = Pdv.objects.get(pk=pdv_pk)
     pdis = pdv.pdi_set.all()
+    montadores = None
+    first_pdi = pdis.first()
+    montadores = first_pdi
     creatividades = list(Creatividad.objects.filter(campana=campana).values())
     materiales = list(Material.objects.all().values())
     try:
@@ -382,6 +385,7 @@ def pdis_json(request):
                     pdi_['checked'] = True
                     pdi_['tipo'] = pdi.tipo.nombre
                     pdi_['image'] = campanapdv_pdi.image.name
+                    montadores = [k['email'] for k in campanapdv_pdi.user_montador.all().values()]
 
                 except Exception as Err:
                     print(Err)
@@ -390,11 +394,13 @@ def pdis_json(request):
                     pdi_['checked'] = False
 
         pdis_ = list(pdis_)
+
         return JsonResponse({'data': pdis_,
                              'creatividades': creatividades,
                              'materiales': materiales,
                              'pdv_pk': pdv_pk,
-                             'MEDIA_URL' : MEDIA_URL})
+                             'MEDIA_URL' : MEDIA_URL,
+                             'montadores': montadores})
 
 
     except Exception as Err:
