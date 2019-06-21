@@ -195,6 +195,13 @@ class ClientesAutocomplete(autocomplete.Select2QuerySetView):
 
 
 def all_pdis_json(request):
+
+    """
+    GET: pdv_pk
+    :param request:
+    :return: (datos del pdi) (path de la ultima imagen del campana_pdv_pdi donde la fecha de cambio sea la ultima
+    """
+
     pdv_pk = request.GET.get('pdv_pk', None)
     pdis = Pdi.objects.filter(pdv=pdv_pk)
     pdis_ = list(pdis.values())
@@ -320,7 +327,7 @@ def elegir_pdvs(request,campana_pk):
     selected_campana = Campana.objects.get(pk = campana_pk)
     logo_path = cliente.logo.image.name
 
-    pdvs = Pdv.objects.all()
+    pdvs = Pdv.objects.filter(cliente=cliente)
 
     for pdv in pdvs:
         campanas_del_pdv = pdv.campana_pdv_set
