@@ -113,7 +113,10 @@ class Zona(models.Model):
                                 on_delete=models.CASCADE)
     nombre = models.CharField(max_length=50,
                               null=True,
-                              unique=True)
+                              unique=False)
+
+    class Metal:
+        unique_together =('cliente', 'nombre')
 
     def __str__(self):
         return f'{self.cliente.usuario.empresa}//{self.nombre}'
@@ -178,7 +181,8 @@ class Pdi(models.Model):
 
 pdv_estados =(('ok', 'ok'),
               ('ko', 'ko'),
-              ('incidencia', 'incidencia'))
+              ('incidencia', 'incidencia'),
+              ('pendiente', 'pendiente'))
 
 
 class Creatividad(models.Model):
@@ -197,7 +201,8 @@ class Campana(models.Model):
     nombre = models.CharField(max_length=50)
     comentarios = models.TextField(max_length=500)
     estado = models.CharField(choices=pdv_estados,
-                              max_length=15)
+                              max_length=15,
+                              default="pendiente")
     activo = models.BooleanField()
     fecha_creacion = models.DateField(auto_now_add=True)
     fecha_cambio = models.DateField(auto_now=True)
@@ -216,6 +221,11 @@ IDIOMAS = (('esp', 'Español'),
 
 def pdi_image_path(instance, filename):
     return f'images/{instance.Campana_Pdv.campana.nombre}/{instance.Campana_Pdv.pdv.slug}/{instance.pdi.nombre}/{filename}'
+
+
+pdv_estados =(('ok', 'ok'),
+              ('ko', 'ko'),
+              ('incidencia', 'incidencia'))
 
 class Campana_Pdv(models.Model):
     campana = models.ForeignKey(Campana,on_delete=models.CASCADE)
@@ -267,6 +277,7 @@ comentarioTipo = (('ok', 'ok'),
                   ('incidencia', 'incidencia'),
                   ('admin', 'admin')
                   )
+
 class Comments(models.Model):
     Campana_Pdv = models.ForeignKey(Campana_Pdv, on_delete=models.CASCADE)
     User = models.ForeignKey(User, on_delete=models.CASCADE)

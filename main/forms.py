@@ -62,6 +62,8 @@ class CampanaForm(forms.ModelForm):
     cliente = forms.ModelChoiceField(queryset=Cliente.objects.all(),
                                      required=False,
                                      widget=forms.HiddenInput())
+    estado = forms.CharField(required=False, widget=forms.HiddenInput(),
+                             initial='pendiente')
     class Meta:
         model = models.Campana
         fields = "__all__"
@@ -71,7 +73,8 @@ class PdvForm(forms.ModelForm):
     class Meta:
         model = models.Pdv
         fields = ['cliente', 'cadena', 'nombre', 'direccion', 'cp', 'ciudad', 'provincia', 'prioridad', 'activo', 'zona']
-
+        widgets = {'cliente': autocomplete.ModelSelect2(url='ClientesAutocomplete'),
+                   'zona' : autocomplete.ModelSelect2(url='ZonasAutocomplete')}
 
 
 class PdiForm(forms.ModelForm):

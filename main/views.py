@@ -191,7 +191,14 @@ class ClientesAutocomplete(autocomplete.Select2QuerySetView):
 
         return clientes
 
+class ZonasAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Zona.objects.none()
 
+        zonas = Zona.objects.all()
+
+        return zonas
 
 
 def all_pdis_json(request):
@@ -244,6 +251,9 @@ def crear_pdv(request):
     else:
         pdv_form = PdvForm()
     return render(request, 'main/crear_pdv.html',{'form': pdv_form})
+
+
+
 
 def crear_pdi(request):
     if request.method == 'POST':
@@ -420,19 +430,6 @@ def pdis_json(request):
 
 
 
-
-def montadores_json(request):
-    montadores = Montador.objects.all()
-    jsonList = []
-    for montador in montadores:
-        montadorDict = {'id' : montador.usuario.pk,
-                        'text': montador.usuario.email}
-        jsonList.append(montadorDict)
-
-
-    return JsonResponse({'results' : jsonList })
-
-
 def guardar_config_campana(request):
     request = request
     str = request.META['HTTP_REFERER']
@@ -515,9 +512,12 @@ class CampanasAutocomplete(autocomplete.Select2QuerySetView):
         if not self.request.user.is_authenticated:
             return Campana.objects.none()
 
-        campanas = Campana.objects.all()
+        qs = Campana.objects.all()
 
-        return campanas
+        if self.q:
+            qs = qs.filter(cliente__usuario__empresa__istartswith=self.q)
+
+        return qs
 
 
 def materiales(request):
@@ -568,7 +568,8 @@ def zonas(request):
         for zona in zonas:
             try:
                 clientes_dict[cliente.usuario.empresa] = clientes_dict[cliente.usuario.empresa] + " - " + zona.nombre
-            except:
+            except Exception as err:
+                print(err)
                 clientes_dict[cliente.usuario.empresa] = ""
 
     return render(request, 'main/zonas.html', context={'clientes_dict' : clientes_dict})
@@ -588,7 +589,7 @@ def add_zonas(request):
         for zona in zonas_list:
             newZona = Zona.objects.get_or_create(cliente=cliente, nombre=zona)
 
-        return render(request, 'main/zonas_form.html', context={'clientes': clientes })
+        return redirect('zonas')
     else:
 
         return render(request, 'main/zonas_form.html', context={'clientes': clientes })
@@ -598,13 +599,31 @@ def add_zonas(request):
 
 # Montador
 
+
+def montadores_json(request):
+    montadores = Montador.objects.all()
+    jsonList = []
+    for montador in montadores:
+        montadorDict = {'id' : montador.usuario.pk,
+                        'text': montador.usuario.email}
+        jsonList.append(montadorDict)
+
+
+    return JsonResponse({'results' : jsonList })
+
 def dashboard(request):
+    """
+    Coje todas las instalacionesPDI del montador, devuelve todas las instalacionesPDV por cada instalacion PDI que esté pendiente.
+    :param request:
+    :return:
+    """
     user = request.user
     instalaciones_pdi = CampanapdV_pdI.objects.filter(user_montador= user)
     instalaciones_pdv = []
 
     for instalacion_pdi in instalaciones_pdi:
-        if instalacion_pdi.Campana_Pdv not in instalaciones_pdv:
+        instalacion_pdv =instalacion_pdi.Campana_Pdv
+        if instalacion_pdv not in instalaciones_pdv and instalacion_pdv.estado == 'pendiente':
             instalaciones_pdv.append(instalacion_pdi.Campana_Pdv)
 
     return render(request, 'main/montador/dasboard.html', context= {'instalaciones_pdv': instalaciones_pdv})

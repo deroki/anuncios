@@ -11,19 +11,31 @@
 <style>
 
     .btn-secondary{
+    {% if cliente.color == 'yellow' %}
+        color: black;
+    {% else %}
         color: white;
+    {% endif %}
         background-color: {{ cliente.color }};
         border-color: black;
     }
 
     .btn-dark{
+    {% if cliente.color == 'yellow' %}
+        color: black;
+    {% else %}
         color: white;
+    {% endif %}
         background-color: {{ cliente.color }};
         border-color: black;
     }
 
     .text-white{
+    {% if cliente.color == 'yellow' %}
+        color: black !important;
+    {% else %}
         color: white !important;
+    {% endif %}
     }
 
     .page-item.active .page-link{

@@ -92,7 +92,13 @@
                                         {% endif %}
                                     </td align="center">
                                     <td align="center">{{ campana.estado }}</td>
-                                    <td align="center">{{ campana.activo }}</td>
+                                    <td align="center">
+                                        {% if campana.activo == True %}
+                                            Activo
+                                        {% else %}
+                                            Inactivo
+                                        {% endif %}
+                                    </td>
 
                                 </tr>
                             {% endfor %}

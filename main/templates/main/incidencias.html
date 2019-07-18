@@ -28,6 +28,9 @@
     #tabla td:hover {
         cursor: pointer;
     }
+    input[type="checkbox"] {
+    transform:scale(2, 2);
+    }
 
 </style>
 {% endblock %}
@@ -50,8 +53,24 @@
                             <textarea form="instalacionform" name="comment_{{ instalacion_pk }}" class="form-control" aria-label="With textarea"></textarea>
 
                     </div>
-                    <div class="col-3">
+
+                    <div class="col-1">
                             <button type="submit" value="submit" class="btn btn btn-primary" >Enviar</button>
+
+                    </div>
+
+                    <div class="col-3">
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-success active">
+                                <input type="radio" name="options" value="ok" autocomplete="off" checked> OK
+                            </label>
+                            <label class="btn btn-warning">
+                                <input type="radio" name="options" value="incidencia" autocomplete="off"> Incidencia
+                            </label>
+                            <label class="btn btn btn-danger">
+                                <input type="radio" name="options" value="ko" autocomplete="off"> KO
+                            </label>
+                        </div>
 
                     </div>
 
@@ -67,7 +86,7 @@
                 <div class="row">
                     <div class="col-12">
 
-
+                        <form id="incidencias_activas" method="post" action="#">
                         {% for incidencia in incidencias %}
 
                             {% if incidencia.tipo == "admin" %}
@@ -90,15 +109,32 @@
                                     {{ incidencia.fecha_creacion }}
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ incidencia.tipo }}</h5>
-                                    <p class="card-text">{{ incidencia.Comments }}</p>
-                                    <a href="#" class="btn btn-secondary">Activo</a>
+                                    <div class="row">
+                                        <div class="col-9">
+                                            <h5 class="card-title">{{ incidencia.tipo }}</h5>
+                                            <p class="card-text">{{ incidencia.Comments }}</p>
+                                        </div>
+
+                                        <div class="col-3">
+                                            <p>Activo</p>
+                                            <br>
+                                            <input  style="margin-left: 10px" type="checkbox" name="comentario_activo_{{ incidencia.pk }}">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                         {%  endfor %}
 
-
+                        <br><br>
+                            <div class="row">
+                                <div style="margin-left: 30px">
+                                    <button type="submit" value="submit" class="btn btn btn-primary">Activar
+                                        comentarios
+                                    </button>
+                                </div>
+                            </div>
+                    </form>
 
 
 

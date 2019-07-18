@@ -59,6 +59,7 @@ urlpatterns = [
     #autocomplete
     path('campanasAutocomplete/', views.CampanasAutocomplete.as_view(), name="CampanasAutocomplete"),
     path('clientesAutocomplete/', views.ClientesAutocomplete.as_view(), name="ClientesAutocomplete"),
+    path('zonasAutocomplete/', views.ZonasAutocomplete.as_view(), name="ZonasAutocomplete"),
     #montador
     path('montadores_json/', views.montadores_json, name="montadores_json"),
     path('dashboard/', views.dashboard, name="dashboard"),
