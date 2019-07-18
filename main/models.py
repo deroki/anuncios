@@ -67,9 +67,14 @@ class Logo(models.Model):
         return self.image.name
 
 
-COLOR = (('red', 'red'),
-         ('blue', 'blue'),
-         ('yellow', 'yellow'))
+COLOR = (('red', 'rojo'),
+         ('blue', 'azul'),
+         ('yellow', 'amarillo'),
+         ('violet', 'violeta'),
+         ('green', 'verde'),
+         ('yellow', 'amarillo'),
+         ('black', 'negro'),
+         ('white', 'blanco'))
 
 
 class Cliente(models.Model):
