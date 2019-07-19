@@ -44,6 +44,7 @@
                             <thead>
                             <tr>
                                 <th class="text-center"></th>
+                                <th class="text-center">Fecha</th>
                                 <th class="text-center">PDV</th>
 
                             </tr>
@@ -52,7 +53,7 @@
                             {% for instalacion_pdv in instalaciones_pdv%}
                                 <tr id = {{ instalacion_pdv.pk }}>
                                     <td class="add_button" align="center"></td>
-
+                                    <td align="center"> {{ instalacion_pdv.fecha_creacion }} </td>
 
 
                                     <td align="center" style="vertical-align: middle;">

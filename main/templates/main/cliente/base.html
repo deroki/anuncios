@@ -82,6 +82,9 @@
                 <!-- side menu button -->
                 <div class="row">
                 <div class="col-11  clearfix ">
+                    {% if request.user.is_staff %}
+                        <a href="{% url 'clientes'  %}"><img src="{% static 'images/back.png' %}" height="30" width="30"></a>
+                    {%  endif %}
                         <a href="{% url 'estadisticas'  %}"><img src="{% static 'images/statistics.png' %}" height="30" width="30"></a>
                         <ul class="notification-area pull-right">
                             <li id="full-view"><i class="ti-fullscreen"></i></li>
