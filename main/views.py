@@ -623,7 +623,7 @@ def dashboard(request):
 
     for instalacion_pdi in instalaciones_pdi:
         instalacion_pdv =instalacion_pdi.Campana_Pdv
-        if instalacion_pdv not in instalaciones_pdv and instalacion_pdv.estado == 'pendiente':
+        if instalacion_pdv not in instalaciones_pdv and instalacion_pdv.estado == 'pendiente' and instalacion_pdv.estado == 'pendiente':
             instalaciones_pdv.append(instalacion_pdi.Campana_Pdv)
 
     return render(request, 'main/montador/dasboard.html', context= {'instalaciones_pdv': instalaciones_pdv})
@@ -655,7 +655,17 @@ def pdis_instalacion_json(request):
 
 def instalacion_config(request):
     params = request.POST
+    files = request.FILES
     user = request.user
+
+    if files is not None:
+        for imageinput in files.keys():
+            pk =imageinput[6:]
+            instance = CampanapdV_pdI.objects.get(pk=pk)
+            instance.image= files[imageinput]
+            instance.save()
+
+
 
     for key in params.keys():
         word = re.match(r'^comment_\d+$', key)
@@ -664,10 +674,7 @@ def instalacion_config(request):
             instalacion = Campana_Pdv.objects.get(pk=pk)
             comentario = params[f'comment_{pk}']
 
-            if user.is_staff:
-                tipo = "admin"
-            else:
-                tipo = params['options']
+            tipo = params['options']
 
             Comment = Comments(Campana_Pdv=instalacion,
                                User= user,

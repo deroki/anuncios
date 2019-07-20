@@ -62,13 +62,10 @@
                     <div class="col-3">
                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
                             <label class="btn btn-success active">
-                                <input type="radio" name="options" value="ok" autocomplete="off" checked> OK
-                            </label>
-                            <label class="btn btn-warning">
-                                <input type="radio" name="options" value="incidencia" autocomplete="off"> Incidencia
+                                <input type="radio" name="options" value="atendida" autocomplete="off" checked> Atendida
                             </label>
                             <label class="btn btn btn-danger">
-                                <input type="radio" name="options" value="ko" autocomplete="off"> KO
+                                <input type="radio" name="options" value="suspendida" autocomplete="off"> Suspendida
                             </label>
                         </div>
 
@@ -89,7 +86,11 @@
                         <form id="incidencias_activas" method="post" action="#">
                         {% for incidencia in incidencias %}
 
-                            {% if incidencia.tipo == "admin" %}
+                            {% if incidencia.tipo == "suspendida" %}
+                            <div class="card bg-danger">
+                            {%  endif %}
+
+                            {% if incidencia.tipo == "atendida" %}
                             <div class="card bg-white">
                             {%  endif %}
 
@@ -102,11 +103,18 @@
                             {%  endif %}
 
                             {% if incidencia.tipo == "incidencia" %}
-                            <div class="card bg-warning">
+                            <div class="card bg-info">
                             {%  endif %}
 
                                 <div class="card-header">
-                                    {{ incidencia.fecha_creacion }}
+                                    <div class="row">
+                                        <div class="col-9">
+                                         <h4>{{ incidencia.User }}</h4>
+                                        </div>
+                                        <div class="col 3">
+                                         {{ incidencia.fecha_creacion }}
+                                        </div>
+
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -123,6 +131,7 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
                         {%  endfor %}
 

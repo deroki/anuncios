@@ -249,7 +249,7 @@ class Material(models.Model):
     nombre = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.nombreCa
+        return self.nombre
 
 def instalacionPdi_imagen(instance, filename):
     return f'images/{instance.pdi.nombre}/{instance.fecha_cambio}/{filename}'
