@@ -81,6 +81,12 @@ class PdiForm(forms.ModelForm):
     class Meta:
         model = models.Pdi
         fields = '__all__'
+        labels = {
+            'altoTotal' : 'altoTotal (cm)',
+            'anchoVista' : 'anchoVista (cm)',
+            'anchoTotal' : 'anchoVista (cm)',
+            'altoVista' : 'anchoVista (cm)'
+            }
 
 class CreatividadForm(forms.ModelForm):
     class Meta:
