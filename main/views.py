@@ -686,7 +686,7 @@ def instalacion_config(request):
             instalacion.estado = tipo
             instalacion.save()
             if user.is_staff:
-                return redirect('instalaciones')
+                return redirect('incidencias', pk=pk)
 
     return redirect('dashboard')
 
