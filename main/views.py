@@ -282,13 +282,14 @@ def get_cliente_pk(request):
 
 def campanas_del_cliente(request, cliente_id = None):
     user = request.user
-    if cliente_id == None:
+    if user.is_cliente:
+        cliente = Cliente.objects.get(usuario=user)
+    elif cliente_id == None:
         cliente_id = request.COOKIES.get('cliente_id')
         cliente = Cliente.objects.get(pk=cliente_id)
     elif user.is_staff:
         cliente = Cliente.objects.get(pk=cliente_id)
-    else:
-        cliente = Cliente.objects.get(usuario=user)
+
     logo_path = cliente.logo.image.name
     campanas = Campana.objects.filter(cliente=cliente)
     response = render(request, 'main/cliente/campanas_del_cliente.html', {'campanas': campanas,
