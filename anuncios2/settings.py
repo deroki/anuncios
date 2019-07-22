@@ -25,7 +25,7 @@ SECRET_KEY = 'u*w_tz0m31jrim%+k9rt0yh*o+32$8%0h@$y54%h+@l+soi&#^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['just-skyline-242012.appspot.com', '127.0.0.1']
+ALLOWED_HOSTS = ['just-skyline-242012.appspot.com', '127.0.0.1', '82.223.5.162']
 
 
 # Application definition
