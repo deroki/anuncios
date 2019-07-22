@@ -1,6 +1,6 @@
 <!doctype html>
 <html class="no-js" lang="en">
-
+{% load static %}
 <head>
 {% include 'static_templates/css.html' %}
 </head>
@@ -21,7 +21,7 @@
                 <form action="{% url "login" %}" method="post">
                     {% csrf_token %}
                     <div class="login-form-head">
-                        <h4>ACCESO</h4>
+                        <img src="{% static 'images/vystalogo.png' %}" >
                         <p></p>
                     </div>
                     <div class="login-form-body">
