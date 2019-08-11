@@ -181,6 +181,21 @@ def pdvs(request):
         print(pdvs)
     return render(request, 'main/pdvs.html', {'pdvs': pdvs})
 
+def guardar_config_pdvs(request):
+    post = request.POST
+    pdvs = Pdv.objects.all().update(activo=False)
+    for pdv in request.POST.keys():
+        if pdv.startswith("pdv"):
+            pdv_id = pdv[4:]
+            pdv_status = request.POST[pdv]
+            pdv = Pdv.objects.get(pk=pdv_id)
+            pdv.activo = pdv_status
+            pdv.save()
+
+
+    return redirect('pdvs')
+
+
 
 class ClientesAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -276,8 +291,8 @@ def pdis_por_pdv(request):
         pdis = Pdi.objects.filter(pdv=pdvSlug)
 
 
-def get_cliente_pk(request):
-    return pk
+# def get_cliente_pk(request):
+#     return pk
 
 
 def campanas_del_cliente(request, cliente_id = None):

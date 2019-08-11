@@ -152,11 +152,23 @@ class Montador(models.Model):
                                    on_delete=models.CASCADE,
                                    primary_key=True,
                                    limit_choices_to={'is_montador': True})
-    dni = models.CharField(max_length=9)
-    ciudad = models.CharField(max_length=50)
-    provincia = models.CharField(max_length=50)
+    dni = models.CharField(max_length=9,
+                           null=True,
+                           blank=True
+                           )
+    ciudad = models.CharField(max_length=50,
+                              null=True,
+                              blank=True
+                              )
+    provincia = models.CharField(max_length=50,
+                                 null=True,
+                                 blank=True
+                                 )
     comunidad = models.CharField(max_length=50,
-                                 choices=COMUNIDADES)
+                                 choices=COMUNIDADES,
+                                 null=True,
+                                 blank=True
+                                 )
 
     def __str__(self):
         return f'{self.usuario.empresa}-{self.usuario.first_name}'
@@ -168,18 +180,37 @@ TRUE_FALSE_CHOICES = (
 class Pdv(models.Model):
     cliente = models.ManyToManyField(Cliente)
     campanas = models.ManyToManyField('Campana', through='Campana_Pdv')
+    #TODO como elgeimos el slug en el pdv?
     slug = models.SlugField(max_length=10)
-    cadena = models.CharField(max_length=50)
+    cadena = models.CharField(max_length=50,
+                              null=True,
+                              blank=True
+                              )
     nombre = models.CharField(max_length=50)
-    direccion = models.TextField(max_length=300)
-    cp = models.IntegerField()
-    ciudad = models.CharField(max_length=50)
-    provincia = models.CharField(max_length=50)
-    prioridad = models.IntegerField()
+    direccion = models.TextField(max_length=300,
+                                 null=True,
+                                 blank=True
+                                 )
+    cp = models.IntegerField(null=True,
+                             blank=True)
+    ciudad = models.CharField(max_length=50,
+                              null=True,
+                              blank=True
+                              )
+    provincia = models.CharField(max_length=50,
+                                 null=True,
+                                 blank=True
+                                 )
+    prioridad = models.IntegerField(null=True,
+                                    blank=True
+                                    )
     activo = models.BooleanField(default=False)
-    zona = models.ForeignKey(Zona, on_delete=models.SET_NULL,
-                             null=True)
-    permisos = models.BooleanField(default=True, choices=TRUE_FALSE_CHOICES)
+    zona = models.ForeignKey(Zona,
+                             on_delete=models.SET_NULL,
+                             null=True,
+                             blank=True)
+    permisos = models.BooleanField(default=True,
+                                   choices=TRUE_FALSE_CHOICES)
 
     def __str__(self):
         return self.slug
@@ -197,16 +228,25 @@ class Pdi(models.Model):
     nombre = models.CharField(max_length=50)
     tipo = models.ForeignKey(TipoPdi,
                              on_delete=models.CASCADE)
-    anchoTotal = models.IntegerField()
-    anchoVista = models.IntegerField()
-    altoTotal = models.IntegerField()
-    altoVista = models.IntegerField()
-    material = models.ForeignKey('Material', on_delete=models.CASCADE,
+    anchoTotal = models.IntegerField(null=True,
+                                     blank=True
+                                     )
+    anchoVista = models.IntegerField(null=True,
+                                     blank=True
+                                     )
+    altoTotal = models.IntegerField(null=True,
+                                    blank=True
+                                     )
+    altoVista = models.IntegerField(null=True,
+                                    blank=True
+                                     )
+    material = models.ForeignKey('Material',
+                                 on_delete=models.CASCADE,
                                  default=None,
                                  null=True,
                                  blank=True)
-    activo = models.BooleanField()
-    composicion = models.BooleanField()
+    activo = models.BooleanField(default=True)
+    composicion = models.BooleanField(default=False)
     instaladores = models.IntegerField()
 
     def __str__(self):
@@ -233,11 +273,13 @@ class Campana(models.Model):
                                 on_delete=models.CASCADE)
     pdvs = models.ManyToManyField('Pdv', through='Campana_Pdv')
     nombre = models.CharField(max_length=50)
-    comentarios = models.TextField(max_length=500)
+    comentarios = models.TextField(max_length=500,
+                                   null=True,
+                                   blank=True)
     estado = models.CharField(choices=pdv_estados,
                               max_length=15,
                               default="pendiente")
-    activo = models.BooleanField()
+    activo = models.BooleanField(default=False)
     fecha_creacion = models.DateField(auto_now_add=True)
     fecha_cambio = models.DateField(auto_now=True)
     fecha_finalizado = models.DateField(null=True,
@@ -266,7 +308,10 @@ class Campana_Pdv(models.Model):
     pdv = models.ForeignKey(Pdv, on_delete=models.CASCADE)
     estado = models.CharField(choices=pdv_estados,
                               max_length=15)
-    idioma = models.CharField(choices=IDIOMAS, max_length=10)
+    idioma = models.CharField(choices=IDIOMAS,
+                              max_length=10,
+                              null=True,
+                              blank=True)
     fecha_creacion = models.DateField(auto_now_add=True)
     fecha_cambio = models.DateField(auto_now=True)
 
@@ -314,9 +359,13 @@ comentarioTipo = (('ok', 'ok'),
 class Comments(models.Model):
     Campana_Pdv = models.ForeignKey(Campana_Pdv, on_delete=models.CASCADE)
     User = models.ForeignKey(User, on_delete=models.CASCADE)
-    Comments = models.CharField(max_length=500)
+    Comments = models.CharField(max_length=500,
+                                null=True,
+                                blank=True)
     tipo = models.CharField(choices=comentarioTipo,
-                            max_length=10)
+                            max_length=10,
+                            null=True,
+                            blank=True)
     visible = models.BooleanField(default=False)
     fecha_creacion = models.DateField(auto_now_add=True)
 
