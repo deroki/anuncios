@@ -246,21 +246,14 @@
                     //material
                     tabla += '<td class="text-center">' ;
                     if (json[rrow].material){
-                        tabla+= `<select style="background-color:#FFFFF0;" name="pdi_${json[rrow]['id']}_material">`;
+                        tabla+= json[rrow].material;
+
                     }else{
-                        tabla+= `<select name="pdi_${json[rrow]['id']}_material">`;
+                        tabla+= `- - - `;
+
                     }
 
 
-                    for (var index in materiales){
-                        let id = materiales[index]['id'];
-                        let nombre = materiales[index]['nombre'];
-                        if (json[rrow].material === id){
-                            tabla += `<option selected value="${id}">${nombre}</option>`;
-                        }else{
-                        tabla += `<option value="${id}">${nombre}</option>`;
-                        }
-                        }
                     tabla+= '</select>';
                     tabla+= '</td>';
                     //creatividad

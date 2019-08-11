@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 
 from main import models
 from main.models import Cliente
@@ -69,10 +70,14 @@ class CampanaForm(forms.ModelForm):
         fields = "__all__"
 
 class PdvForm(forms.ModelForm):
+    TRUE_FALSE_CHOICES = (
+        (True, 'Si'),
+        (False, 'No')
+    )
 
     class Meta:
         model = models.Pdv
-        fields = ['cliente', 'cadena', 'nombre', 'direccion', 'cp', 'ciudad', 'provincia', 'prioridad', 'activo', 'zona']
+        fields = ['cliente', 'cadena', 'nombre', 'direccion', 'cp', 'ciudad', 'provincia', 'prioridad', 'activo', 'zona','permisos']
         widgets = {'cliente': autocomplete.ModelSelect2(url='ClientesAutocomplete'),
                    'zona' : autocomplete.ModelSelect2(url='ZonasAutocomplete')}
 
@@ -87,6 +92,12 @@ class PdiForm(forms.ModelForm):
             'anchoTotal' : 'anchoVista (cm)',
             'altoVista' : 'anchoVista (cm)'
             }
+
+    def clean_instaladores(self):
+        instaladores = self.cleaned_data['instaladores']
+        if instaladores < 0 :
+            raise ValidationError("El número de instaladores no puede ser negativo")
+        return instaladores
 
 class CreatividadForm(forms.ModelForm):
     class Meta:

@@ -140,7 +140,10 @@ class Montador(models.Model):
     def __str__(self):
         return f'{self.usuario.empresa}-{self.usuario.first_name}'
 
-
+TRUE_FALSE_CHOICES = (
+        (True, 'Si'),
+        (False, 'No')
+    )
 class Pdv(models.Model):
     cliente = models.ManyToManyField(Cliente)
     campanas = models.ManyToManyField('Campana', through='Campana_Pdv')
@@ -155,6 +158,7 @@ class Pdv(models.Model):
     activo = models.BooleanField(default=False)
     zona = models.ForeignKey(Zona, on_delete=models.SET_NULL,
                              null=True)
+    permisos = models.BooleanField(default=True, choices=TRUE_FALSE_CHOICES)
 
     def __str__(self):
         return self.slug
@@ -176,6 +180,10 @@ class Pdi(models.Model):
     anchoVista = models.IntegerField()
     altoTotal = models.IntegerField()
     altoVista = models.IntegerField()
+    material = models.ForeignKey('Material', on_delete=models.CASCADE,
+                                 default=None,
+                                 null=True,
+                                 blank=True)
     activo = models.BooleanField()
     composicion = models.BooleanField()
     instaladores = models.IntegerField()
@@ -261,7 +269,6 @@ class CampanapdV_pdI(models.Model):
                                     on_delete=models.CASCADE,
                                     null=True,
                                     blank=True)
-    material = models.ForeignKey(Material,on_delete=models.CASCADE)
     image = models.ImageField(upload_to=instalacionPdi_imagen,
                               null=True,
                               blank=True)

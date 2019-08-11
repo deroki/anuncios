@@ -380,19 +380,20 @@ def pdis_json(request):
     pdis = pdv.pdi_set.all()
     montadores = None
     first_pdi = pdis.first()
-    montadores = first_pdi
+    #montadores = first_pdi
     creatividades = list(Creatividad.objects.filter(campana=campana).values())
     materiales = list(Material.objects.all().values())
+
     try:
-        campana_pdv = pdv.campana_pdv_set.filter(campana = CampanaNum).get()
-        print(campana_pdv)
+        # en caso de que este el pdv sleccionado para la campaña
         pdis_ = pdis.values()
         for pdi, pdi_ in zip(pdis,pdis_):
                 try:
+                    campana_pdv = pdv.campana_pdv_set.filter(campana=CampanaNum).get()
                     campanapdv_pdi = pdi.campanapdv_pdi_set.all()
                     campanapdv_pdi = pdi.campanapdv_pdi_set.filter(Campana_Pdv = campana_pdv).get()
                     pdi_['creatividad'] = campanapdv_pdi.creatividad.id
-                    pdi_['material'] = campanapdv_pdi.material.id
+                    pdi_['material'] = pdi.material.nombre
                     pdi_['checked'] = True
                     pdi_['tipo'] = pdi.tipo.nombre
                     pdi_['image'] = campanapdv_pdi.image.name
@@ -401,7 +402,7 @@ def pdis_json(request):
                 except Exception as Err:
                     print(Err)
                     # pdi_['creatividad'] = ""
-                    # pdi_['material'] = ""
+                    pdi_['material'] = pdi.material.nombre
                     pdi_['checked'] = False
 
         pdis_ = list(pdis_)
@@ -444,7 +445,6 @@ def guardar_config_campana(request):
     for key in params.keys():
         z = re.match(r'^pdi_\d+$', key)
         if z:
-            material = key + '_material'
             creatividad = key + '_creatividad'
             print(z.group())
             pdi_pk = key[4:]
@@ -465,7 +465,6 @@ def guardar_config_campana(request):
 
             campanaPdv_Pdi, created = CampanapdV_pdI.objects.get_or_create(Campana_Pdv = campana_Pdv,
                                                                   pdi = pdi,
-                                                                  material_id= params[material],
                                                                   creatividad_id= creatividad_id)
             montadores_list = request.POST.getlist(f'montadores_{pdv.pk}')
             if montadores_list:
