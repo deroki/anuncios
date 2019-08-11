@@ -579,10 +579,14 @@ def zonas(request):
     clientes = Cliente.objects.all()
     clientes_dict = {}
     for cliente in clientes:
+        clientes_dict[cliente.usuario.empresa] = ''
         zonas = Zona.objects.filter(cliente=cliente)
         for zona in zonas:
             try:
-                clientes_dict[cliente.usuario.empresa] = clientes_dict[cliente.usuario.empresa] + " - " + zona.nombre
+                if clientes_dict[cliente.usuario.empresa] == '':
+                    clientes_dict[cliente.usuario.empresa] = clientes_dict[cliente.usuario.empresa] + zona.nombre
+                else:
+                    clientes_dict[cliente.usuario.empresa] = clientes_dict[cliente.usuario.empresa] + " - " + zona.nombre
             except Exception as err:
                 print(err)
                 clientes_dict[cliente.usuario.empresa] = ""
