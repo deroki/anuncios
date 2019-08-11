@@ -353,7 +353,7 @@ def elegir_pdvs(request,campana_pk):
     selected_campana = Campana.objects.get(pk = campana_pk)
     logo_path = cliente.logo.image.name
 
-    pdvs = Pdv.objects.filter(cliente=cliente)
+    pdvs = Pdv.objects.filter(cliente=cliente, activo=True)
 
     for pdv in pdvs:
         campanas_del_pdv = pdv.campana_pdv_set
