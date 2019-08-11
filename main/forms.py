@@ -54,7 +54,7 @@ class UserForm(forms.ModelForm):
 class MontadorForm(forms.ModelForm):
     class Meta:
         model = models.Montador
-        fields = ['dni', 'ciudad', 'provincia']
+        fields = ['dni', 'ciudad', 'provincia','comunidad']
 
 
 class CampanaForm(forms.ModelForm):

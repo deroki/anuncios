@@ -127,6 +127,25 @@ class Zona(models.Model):
         return f'{self.cliente.usuario.empresa}//{self.nombre}'
 
 
+COMUNIDADES = (
+        ("AND", 'Andalucía'),
+        ("ARA", 'Aragón'),
+        ("AST", 'Asturias'),
+        ("CAN", 'Cantabria'),
+        ("CYL", 'Castilla-Leon'),
+        ("CAT", 'Cataluña'),
+        ("CEUTA", 'Ceuta'),
+        ("EXT", 'Extremadura'),
+        ("GAL", 'Galicia'),
+        ("BAL", 'Islas Baleares'),
+        ("RIO", 'Rioja'),
+        ("MAD", 'Madrid'),
+        ("MEL", 'Melilla'),
+        ("MUR", 'Murcia'),
+        ("NAV", 'Navarra'),
+        ("VAL", 'Valencia'),
+)
+
 
 class Montador(models.Model):
     usuario = models.OneToOneField(User,
@@ -136,6 +155,8 @@ class Montador(models.Model):
     dni = models.CharField(max_length=9)
     ciudad = models.CharField(max_length=50)
     provincia = models.CharField(max_length=50)
+    comunidad = models.CharField(max_length=50,
+                                 choices=COMUNIDADES)
 
     def __str__(self):
         return f'{self.usuario.empresa}-{self.usuario.first_name}'
