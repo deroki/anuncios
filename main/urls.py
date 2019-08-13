@@ -49,6 +49,7 @@ urlpatterns = [
     path('zonas/', views.zonas, name="zonas"),
     path('add_zonas/', views.add_zonas, name='add_zonas'),
     path('guardar_config_pdvs/', views.guardar_config_pdvs, name='guardar_config_pdvs'),
+    path('finalizarCampana/', views.finalizarCampana, name='finalizarCampana'),
     # cliente
     path('campanas_del_cliente/', views.campanas_del_cliente, name='campanas_del_cliente'),
     path('campanas_del_cliente/<int:cliente_id>/', views.campanas_del_cliente, name='campanas_del_cliente'),

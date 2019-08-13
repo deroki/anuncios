@@ -267,6 +267,8 @@ class Creatividad(models.Model):
     def __str__(self):
         return self.nombre
 
+IDIOMAS = (('finalizada', 'Finalizada'),
+           ('iniciada', 'Iniciada'),)
 
 class Campana(models.Model):
     cliente = models.ForeignKey(Cliente,
@@ -278,7 +280,7 @@ class Campana(models.Model):
                                    blank=True)
     estado = models.CharField(choices=pdv_estados,
                               max_length=15,
-                              default="pendiente")
+                              default="iniciada")
     activo = models.BooleanField(default=False)
     fecha_creacion = models.DateField(auto_now_add=True)
     fecha_cambio = models.DateField(auto_now=True)

@@ -75,6 +75,9 @@
                                 <th class="text-center">FINALIZADA</th>
                                 <th class="text-center">ESTADO</th>
                                 <th class="text-center">ACTIVO</th>
+                                {% if request.user.is_staff %}
+                                <th class="text-center">ACCION</th>
+                                {%  endif %}
 
                             </tr>
                             </thead>
@@ -90,7 +93,7 @@
                                         {% else %}
                                         {{ campana.fecha_finalizado }}
                                         {% endif %}
-                                    </td align="center">
+                                    </td>
                                     <td align="center">{{ campana.estado }}</td>
                                     <td align="center">
                                         {% if campana.activo == True %}
@@ -99,6 +102,19 @@
                                             Inactivo
                                         {% endif %}
                                     </td>
+
+                                {%  if request.user.is_staff %}
+                                    <td align="center">
+
+                                    {% if campana.estado != "finalizada" %}
+                                        <form action="{% url 'finalizarCampana' %}" method="post">
+                                            {%  csrf_token %}
+                                            <button class="btn btn-outline-secondary btn-sm" type="submit" name="EndCamp_{{ campana.pk }}" value="True">Finalizar</button>
+                                        </form>
+                                    </td>
+                                    {% endif %}
+
+                                {% endif %}
 
                                 </tr>
                             {% endfor %}

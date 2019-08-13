@@ -494,6 +494,25 @@ def guardar_config_campana(request):
     return redirect('campanas_del_cliente', cliente_id=cliente_id)
 
 
+def finalizarCampana(request):
+    request = request
+    url = request.META['HTTP_REFERER']
+    for key in request.POST.keys():
+        if key.startswith("EndCamp"):
+            campana_pk = key[8:]
+            campana = Campana.objects.get(pk=campana_pk)
+            campana.estado = "finalizada"
+            campana.activo = False
+            campana.fecha_finalizado = timezone.now()
+            campana.save()
+
+
+
+    return redirect(url)
+
+
+
+
 def creatividades(request):
     creatividades = Creatividad.objects.all()
 
