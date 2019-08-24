@@ -242,9 +242,7 @@ class Pdi(models.Model):
                                      )
     material = models.ForeignKey('Material',
                                  on_delete=models.CASCADE,
-                                 default=None,
-                                 null=True,
-                                 blank=True)
+                                 default=None)
     activo = models.BooleanField(default=True)
     composicion = models.BooleanField(default=False)
     instaladores = models.IntegerField()
