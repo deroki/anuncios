@@ -387,6 +387,12 @@ def estadisticas(request):
                                                               'MEDIA_URL' : MEDIA_URL,})
 
 def pdis_json(request):
+    '''
+    Si falta por ejemplo el material ya no funciona bien y no salen las fotos subidas por el mntador
+
+    :param request:
+    :return:
+    '''
     str = request.META['HTTP_REFERER']
     CampanaNum = re.findall(r'/\d+/', str)[0][1:-1]
     campana = Campana.objects.filter(pk = CampanaNum).get()
