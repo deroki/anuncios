@@ -42,7 +42,8 @@
                     {{ form_campanaPdVPdI|crispy }}
 
 
-                    <button type='submit' class='btn btn-success'> Crear </button>
+                    <button type='submit' class='btn btn-secondary mr-3'> Crear </button>
+                    <button formaction="{{ request.META.HTTP_REFERER }}" type='submit' class='btn btn-secondary mr-3'> Volver </button>
                 </form>
             </div>
         </div>
