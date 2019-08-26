@@ -66,7 +66,7 @@
                                     <td align="center">
                                         <div style="vertical-align: center; text-align:center;">
                                             <a href="{% url 'edit_material' material.pk %}">
-                                            <img title="Editar" src="{% static 'images/edit.png' %}"
+                                            <img class = "mr-3" title="Editar" src="{% static 'images/edit.png' %}"
                                                   height="20" width="20">
                                             </a>
                                             <img onclick="showImageModal({{ material.pk }})"  title="Borrar" src="{% static 'images/delete.png' %}"
