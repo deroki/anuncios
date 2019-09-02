@@ -204,7 +204,12 @@ class ClientesAutocomplete(autocomplete.Select2QuerySetView):
 
         clientes = Cliente.objects.all()
 
-        return clientes
+        if self.q:
+            seleccion = clientes.filter(usuario__empresa__startswith = self.q)
+        else:
+            seleccion = clientes
+
+        return seleccion
 
 class ZonasAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -212,8 +217,13 @@ class ZonasAutocomplete(autocomplete.Select2QuerySetView):
             return Zona.objects.none()
 
         zonas = Zona.objects.all()
+        if self.q:
+            seleccion = zonas.filter(cliente__usuario__empresa__startswith = self.q)
+        else:
+            seleccion = zonas
 
-        return zonas
+
+        return seleccion
 
 
 def all_pdis_json(request):
