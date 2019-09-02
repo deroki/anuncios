@@ -78,7 +78,7 @@ class PdvForm(forms.ModelForm):
     class Meta:
         model = models.Pdv
         fields = ['cliente', 'cadena', 'nombre', 'direccion', 'cp', 'ciudad', 'provincia', 'prioridad', 'activo', 'zona','permisos']
-        widgets = {'cliente': autocomplete.ModelSelect2(url='ClientesAutocomplete'),
+        widgets = {'cliente': autocomplete.ModelSelect2Multiple(url='ClientesAutocomplete'),
                    'zona' : autocomplete.ModelSelect2(url='ZonasAutocomplete')}
 
 
