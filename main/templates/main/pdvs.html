@@ -86,9 +86,12 @@
                                     <td>{{ pdv.direccion }}</td>
                                     <td>
                                         <div style="vertical-align: center; text-align:center;">
+                                            <a href="{% url 'edit_pdv' pdv.pk %}" >
                                             <img class = "mr-3" title="Editar" src="{% static 'images/edit.png' %}"
                                                   height="20" width="20">
-                                            <img title="Borrar" src="{% static 'images/delete.png' %}"
+                                            </a>
+
+                                            <img onclick="showImageModal({{ pdv.pk }})" title="Borrar" src="{% static 'images/delete.png' %}"
                                                    height="20" width="20" >
                                         </div>
                                     </td>
@@ -149,6 +152,46 @@
     <script type="text/javascript"
             src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.6/b-html5-1.5.6/r-2.2.2/datatables.min.js"></script>
     <script>
+function showImageModal(source){
+            var modal = `<div class="modal fade show" id="exampleModalCenter" style="display: block; padding-right: 15px;">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+
+                                                <button onclick="closeModal()" type="button" class="close" data-dismiss="modal"><span>×</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                            <div class="row justify-content-md-center">
+                                                <h1>¿ Eliminar PdV ?</h1>
+                                            </div>
+                                               <br><br>
+                                            <div class="row justify-content-md-center">
+                                               <div class="col-3">
+                                                    <a href="{% url 'delete_pdv' %}${source}" class="btn btn-dark text-white">
+                                                       SI
+                                                    </a>
+                                               </div>
+
+                                               <div class="col-3">
+                                                    <a onclick="closeModal()" href="#" class="btn btn-dark text-white">
+                                                        NO
+                                                    </a>
+                                               </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>`;
+            var mydiv = document.getElementById('mymodal');
+            mydiv.innerHTML += modal;
+        }
+
+        function closeModal(){
+            var mydiv = document.getElementById('mymodal');
+            mydiv.innerHTML = ""
+        }
+
         $(document).ready(function () {
             var table = $('#tabla').DataTable(
                 {
@@ -290,29 +333,7 @@
                 }
             }
 
-        function showImageModal(source){
-            var modal = `<div class="modal fade show" id="exampleModalCenter" style="display: block; padding-right: 15px;">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
 
-                                                <button onclick="closeModal()" type="button" class="close" data-dismiss="modal"><span>×</span></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <img class = "mx-auto d-block" src="${source.src}">
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>`;
-            var mydiv = document.getElementById('mymodal');
-            mydiv.innerHTML += modal;
-        }
-
-        function closeModal(){
-            var mydiv = document.getElementById('mymodal');
-            mydiv.innerHTML = ""
-        }
 
         function checkAll(){
             extend()

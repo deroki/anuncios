@@ -267,18 +267,29 @@ def get_creatividad_image(request):
 
 
 
-def crear_pdv(request):
+def crear_pdv(request, pk=None):
+    if pk:
+        accion = "Editar"
+        instance = Pdv.objects.get(pk=pk)
+    else:
+        accion = "Crear"
+        instance = None
+
     if request.method == 'POST':
-        pdv_form = PdvForm(request.POST)
+        pdv_form = PdvForm(request.POST, instance=instance)
         if pdv_form.is_valid():
             pdv_form.save()
             return redirect('pdvs')
     else:
-        pdv_form = PdvForm()
-    return render(request, 'main/crear_pdv.html',{'form': pdv_form})
+        pdv_form = PdvForm(instance=instance)
+    return render(request, 'main/crear_pdv.html',{'form': pdv_form,
+                                                  'accion' : accion})
 
 
-
+def delete_pdv(request, pk=None):
+    pdv = Pdv.objects.filter(pk = pk)
+    pdv.delete()
+    return redirect('pdvs')
 
 def crear_pdi(request):
     if request.method == 'POST':
