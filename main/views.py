@@ -518,7 +518,7 @@ def guardar_config_campana(request):
 
 
 
-    return redirect('campanas_del_cliente', cliente_id=cliente_id)
+    return redirect(str)
 
 
 def finalizarCampana(request):
