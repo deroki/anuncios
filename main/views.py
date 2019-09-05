@@ -601,7 +601,7 @@ def crear_material(request, pk=None):
             material_form.save()
             return redirect('materiales')
     else:
-        material_form = MaterialForm()
+        material_form = MaterialForm(instance=instance)
     return render(request, 'main/crear_material.html',{'form': material_form})
 
 
