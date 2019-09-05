@@ -537,18 +537,21 @@ def creatividades(request):
 
 def crear_creatividad(request, pk=None):
     if pk:
+        accion = "Editar"
         instance = Creatividad.objects.get(pk=pk)
     else:
+        accion = "Crear"
         instance = None
 
     if request.method == 'POST':
-        creatividad_form = CreatividadForm(request.POST, request.FILES, instance=instance)
+        creatividad_form = CreatividadForm(request.POST, request.FILES, instance=instance,)
         if creatividad_form.is_valid():
             creatividad_form.save()
             return redirect('creatividades')
     else:
-        creatividad_form = CreatividadForm()
-    return render(request, 'main/crear_creatividad.html',{'form': creatividad_form})
+        creatividad_form = CreatividadForm(instance = instance)
+    return render(request, 'main/crear_creatividad.html',{'form': creatividad_form,
+                                                          'accion':  accion})
 
 
 def delete_creatividad(request, creatividad_pk = None):
