@@ -216,6 +216,8 @@ class Pdv(models.Model):
         return self.slug
 
 
+
+
 class TipoPdi(models.Model):
     nombre = models.CharField(max_length=50)
 
