@@ -99,8 +99,17 @@ def usuarios(request):
 
 
 def crear_usuario(request,pk=None):
+    accion = 'Crear'
+    instance = None
+    cliente_instance = None
+    montador_instance = None
     if pk:
         instance = User.objects.get(pk=pk)
+        accion = 'Editar'
+        if instance.is_cliente == True:
+            cliente_instance = Cliente.objects.get(usuario = instance)
+        if instance.is_montador == True:
+            montador_instance = Montador.objects.get(usuario = instance)
     else:
         instance = None
 
@@ -109,7 +118,7 @@ def crear_usuario(request,pk=None):
     form = UserForm()
     form_cliente = ClienteForm()
     form_montador = MontadorForm()
-
+    #en caso de que subamos una imagen solo...
     if request.method == 'POST':
         if 'image' in request.FILES:
             form = UserForm()
@@ -124,13 +133,14 @@ def crear_usuario(request,pk=None):
                                                                   'form_image': form_image,
                                                                   'form_cliente': form_cliente,
                                                                   'exitStatus': exitStatus,
-                                                                  'MEDIA_URL': MEDIA_URL})
-
+                                                                  'MEDIA_URL': MEDIA_URL,
+                                                                  'accion' : accion})
+        # en caso de que subamos un usuario
         if 'color' in request.POST:
             form_image = ImageForm()
-            form = UserForm(request.POST)
-            form_cliente = ClienteForm(request.POST)
-            form_montador = MontadorForm(request.POST)
+            form = UserForm(request.POST, instance=instance)
+            form_cliente = ClienteForm(request.POST, instance=cliente_instance)
+            form_montador = MontadorForm(request.POST, instance=montador_instance)
             if form.is_valid():
                 form.save()
                 exitStatus = "Usuario guardado"
@@ -152,20 +162,22 @@ def crear_usuario(request,pk=None):
                                                                    'form_image': form_image,
                                                                    'form_cliente': form_cliente,
                                                                    'exitStatus': exitStatus,
-                                                                   'MEDIA_URL': MEDIA_URL})
+                                                                   'MEDIA_URL': MEDIA_URL,
+                                                                   'accion' : accion})
 
     else:
         form_image = ImageForm()
-        form = UserForm()
-        form_cliente = ClienteForm()
-        form_montador = MontadorForm()
+        form = UserForm(instance= instance)
+        form_cliente = ClienteForm(instance = cliente_instance)
+        form_montador = MontadorForm(instance = montador_instance)
         exitStatus = None
     return render(request, 'main/crear_usuario.html', {'form': form,
                                                       'form_montador': form_montador,
                                                       'form_image': form_image,
                                                       'form_cliente': form_cliente,
                                                       'exitStatus': exitStatus,
-                                                      'MEDIA_URL': MEDIA_URL})
+                                                      'MEDIA_URL': MEDIA_URL,
+                                                      'accion' : accion})
 
 
 def delete_usuario(request,pk):

@@ -45,10 +45,10 @@
                                   <td>{{ user.role }}</td>
                                   <td>
                                         <div style="vertical-align: center; text-align:center;">
-{% comment %}                                             <a href="{% url 'edit_user' user.pk %}">
-                                            <img title="Editar" src="{% static 'images/edit.png' %}"
+                                            <a href="{% url 'edit_usuario' user.pk %}">
+                                            <img class = "mr-4"  title="Editar" src="{% static 'images/edit.png' %}"
                                                   height="20" width="20">
-                                            </a> {% endcomment %}
+                                            </a>
                                             <img onclick="showImageModal({{ user.pk }})"  title="Borrar" src="{% static 'images/delete.png' %}"
                                                    height="20" width="20" >
                                         </div>

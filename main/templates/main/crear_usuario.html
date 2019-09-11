@@ -4,7 +4,7 @@
 
 
 
-{% block titulo %}Crear Usuario{% endblock %}
+{% block titulo %}{{accion}} Usuario{% endblock %}
 
 {% block content %}
 
@@ -39,7 +39,7 @@
     <div class="col-12">
         <div class="card mt-5">
             <div class = "card-body">
-                <h3> Nuevo Usuario </h3>
+                <h3> {{accion}} Usuario </h3>
                 <form method="POST" novalidate>
                     {% csrf_token %}
                     {{ form|crispy}}
@@ -50,7 +50,7 @@
                         {{ form_cliente|crispy }}
                     </div>
                     <div class="btn-toolbar pull-left">
-                        <button type='submit' class='btn btn-secondary mr-3'> Crear </button>
+                        <button type='submit' class='btn btn-secondary mr-3'> {{accion}} </button>
                         <button formaction="{% url 'usuarios' %}" type='submit' class='btn btn-secondary mr-3'> Volver </button>
                     </div>
 
