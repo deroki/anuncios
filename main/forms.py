@@ -92,6 +92,7 @@ class PdiForm(forms.ModelForm):
             'anchoTotal' : 'anchoVista (cm)',
             'altoVista' : 'anchoVista (cm)'
             }
+        widgets = {'pdv' : autocomplete.ModelSelect2(url='PdvAutocomplete')}
 
     def clean_instaladores(self):
         instaladores = self.cleaned_data['instaladores']

@@ -223,6 +223,21 @@ class ClientesAutocomplete(autocomplete.Select2QuerySetView):
 
         return seleccion
 
+class PdvAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Pdv.objects.none()
+
+        
+        pdvs = Pdv.objects.all()
+        
+        if self.q:
+            seleccion = pdvs.filter(nombre__startswith = self.q)
+        else:
+            seleccion = pdvs
+
+        return seleccion
+
 class ZonasAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         if not self.request.user.is_authenticated:

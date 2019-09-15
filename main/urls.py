@@ -68,6 +68,7 @@ urlpatterns = [
     path('campanasAutocomplete/', views.CampanasAutocomplete.as_view(), name="CampanasAutocomplete"),
     path('clientesAutocomplete/', views.ClientesAutocomplete.as_view(), name="ClientesAutocomplete"),
     path('zonasAutocomplete/', views.ZonasAutocomplete.as_view(), name="ZonasAutocomplete"),
+    path('pdvsAutocomplete/', views.PdvAutocomplete.as_view(),  name="PdvAutocomplete"),
     #montador
     path('montadores_json/', views.montadores_json, name="montadores_json"),
     path('dashboard/', views.dashboard, name="dashboard"),

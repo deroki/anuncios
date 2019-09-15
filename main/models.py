@@ -213,7 +213,7 @@ class Pdv(models.Model):
                                    choices=TRUE_FALSE_CHOICES)
 
     def __str__(self):
-        return self.slug
+        return self.nombre
 
 
 
