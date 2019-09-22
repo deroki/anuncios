@@ -540,12 +540,63 @@ def guardar_config_campana(request):
                 for user_pk in montadores_list:
                     campanaPdv_Pdi.user_montador.add(User.objects.get(pk=user_pk))
                     campanaPdv_Pdi.save()
-
-
-
-
-
     return redirect(str)
+
+
+
+def reporte(request, campana_pk):
+    user = request.user
+    if user.is_staff:
+        cliente_id = request.COOKIES.get('cliente_id')
+        cliente = Cliente.objects.get(pk=cliente_id)
+    else:
+        cliente = Cliente.objects.get(usuario=user)
+    logo_path = cliente.logo.image.name
+    
+    pdvs = []
+    campana = Campana.objects.get(pk=campana_pk)
+    campana_pdv_items = Campana_Pdv.objects.filter(campana=campana)
+
+    for item in campana_pdv_items:
+        pdv = {}
+        pdv['id'] = item.pdv.id
+        pdv['nombre'] = item.pdv.nombre
+        pdv['cadena'] = item.pdv.cadena
+        pdv['idioma'] = item.idioma
+        pdv['ciudad'] = item.pdv.ciudad
+        pdv['provincia'] = item.pdv.id
+        pdv['estado'] = item.estado
+        # get the pdi info of this pdv
+        campanaPdvPdis = CampanapdV_pdI.objects.filter(Campana_Pdv=item)
+        if campanaPdvPdis != None:
+            pdv['pdis'] = []
+            for campanaPdvPdi in campanaPdvPdis:
+                pdi = {}
+                pdi['nombre'] = campanaPdvPdi.pdi.nombre
+                pdi['tipo'] = campanaPdvPdi.pdi.tipo
+                pdi['anchoT'] = campanaPdvPdi.pdi.anchoTotal
+                pdi['anchoV'] = campanaPdvPdi.pdi.anchoVista
+                pdi['altoT'] = campanaPdvPdi.pdi.altoTotal
+                pdi['altoV'] = campanaPdvPdi.pdi.altoVista
+                pdi['composicion'] = campanaPdvPdi.pdi.composicion
+                pdi['instaladores'] = campanaPdvPdi.pdi.instaladores
+                pdi['material'] = campanaPdvPdi.pdi.material
+                pdi['creatividad'] = campanaPdvPdi.image
+                pdi['montadores'] = campanaPdvPdi.user_montador.all()
+                
+                pdv['pdis'].append(pdi)
+
+
+        pdvs.append(pdv)
+
+
+    return render(request,"main/cliente/reporte.html", {'cliente' : cliente,
+                                                        'pdvs' : pdvs,
+                                                        "MEDIA_URL": MEDIA_URL,
+                                                        'logo_path' : logo_path})
+
+def generate_pdf(request):
+    pass
 
 
 def finalizarCampana(request):

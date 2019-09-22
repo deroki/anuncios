@@ -291,11 +291,11 @@ class Campana(models.Model):
         return f'{self.cliente}-{self.nombre}'
 
 
-IDIOMAS = (('esp', 'Español'),
-           ('cat', 'Catalán'),
-           ('gal', 'Gallego'),
-           ('eu', 'Euskera'),
-           ('eng', 'Inglés'),)
+IDIOMAS = (('Español', 'Español'),
+           ('Catalán', 'Catalán'),
+           ('Gallego', 'Gallego'),
+           ('Euskera', 'Euskera'),
+           ('Inglés', 'Inglés'),)
 
 def pdi_image_path(instance, filename):
     return f'images/{instance.Campana_Pdv.campana.nombre}/{instance.Campana_Pdv.pdv.slug}/{instance.pdi.nombre}/{filename}'
