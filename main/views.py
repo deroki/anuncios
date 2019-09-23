@@ -581,7 +581,7 @@ def reporte(request, campana_pk):
                 pdi['composicion'] = campanaPdvPdi.pdi.composicion
                 pdi['instaladores'] = campanaPdvPdi.pdi.instaladores
                 pdi['material'] = campanaPdvPdi.pdi.material
-                pdi['creatividad'] = campanaPdvPdi.image
+                pdi['creatividad'] = campanaPdvPdi.creatividad.imagen
                 pdi['montadores'] = campanaPdvPdi.user_montador.all()
                 
                 pdv['pdis'].append(pdi)

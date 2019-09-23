@@ -2,6 +2,22 @@
 {% load static %}
 
 
+{% block css%}
+<style>
+
+th.coloured{
+    background: rgba(37, 37, 36, 0.795);
+    color : white;
+    
+}
+
+td.centered {
+text-align: center;
+vertical-align: middle;
+}
+
+</style>
+{% endblock%}
 
 
 
@@ -23,19 +39,19 @@
 
                             <thead>
                                 <tr>
-                                    <th class="text-center">ID</th>
-                                    <th class="text-center">NOMBRE</th>
-                                    <th class="text-center">CADENA</th>
-                                    <th class="text-center">IDIOMA</th>
-                                    <th class="text-center">CIUDAD</th>
-                                    <th class="text-center">PROVINCIA</th>
-                                    <th class="text-center">ESTADO</th>
+                                    <th class="text-center coloured">ID</th>
+                                    <th class="text-center coloured">NOMBRE</th>
+                                    <th class="text-center coloured">CADENA</th>
+                                    <th class="text-center coloured">IDIOMA</th>
+                                    <th class="text-center coloured">CIUDAD</th>
+                                    <th class="text-center coloured">PROVINCIA</th>
+                                    <th class="text-center coloured">ESTADO</th>
                                 </tr>
                             </thead>
 
 
                             <tbody>
-                            {% for item in pdvs%}
+                            {% for item in pdvs %}
                                 <tr>
                                     <td align="center">{{ item.id }}</td>
                                     <td align="center">{{ item.nombre }}</td>
@@ -45,7 +61,52 @@
                                     <td align="center">{{ item.provincia }}</td>
                                     <td align="center">{{ item.estado }}
                                 </tr>
-                                
+
+
+                                {% if item.pdis is not None %}
+                                <tr>
+                                    <table id="tabla" class="table table-striped table-bordered" style="width:100%">
+                                        <thead>
+                                            <th class="text-center">NOMBRE</th>
+                                            <th class="text-center">TIPO</th>
+                                            <th class="text-center">ANCHO TOTAL</th>
+                                            <th class="text-center">ANCHO VISTA</th>
+                                            <th class="text-center">ALTURA TOTAL</th>
+                                            <th class="text-center">ALTURA VISTA</th>
+                                            <th class="text-center">MATERIAL</th>
+                                            <th class="text-center">CREATIVIDAD</th>
+                                        </thead>
+                                        
+                                        <tbody>
+                                        {% for pdi in item.pdis %}
+                                        <tr>
+                                            <td class="centered">{{ pdi.nombre}}</td>
+                                            <td class="centered">{{ pdi.tipo }}</td>
+                                            <td class="centered">{{ pdi.anchoT }}</td>
+                                            <td class="centered">{{ pdi.anchoV }}</td>
+                                            <td class="centered">{{ pdi.altoT }}</td>
+                                            <td class="centered">{{ pdi.altoV }}</td>
+                                            <td class="centered">{{ pdi.material }}</td>
+                                            <td>
+                                                <img class="mx-auto d-block" src={{ MEDIA_URL }}/{{ pdi.creatividad }} height="150" width="150">
+                                            </td>
+                                        </tr>
+                                        
+                                        {% for montador in pdi.montadores %}
+                                        <tr>
+                                            <td colspan="13" align="center">{{ montador.email}}</td>
+                                        </tr>
+                                        {% endfor %}
+
+                                        {% endfor %}
+                                        
+
+
+                                        </tbody>
+                                        
+                                    </table>
+                                </tr>
+                                {% endif %}
                             {% endfor %}
                             </tbody>
                         </table>
