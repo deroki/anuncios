@@ -545,6 +545,11 @@ def guardar_config_campana(request):
 
 
 def reporte(request, campana_pk):
+    from django.core.files.storage import FileSystemStorage
+    from django.http import HttpResponse
+    from django.template.loader import render_to_string
+
+
     user = request.user
     if user.is_staff:
         cliente_id = request.COOKIES.get('cliente_id')
@@ -590,13 +595,29 @@ def reporte(request, campana_pk):
         pdvs.append(pdv)
 
 
-    return render(request,"main/cliente/reporte.html", {'cliente' : cliente,
-                                                        'pdvs' : pdvs,
-                                                        "MEDIA_URL": MEDIA_URL,
-                                                        'logo_path' : logo_path})
+    return html_to_pdf_view(request, "main/cliente/reporte.html", {'cliente' : cliente,
+                                                                    'pdvs' : pdvs,
+                                                                    "MEDIA_URL": MEDIA_URL,
+                                                                    'logo_path' : logo_path})
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
+from django.template.loader import render_to_string
 
-def generate_pdf(request):
-    pass
+from weasyprint import HTML
+
+def html_to_pdf_view(request, template, context):
+    html_string = render_to_string(template, context)
+
+    html = HTML(string=html_string, base_url=request.build_absolute_uri())
+    html.write_pdf(target='/tmp/mypdf.pdf')
+
+    fs = FileSystemStorage('/tmp')
+    with fs.open('mypdf.pdf') as pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="mypdf.pdf"'
+        return response
+
+    return response
 
 
 def finalizarCampana(request):

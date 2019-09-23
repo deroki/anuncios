@@ -1,4 +1,4 @@
-{% extends 'main/cliente/base.html' %}
+{% extends 'main/cliente/base_pdf.html' %}
 {% load static %}
 
 
@@ -6,8 +6,8 @@
 <style>
 
 th.coloured{
-    background: rgba(37, 37, 36, 0.795);
-    color : white;
+    background: rgba(223, 223, 209, 0.795);
+    color : rgb(10, 9, 9)0, 9, 9);
     
 }
 
@@ -15,6 +15,8 @@ td.centered {
 text-align: center;
 vertical-align: middle;
 }
+
+@page { size: letter landscape; margin: 2cm; } 
 
 </style>
 {% endblock%}
