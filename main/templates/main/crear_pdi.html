@@ -4,7 +4,7 @@
 
 
 
-{% block titulo %} Crear PdI{% endblock %}
+{% block titulo %} {{accion}} PdI{% endblock %}
 
 {% block content %}
 
@@ -24,7 +24,7 @@
                 <form method="POST" novalidate>
                     {% csrf_token %}
                     {{ form|crispy}}
-                    <button type='submit' class='btn btn-secondary mr-3'> Crear </button>
+                    <button type='submit' class='btn btn-secondary mr-3'> {{accion}} </button>
                     <button formaction="{% url 'pdvs' %}" type='submit' class='btn btn-secondary mr-3'> Volver </button>
                 </form>
             </div>

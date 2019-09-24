@@ -239,6 +239,7 @@ function showImageModal(source){
                                 <th class="text-center">Ancho Vista</th>
                                 <th class="text-center">Activo</th>
                                 <th class="text-center">Image</th>
+                                <th class="text-center">Edición</th>
                                 <th class="text-center"></th>
 
                             </tr>
@@ -253,6 +254,11 @@ function showImageModal(source){
                     tabla += '<td class="text-center">' + json[rrow].anchoTotal + '</td>';
                     tabla += '<td class="text-center">' + json[rrow].anchoVista+ '</td>';
                     tabla += '<td class="text-center">' + json[rrow].activo + '</td>';
+                    tabla +=    `<td class="text-center">
+                                    <a href="{% url 'edit_pdi' %}${json[rrow].id}" >
+                                        <img class = "mr-3" title="Editar" src="{% static 'images/edit.png' %}"height="20" width="20"> 
+                                    </a>
+                                </td>`;
                     var checked = null
                     //check
                     if (json[rrow].checked){

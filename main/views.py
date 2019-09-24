@@ -318,15 +318,23 @@ def delete_pdv(request, pk=None):
     pdv.delete()
     return redirect('pdvs')
 
-def crear_pdi(request):
+def crear_pdi(request, pk=None):
+    if pk:
+        accion = "Editar"
+        instance = Pdi.objects.get(pk=pk)
+    else:
+        accion = "Crear"
+        instance = None
+
     if request.method == 'POST':
-        pdi_form = PdiForm(request.POST)
+        pdi_form = PdiForm(request.POST, instance=instance)
         if pdi_form.is_valid():
             pdi_form.save()
             return redirect('pdvs')
     else:
-        pdi_form = PdiForm()
-    return render(request, 'main/crear_pdi.html',{'form': pdi_form})
+        pdi_form = PdiForm(instance=instance)
+    return render(request, 'main/crear_pdi.html',{'form': pdi_form,
+                                                'accion' : accion})
 
 
 def campana_pdvs(request):
@@ -540,7 +548,7 @@ def guardar_config_campana(request):
                 for user_pk in montadores_list:
                     campanaPdv_Pdi.user_montador.add(User.objects.get(pk=user_pk))
                     campanaPdv_Pdi.save()
-                    
+
     return reporte(request, CampanaNum)
 
 
