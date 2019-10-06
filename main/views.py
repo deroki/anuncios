@@ -462,7 +462,7 @@ def estadisticas(request,pk):
 
     #query para hacer la agregacion
     campana = Campana.objects.get(pk = pk)
-    campanas_pdv_ok = Campana_Pdv.objects.filter(Q(estado='ok') & Q(fecha_cambio__year=year)).values('estado','fecha_cambio') \
+    campanas_pdv_ok = Campana_Pdv.objects.filter(Q(estado='atendida') & Q(fecha_cambio__year=year)).values('estado','fecha_cambio') \
                                         .annotate(Enero=Count('estado', filter=Q(fecha_cambio__month=1))) \
                                         .annotate(Febrero=Count('estado', filter=Q(fecha_cambio__month=2))) \
                                         .annotate(Marzo=Count('estado', filter=Q(fecha_cambio__month=3))) \
@@ -476,7 +476,7 @@ def estadisticas(request,pk):
                                         .annotate(Noviembre=Count('estado', filter=Q(fecha_cambio__month=11))) \
                                         .annotate(Diciembre=Count('estado', filter=Q(fecha_cambio__month=12))) \
 
-    campanas_pdv_ko = Campana_Pdv.objects.filter(Q(estado='ko') & Q(fecha_cambio__year=year)).values('estado','fecha_cambio') \
+    campanas_pdv_ko = Campana_Pdv.objects.filter(Q(estado='suspendida') & Q(fecha_cambio__year=year)).values('estado','fecha_cambio') \
                                         .annotate(Enero=Count('estado', filter=Q(fecha_cambio__month=1))) \
                                         .annotate(Febrero=Count('estado', filter=Q(fecha_cambio__month=2))) \
                                         .annotate(Marzo=Count('estado', filter=Q(fecha_cambio__month=3))) \
