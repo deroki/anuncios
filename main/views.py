@@ -8,6 +8,9 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, render_to_response
 from django.core import serializers
 from django.http import HttpResponse
+from django.db.models.functions import TruncMonth
+from django.utils import timezone
+
 
 # Create your views here.
 from django.template import RequestContext
@@ -429,7 +432,24 @@ def elegir_pdvs(request,campana_pk):
                                                              'cliente': cliente})
 
 
-def estadisticas(request):
+def estadisticas(request,pk):
+
+    def generate_list(queryset):
+        months = ['Enero','Febrero','Marzo','Abril','Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+        lista = []
+        try:
+            line = queryset[0]
+        except:
+            return []
+
+        for key in line.keys():
+            if key in months:
+                lista.append(line[key])
+
+        return lista
+
+    today_date = timezone.now()
+    year = today_date.year
     user = request.user
     if user.is_staff:
         cliente_id = request.COOKIES.get('cliente_id')
@@ -438,9 +458,64 @@ def estadisticas(request):
         cliente = Cliente.objects.get(usuario=user)
 
     logo_path = cliente.logo.image.name
+
+
+    #query para hacer la agregacion
+    campana = Campana.objects.get(pk = pk)
+    campanas_pdv_ok = Campana_Pdv.objects.filter(Q(estado='ok') & Q(fecha_cambio__year=year)).values('estado','fecha_cambio') \
+                                        .annotate(Enero=Count('estado', filter=Q(fecha_cambio__month=1))) \
+                                        .annotate(Febrero=Count('estado', filter=Q(fecha_cambio__month=2))) \
+                                        .annotate(Marzo=Count('estado', filter=Q(fecha_cambio__month=3))) \
+                                        .annotate(Abril=Count('estado', filter=Q(fecha_cambio__month=4))) \
+                                        .annotate(Mayo=Count('estado', filter=Q(fecha_cambio__month=5))) \
+                                        .annotate(Junio=Count('estado', filter=Q(fecha_cambio__month=6))) \
+                                        .annotate(Julio=Count('estado', filter=Q(fecha_cambio__month=7))) \
+                                        .annotate(Agosto=Count('estado', filter=Q(fecha_cambio__month=8))) \
+                                        .annotate(Septiembre=Count('estado', filter=Q(fecha_cambio__month=9))) \
+                                        .annotate(Octubre=Count('estado', filter=Q(fecha_cambio__month=10))) \
+                                        .annotate(Noviembre=Count('estado', filter=Q(fecha_cambio__month=11))) \
+                                        .annotate(Diciembre=Count('estado', filter=Q(fecha_cambio__month=12))) \
+
+    campanas_pdv_ko = Campana_Pdv.objects.filter(Q(estado='ko') & Q(fecha_cambio__year=year)).values('estado','fecha_cambio') \
+                                        .annotate(Enero=Count('estado', filter=Q(fecha_cambio__month=1))) \
+                                        .annotate(Febrero=Count('estado', filter=Q(fecha_cambio__month=2))) \
+                                        .annotate(Marzo=Count('estado', filter=Q(fecha_cambio__month=3))) \
+                                        .annotate(Abril=Count('estado', filter=Q(fecha_cambio__month=4))) \
+                                        .annotate(Mayo=Count('estado', filter=Q(fecha_cambio__month=5))) \
+                                        .annotate(Junio=Count('estado', filter=Q(fecha_cambio__month=6))) \
+                                        .annotate(Julio=Count('estado', filter=Q(fecha_cambio__month=7))) \
+                                        .annotate(Agosto=Count('estado', filter=Q(fecha_cambio__month=8))) \
+                                        .annotate(Septiembre=Count('estado', filter=Q(fecha_cambio__month=9))) \
+                                        .annotate(Octubre=Count('estado', filter=Q(fecha_cambio__month=10))) \
+                                        .annotate(Noviembre=Count('estado', filter=Q(fecha_cambio__month=11))) \
+                                        .annotate(Diciembre=Count('estado', filter=Q(fecha_cambio__month=12))) \
+
+    campanas_pdv_incidencia = Campana_Pdv.objects.filter(Q(estado='incidencia') & Q(fecha_cambio__year=year)).values('estado','fecha_cambio') \
+                                        .annotate(Enero=Count('estado', filter=Q(fecha_cambio__month=1))) \
+                                        .annotate(Febrero=Count('estado', filter=Q(fecha_cambio__month=2))) \
+                                        .annotate(Marzo=Count('estado', filter=Q(fecha_cambio__month=3))) \
+                                        .annotate(Abril=Count('estado', filter=Q(fecha_cambio__month=4))) \
+                                        .annotate(Mayo=Count('estado', filter=Q(fecha_cambio__month=5))) \
+                                        .annotate(Junio=Count('estado', filter=Q(fecha_cambio__month=6))) \
+                                        .annotate(Julio=Count('estado', filter=Q(fecha_cambio__month=7))) \
+                                        .annotate(Agosto=Count('estado', filter=Q(fecha_cambio__month=8))) \
+                                        .annotate(Septiembre=Count('estado', filter=Q(fecha_cambio__month=9))) \
+                                        .annotate(Octubre=Count('estado', filter=Q(fecha_cambio__month=10))) \
+                                        .annotate(Noviembre=Count('estado', filter=Q(fecha_cambio__month=11))) \
+                                        .annotate(Diciembre=Count('estado', filter=Q(fecha_cambio__month=12))) \
+
+    ok_list = generate_list(campanas_pdv_ok)
+    ko_list = generate_list(campanas_pdv_ko)
+    incidencia_list = generate_list(campanas_pdv_incidencia)
+
+
     return render(request, 'main/cliente/estadisticas.html', {'cliente': cliente,
                                                               'logo_path': logo_path,
-                                                              'MEDIA_URL' : MEDIA_URL,})
+                                                              'MEDIA_URL' : MEDIA_URL,
+                                                              'selected_campana' : campana,
+                                                              'ok' : ok_list,
+                                                              'ko' : ko_list,
+                                                              'incidencia' : incidencia_list})
 
 def pdis_json(request):
     '''
@@ -858,7 +933,7 @@ def instalacion_config(request):
                                tipo= tipo,
                                visible= False)
             Comment.save()
-
+            # Aqui el estado del ultimo comentario en el pdi, se utiliza para marcar el ultimo estado del pdv , aqui llamado instalacion
             instalacion.estado = tipo
             instalacion.save()
             if user.is_staff:
