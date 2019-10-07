@@ -301,8 +301,8 @@ def pdi_image_path(instance, filename):
     return f'images/{instance.Campana_Pdv.campana.nombre}/{instance.Campana_Pdv.pdv.slug}/{instance.pdi.nombre}/{filename}'
 
 
-pdv_estados =(('ok', 'ok'),
-              ('ko', 'ko'),
+pdv_estados =(('atendida', 'atendida'),
+              ('suspendida', 'suspendida'),
               ('incidencia', 'incidencia'))
 
 class Campana_Pdv(models.Model):

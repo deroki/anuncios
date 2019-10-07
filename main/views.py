@@ -508,6 +508,9 @@ def estadisticas(request,pk):
     ko_list = generate_list(campanas_pdv_ko)
     incidencia_list = generate_list(campanas_pdv_incidencia)
 
+    terminada_count = Campana_Pdv.objects.filter(estado='atendida').count()
+    suspendida_count = Campana_Pdv.objects.filter(estado='suspendida').count()
+    incidencia_count = Campana_Pdv.objects.filter(estado='incidencia').count()
 
     return render(request, 'main/cliente/estadisticas.html', {'cliente': cliente,
                                                               'logo_path': logo_path,
@@ -515,7 +518,10 @@ def estadisticas(request,pk):
                                                               'selected_campana' : campana,
                                                               'ok' : ok_list,
                                                               'ko' : ko_list,
-                                                              'incidencia' : incidencia_list})
+                                                              'incidencia' : incidencia_list,
+                                                              'terminada' : terminada_count,
+                                                              'suspendida' : suspendida_count,
+                                                              'incidencia' : incidencia_count})
 
 def pdis_json(request):
     '''

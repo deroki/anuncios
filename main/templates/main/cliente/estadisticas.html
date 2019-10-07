@@ -41,6 +41,8 @@
                     <div class="col-12">
 
                         <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                        <br><br><br><br>
+                        <div id="donuts" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
 
 
@@ -121,6 +123,46 @@
     }, {
         name: 'Incidencia',
         data: {{ incidencia }}
+    }]
+});
+Highcharts.chart('donuts', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Porcentaje'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            }
+        }
+    },
+    series: [{
+        name: 'Estados',
+        colorByPoint: true,
+        data: [{
+            name: 'Terminada',
+            y: {{terminada}},
+            sliced: true,
+            selected: true
+        }, {
+            name: 'Suspendida',
+            y: {{suspendida}}
+        }, {
+            name: 'Incidencia',
+            y: {{incidencia}}
+        }]
     }]
 });
     </script>
