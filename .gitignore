@@ -1,2 +1,5 @@
 *.sqlite3
 *.pyc
+/myvenv/
+/.vscode/
+/media/
