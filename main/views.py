@@ -511,6 +511,7 @@ def estadisticas(request,pk):
     terminada_count = Campana_Pdv.objects.filter(estado='atendida').count()
     suspendida_count = Campana_Pdv.objects.filter(estado='suspendida').count()
     incidencia_count = Campana_Pdv.objects.filter(estado='incidencia').count()
+    comenzada_count = Campana_Pdv.objects.filter(estado='comenzada').count()
 
     return render(request, 'main/cliente/estadisticas.html', {'cliente': cliente,
                                                               'logo_path': logo_path,
@@ -521,7 +522,8 @@ def estadisticas(request,pk):
                                                               'incidencia' : incidencia_list,
                                                               'terminada' : terminada_count,
                                                               'suspendida' : suspendida_count,
-                                                              'incidencia' : incidencia_count})
+                                                              'incidencia' : incidencia_count,
+                                                              'comenzada' : comenzada_count})
 
 def pdis_json(request):
     '''
@@ -612,7 +614,7 @@ def guardar_config_campana(request):
             campana_Pdv, created = Campana_Pdv.objects.get_or_create(campana=campana,
                                                             pdv=pdv,
                                                             idioma=params[f'pdv_{pdv.id}_idioma'],
-                                                            estado='pendiente')
+                                                            estado='comenzada')
 
             #si no hay creatividad que seleccionar
             try:
