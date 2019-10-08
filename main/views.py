@@ -882,7 +882,7 @@ def dashboard(request):
 
     for instalacion_pdi in instalaciones_pdi:
         instalacion_pdv =instalacion_pdi.Campana_Pdv
-        if instalacion_pdv not in instalaciones_pdv and instalacion_pdv.estado == 'pendiente' and instalacion_pdv.estado == 'pendiente':
+        if instalacion_pdv not in instalaciones_pdv and instalacion_pdv.estado == 'comenzado':
             instalaciones_pdv.append(instalacion_pdi.Campana_Pdv)
 
     return render(request, 'main/montador/dasboard.html', context= {'instalaciones_pdv': instalaciones_pdv})
