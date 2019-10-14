@@ -508,7 +508,7 @@ def estadisticas(request,pk):
     ko_list = generate_list(campanas_pdv_ko)
     incidencia_list = generate_list(campanas_pdv_incidencia)
 
-    terminada_count = Campana_Pdv.objects.filter(estado='atendida').count()
+    terminada_count = Campana_Pdv.objects.filter(estado='finalizada').count()
     suspendida_count = Campana_Pdv.objects.filter(estado='suspendida').count()
     incidencia_count = Campana_Pdv.objects.filter(estado='incidencia').count()
     comenzada_count = Campana_Pdv.objects.filter(estado='comenzada').count()
@@ -882,7 +882,7 @@ def dashboard(request):
 
     for instalacion_pdi in instalaciones_pdi:
         instalacion_pdv =instalacion_pdi.Campana_Pdv
-        if instalacion_pdv not in instalaciones_pdv and instalacion_pdv.estado == 'comenzado':
+        if instalacion_pdv not in instalaciones_pdv and instalacion_pdv.estado != 'finalizada':
             instalaciones_pdv.append(instalacion_pdi.Campana_Pdv)
 
     return render(request, 'main/montador/dasboard.html', context= {'instalaciones_pdv': instalaciones_pdv})
