@@ -701,7 +701,7 @@ def html_to_pdf_view(request, template, context):
     html_string = render_to_string(template, context)
 
     html = HTML(string=html_string, base_url=request.build_absolute_uri())
-    html.write_pdf(target='/tmp/mypdf.pdf')
+    html.write_pdf(target='/tmp/mypdf.pdf', presentational_hints = True)
 
     fs = FileSystemStorage('/tmp')
     with fs.open('mypdf.pdf') as pdf:

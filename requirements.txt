@@ -28,7 +28,6 @@ jmespath==0.9.4
 jsonschema==2.6.0
 pathspec==0.5.9
 Pillow==6.0.0
-pkg-resources==0.0.0
 psycopg2-binary==2.8.2
 pyasn1==0.4.5
 pycparser==2.19
