@@ -631,8 +631,8 @@ def guardar_config_campana(request):
                 for user_pk in montadores_list:
                     campanaPdv_Pdi.user_montador.add(User.objects.get(pk=user_pk))
                     campanaPdv_Pdi.save()
-
-    return reporte(request, CampanaNum)
+                    
+    return redirect(str)
 
 
 
