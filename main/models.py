@@ -304,7 +304,7 @@ def pdi_image_path(instance, filename):
 pdv_estados =(('atendida', 'atendida'),
               ('suspendida', 'suspendida'),
               ('incidencia', 'incidencia'),
-              ('finalizada'), ('finalizada'))
+              ('finalizada', 'finalizada'))
 
 class Campana_Pdv(models.Model):
     campana = models.ForeignKey(Campana,on_delete=models.CASCADE)
