@@ -329,7 +329,7 @@ class Material(models.Model):
         return self.nombre
 
 def instalacionPdi_imagen(instance, filename):
-    return f'images/{instance.pdi.nombre}/{instance.fecha_cambio}/{filename}'
+    return f'images/{instance.CampanapdV_pdI.pdi.nombre}/{instance.CampanapdV_pdI.fecha_cambio}/{filename}'
 
 class CampanapdV_pdI(models.Model):
     Campana_Pdv = models.ForeignKey(Campana_Pdv, on_delete=models.CASCADE)
@@ -338,9 +338,6 @@ class CampanapdV_pdI(models.Model):
                                     on_delete=models.CASCADE,
                                     null=True,
                                     blank=True)
-    image = models.ImageField(upload_to=instalacionPdi_imagen,
-                              null=True,
-                              blank=True)
     user_montador = models.ManyToManyField(User,
                                  null=True,
                                  blank=True
@@ -359,6 +356,12 @@ comentarioTipo = (('ok', 'ok'),
                   ('admin', 'admin')
                   )
 
+class Montador_images(models.Model):
+    CampanapdV_pdI = models.ForeignKey(CampanapdV_pdI,
+                                        on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=instalacionPdi_imagen,
+                              null=True,
+                              blank=True)
 class Comments(models.Model):
     Campana_Pdv = models.ForeignKey(Campana_Pdv, on_delete=models.CASCADE)
     User = models.ForeignKey(User, on_delete=models.CASCADE)

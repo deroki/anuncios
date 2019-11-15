@@ -193,7 +193,7 @@
                                   ${data[rrow].nombre}
                                 </button>`;
                     var fileinput= `<div class="custom-file">
-                            <input name="image_${data[rrow].pdi_pk}" type="file" class="custom-file-input" id="image_${data[rrow].pdi_pk}">
+                            <input name="image_${data[rrow].pdi_pk}" type="file" class="custom-file-input" id="image_${data[rrow].pdi_pk}" multiple="true">
                             <label class="custom-file-label" for="inputGroupFile04">Elige imagen</label>
                             </div>`;
                     tabla += `<td class="text-center">${modal}${button}<br><br>${fileinput}</td>`;

@@ -906,7 +906,6 @@ def pdis_instalacion_json(request):
                                  'altoTotal' : instalacionPdi.pdi.altoTotal,
                                  'composicion': instalacionPdi.pdi.composicion,
                                  'pdi_pk' : instalacionPdi.pk, # se trata del pk de la instalacion no del pdi
-                                 'imagenNow' : lastImage.image.name,
                                  "MEDIA_URL": MEDIA_URL,
                                  'campanaPdv_pk' : instalacionPdi.Campana_Pdv.pk
                                 })
@@ -923,10 +922,10 @@ def instalacion_config(request):
         for imageinput in files.keys():
             pk =imageinput[6:]
             instance = CampanapdV_pdI.objects.get(pk=pk)
-            instance.image= files[imageinput]
-            instance.save()
-
-
+            for image in files.getlist(imageinput):
+                newImage = Montador_images(CampanapdV_pdI = instance)
+                newImage.image = image
+                newImage.save()
 
     for key in params.keys():
         word = re.match(r'^comment_\d+$', key)
