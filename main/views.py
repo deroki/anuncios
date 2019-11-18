@@ -558,7 +558,13 @@ def pdis_json(request):
                     pdi_['material'] = pdi.material.nombre
                     pdi_['checked'] = True
                     pdi_['tipo'] = pdi.tipo.nombre
-                    pdi_['image'] = campanapdv_pdi.image.name
+
+                    imagenes = Montador_images.objects.filter(CampanapdV_pdI = campanapdv_pdi)
+                    imagenes_list = []
+                    for image in imagenes:
+                        imagenes_list.append(image.image.url)
+                    pdi_['imagenes'] = imagenes_list
+
                     montadores = [k['email'] for k in campanapdv_pdi.user_montador.all().values()]
 
                 except Exception as Err:

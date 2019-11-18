@@ -286,15 +286,17 @@
                     var checked = null
                     //check
                     if (json[rrow].checked){
-                        checked = 'checked'
+                        checked = 'true'
+                    }else{
+                        checked = 'false'
                     }
                     image_path = json[rrow].image
                     if (image_path){
-                        tabla += `<td class="text-center"> <img src="${MEDIA_URL}${image_path}" class="thumbnail" onclick="showImageModal(this)"> </td>`;
+                        tabla += `<td class="text-center"> <img src="/static/images/error.png" class="thumbnail" onclick="showImageModal([${json[rrow].imagenes}])"> </td>`;
                     }else{
-                        tabla += `<td class="text-center"> <img src="/static/images/error.png" class="thumbnail"> </td>`;
+                        tabla += `<td class="text-center"> <img src="/static/images/error.png" class="thumbnail" onclick="showImageModal([${json[rrow].imagenes}])"> </td>`;
                     }
-                    tabla+= `<td> <input ${checked} class="pdv_${pdv_pk}" onclick="togglePdi(this)"type="checkbox" name="pdi_${json[rrow]['id']}" value="${json.checked}"></td>`
+                    tabla+= `<td> <input class="pdv_${pdv_pk}" onclick="togglePdi(this)"type="checkbox" name="pdi_${json[rrow]['id']}" value="${checked}"></td>`
 
                     }
                 tabla+= '</tr>';
@@ -370,6 +372,10 @@
             }
 
         function showImageModal(source){
+            var html_imagenes = "";
+            for(var index in source.imagenes){
+                html_imagenes += `<img class = "mx-auto d-block" src="${imagen[index]}">`;
+            }
             var modal = `<div class="modal fade show" id="exampleModalCenter" style="display: block; padding-right: 15px;">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
@@ -378,7 +384,7 @@
                                                 <button onclick="closeModal()" type="button" class="close" data-dismiss="modal"><span>×</span></button>
                                             </div>
                                             <div class="modal-body">
-                                                <img class = "mx-auto d-block" src="${source.src}">
+                                                ${html_imagenes}
                                             </div>
 
                                         </div>
