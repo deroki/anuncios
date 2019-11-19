@@ -547,26 +547,42 @@ def pdis_json(request):
     materiales = list(Material.objects.all().values())
 
     try:
-        # en caso de que este el pdv sleccionado para la campaña
+        # en caso de que este el pdv sleccionado para la campaña TODO esto esta fatal falla siempre
         pdis_ = pdis.values()
         for pdi, pdi_ in zip(pdis,pdis_):
                 try:
                     campana_pdv = pdv.campana_pdv_set.filter(campana=CampanaNum).get()
                     campanapdv_pdi = pdi.campanapdv_pdi_set.all()
                     campanapdv_pdi = pdi.campanapdv_pdi_set.filter(Campana_Pdv = campana_pdv).get()
-                    pdi_['creatividad'] = campanapdv_pdi.creatividad.id
-                    pdi_['material'] = pdi.material.nombre
+                    try:
+                        pdi_['creatividad'] = campanapdv_pdi.creatividad.id
+                    except:
+                        pdi_['creatividad'] = ""
+                    try:    
+                        pdi_['material'] = pdi.material.nombre
+                    except:
+                        pdi_['material'] = ""
+
                     pdi_['checked'] = True
-                    pdi_['tipo'] = pdi.tipo.nombre
 
-                    imagenes = Montador_images.objects.filter(CampanapdV_pdI = campanapdv_pdi)
-                    imagenes_list = []
-                    for image in imagenes:
-                        imagenes_list.append(image.image.url)
-                    pdi_['imagenes'] = imagenes_list
-
-                    montadores = [k['email'] for k in campanapdv_pdi.user_montador.all().values()]
-
+                    try:
+                        pdi_['tipo'] = pdi.tipo.nombre
+                    except:
+                        pdi_['tipo'] = ""
+                    
+                    try:
+                        imagenes = Montador_images.objects.filter(CampanapdV_pdI = campanapdv_pdi)
+                        imagenes_list = []
+                        for image in imagenes:
+                            imagenes_list.append(image.image.url)
+                        pdi_['imagenes'] = imagenes_list
+                    except:
+                        imagenes = []
+                    try:    
+                        montadores = [k['email'] for k in campanapdv_pdi.user_montador.all().values()]
+                    except:
+                        montadores = []
+                        
                 except Exception as Err:
                     print(Err)
                     # pdi_['creatividad'] = ""
