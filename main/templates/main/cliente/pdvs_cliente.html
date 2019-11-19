@@ -292,12 +292,38 @@
                     }
                     image_path = json[rrow].image
                     if (image_path){
-                        tabla += `<td class="text-center"> <img src="/static/images/error.png" class="thumbnail" onclick="showImageModal([${json[rrow].imagenes}])"> </td>`;
+                        tabla += `<td class="text-center"> <img src="/static/images/error.png" class="thumbnail" onclick=showModal("mymodal_${json[rrow]['id']}")> </td>`;
                     }else{
-                        tabla += `<td class="text-center"> <img src="/static/images/error.png" class="thumbnail" onclick="showImageModal([${json[rrow].imagenes}])"> </td>`;
+                        tabla += `<td class="text-center"> <img src="/static/images/error.png" class="thumbnail" onclick=showModal("mymodal_${json[rrow]['id']}")> </td>`;
                     }
                     tabla+= `<td> <input class="pdv_${pdv_pk}" onclick="togglePdi(this)"type="checkbox" name="pdi_${json[rrow]['id']}" value="${checked}"></td>`
 
+
+                    // crear modal
+                    var imagenes = json[rrow].imagenes
+                    var html_imagenes = "";
+                    for(var index in imagenes){
+                        html_imagenes += `<img class = "mx-auto d-block" src="${imagenes[index]}">`;
+                    }
+                    var modal = `<div class="modal fade show" id="exampleModalCenter" style="overflow-y: scroll;display: block; padding-right: 15px;">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+
+                                                        <button onclick=hiddeModal("mymodal_${json[rrow]['id']}") type="button" class="close" data-dismiss="modal"><span>×</span></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        ${html_imagenes}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>`;
+                    
+                    tabla+= `<div style="display: none;" id="mymodal_${json[rrow]['id']}">${modal}</div>`
+
+
+                    
                     }
                 tabla+= '</tr>';
                 tabla+= '<tr >';
@@ -370,6 +396,14 @@
                     pdvCheckbox.checked = source.checked;
                 }
             }
+
+        function hiddeModal(modalname){
+            document.getElementById(modalname).style.display = 'none';
+        }
+
+        function showModal(modalname){
+            document.getElementById(modalname).style.display = 'block';
+        }
 
         function showImageModal(source){
             var html_imagenes = "";
