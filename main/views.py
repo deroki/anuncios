@@ -190,11 +190,23 @@ def delete_usuario(request,pk):
 
 
 def pdvs(request):
+    try:
+        activo_status = request.GET['activo']
+    except:
+        activo_status = True
+
+    if activo_status == "False":
+        activo_status = False
+    if activo_status == "True":
+        activo_status = True
+        
     user = request.user
     if user.is_superuser:
-        pdvs = Pdv.objects.all()
+        pdvs = Pdv.objects.filter(activo = activo_status)
         print(pdvs)
-    return render(request, 'main/pdvs.html', {'pdvs': pdvs})
+    activo_status = not activo_status
+    return render(request, 'main/pdvs.html', {'pdvs': pdvs,
+                                            'activo_st' : activo_status})
 
 def guardar_config_pdvs(request):
     post = request.POST
@@ -403,6 +415,8 @@ def crear_campana(request):
 
 
 def elegir_pdvs(request,campana_pk):
+
+
     user = request.user
     if user.is_staff:
         cliente_id = request.COOKIES.get('cliente_id')
@@ -412,7 +426,7 @@ def elegir_pdvs(request,campana_pk):
     selected_campana = Campana.objects.get(pk = campana_pk)
     logo_path = cliente.logo.image.name
 
-    pdvs = Pdv.objects.filter(cliente=cliente, activo=True)
+    pdvs = Pdv.objects.filter(cliente=cliente, activo=activo)
 
     for pdv in pdvs:
         campanas_del_pdv = pdv.campana_pdv_set

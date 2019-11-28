@@ -68,9 +68,13 @@
                                 <th class="text-center">CIUDAD</th>
                                 <th class="text-center">PROVINCIA</th>
                                 <th class="text-center">CP</th>
-                                <th class="text-center">DIRECcIÓN</th>
+                                <th class="text-center">DIRECCIÓN</th>
                                 <th class="text-center">EDICION</th>
-                                <th class="text-center">ACTIVO</th>
+                                <th class="text-center">
+                                    <a href="{% url 'pdvs' %}?activo={{activo_st}}" class="btn btn-outline-secondary btn-sm">
+                                    ACTIVO
+                                    </a>
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
