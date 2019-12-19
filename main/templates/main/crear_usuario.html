@@ -4,7 +4,7 @@
 
 
 
-{% block titulo %}{{accion}} Usuario{% endblock %}
+{% block titulo %}{{accion}} USUARIO {% endblock %}
 
 {% block content %}
 
@@ -21,11 +21,13 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-6">
-                        <h3> Nuevo Logo </h3>
+                        <h3> NUEVO LOGO </h3>
+                        <br>
                         <form method="POST" novalidate enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ form_image|crispy }}
-                            <button type='submit' class='btn btn-secondary'> Enviar Logo</button>
+                            <br>
+                            <button type='submit' class='btn btn-dark'> ENVIAR LOGO </button>
                         </form>
                     </div>
 
@@ -39,7 +41,8 @@
     <div class="col-12">
         <div class="card mt-5">
             <div class = "card-body">
-                <h3> {{accion}} Usuario </h3>
+                <h3> {{accion}} USUARIO </h3>
+                <br>
                 <form method="POST" novalidate>
                     {% csrf_token %}
                     {{ form|crispy}}
@@ -50,8 +53,8 @@
                         {{ form_cliente|crispy }}
                     </div>
                     <div class="btn-toolbar pull-left">
-                        <button type='submit' class='btn btn-secondary mr-3'> {{accion}} </button>
-                        <button formaction="{% url 'usuarios' %}" type='submit' class='btn btn-secondary mr-3'> Volver </button>
+                        <button type='submit' class='btn btn-dark btn-separator'> {{accion}} </button>
+                        <button formaction="{% url 'usuarios' %}" type='submit' class='btn btn-dark btn-separator'> VOLVER </button>
                     </div>
 
 

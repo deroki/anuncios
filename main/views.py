@@ -102,13 +102,13 @@ def usuarios(request):
 
 
 def crear_usuario(request,pk=None):
-    accion = 'Crear'
+    accion = 'CREAR'
     instance = None
     cliente_instance = None
     montador_instance = None
     if pk:
         instance = User.objects.get(pk=pk)
-        accion = 'Editar'
+        accion = 'EDITAR'
         if instance.is_cliente == True:
             cliente_instance = Cliente.objects.get(usuario = instance)
         if instance.is_montador == True:
