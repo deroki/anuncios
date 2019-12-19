@@ -15,6 +15,14 @@
         background-color: dimgray;
         border-color: black;
     }
+        .header-area {
+    background: #303641;
+    border-bottom: 1px solid #303641;
+}
+        .card-body {
+    padding: 10px;
+}
+
     </style>
 </head>
 
@@ -71,7 +79,7 @@
         <div class="main-content">
             <!-- header area start -->
 
-            <div class="header-area">
+            <div class="header-area fixed-top">
                 <!-- side menu button -->
                 <div class="row">
                 <div class="col-1 clearfix">
@@ -152,7 +160,7 @@
             <!-- page title area end -->
             <div class="main-content-inner">
                 <!-- MAIN CONTENT GOES HERE -->
-                <br><br>
+                <br><br><br><br><br>
                 <div class="col-12">
                     <div class="card mt-auto">
                         <div class="card-body">
@@ -166,7 +174,7 @@
                         </div>
                     </div>
                 </div>
-                <br><br>
+                
 
                 {% block content %}
                 {% endblock %}
