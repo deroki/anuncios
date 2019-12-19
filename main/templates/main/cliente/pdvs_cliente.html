@@ -104,9 +104,13 @@
                                     <td align="center">{{ pdv.estado }}
                                     </td>
 
-                                    <td align="center"> <input {% if pdv.checked %} checked {% endif %}
+                                    <td align="center"> 
+                                            <input {% if pdv.checked %} checked {% endif %}
                                             class="main_pdv_{{ pdv.pk }}" onclick="togglePdv(this)" type="checkbox"
-                                            name="pdv_{{ pdv.pk }}" value="True"></td>
+                                            name="pdv_{{ pdv.pk }}" value="True">
+                                             <span style="display: none;">{% if pdv.checked %} si {% else %} no  {% endif %} </span>
+                                             
+                                    </td>
 
 
                                 </tr>
