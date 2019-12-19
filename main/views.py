@@ -311,10 +311,10 @@ def get_creatividad_image(request):
 
 def crear_pdv(request, pk=None):
     if pk:
-        accion = "Editar"
+        accion = "EDITAR"
         instance = Pdv.objects.get(pk=pk)
     else:
-        accion = "Crear"
+        accion = "CREAR"
         instance = None
 
     if request.method == 'POST':
@@ -780,7 +780,7 @@ def crear_creatividad(request, pk=None):
         accion = "Editar"
         instance = Creatividad.objects.get(pk=pk)
     else:
-        accion = "Crear"
+        accion = "CREAR"
         instance = None
 
     if request.method == 'POST':

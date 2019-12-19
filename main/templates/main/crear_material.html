@@ -24,8 +24,10 @@
                 <form method="POST" novalidate>
                     {% csrf_token %}
                     {{ form|crispy}}
-                    <button type='submit' class='btn btn-secondary mr-3'> Crear </button>
-                    <button formaction="{% url 'materiales' %}" type='submit' class='btn btn-secondary mr-3'> Volver </button>
+                    <div class="row">
+                        <button type='submit' class='btn btn-dark btn-separator'> CREAR </button>
+                        <button formaction="{% url 'materiales' %}" type='submit' class='btn btn-dark btn-separator'> VOLVER </button>
+                        </div>
                 </form>
             </div>
         </div>
